@@ -22,7 +22,7 @@ $(document).ready(function () {
     	viewportHeight = $(window).height();
     	viewportWidth = $(window).width();
 
-    	$(".swiper-slide").css("height", viewportHeight);
+    	
     	fullScreenVids.forEach(function(instance) {
     		_V_(instance).width(viewportWidth).height(viewportHeight);
     	})    	
@@ -101,6 +101,8 @@ $(document).ready(function () {
 	    loop: false,
 	   	speed: 1500,
 	   	hashnav: true,
+	   	slidesPerView: 1,
+	   	longSwipes: false,	// This is to make sure user doesn't scroll through several pages
 
 	   	// Pagination
 	   	pagination: '.swiper-pagination',
@@ -139,12 +141,12 @@ $(document).ready(function () {
 			turnActiveSlideOnTurnPrevOff(swiper);
 	    },
 
-	    onSlideChangeEnd: function(swiper)
+	    onTransitionEnd: function(swiper)
 	    {
 
 	    },
 
-	    onSlideChangeStart: function(swiper)
+	    onTransitionStart: function(swiper)
 	    {
 			turnActiveSlideOnTurnPrevOff(swiper);
 	    },

@@ -55,7 +55,8 @@
 	}
 
 	#slides .swiper-slide {
-		opacity: 0;
+		opacity: 1;
+		overflow: scroll;
 	}
 
 	#slides .swiper-slide h2 {
@@ -77,9 +78,25 @@
 	}
 
 
+	@media screen and (max-device-width: 760px) {
+		#bgvid { display: none; }
+		}
+	}
 
-	@media (max-width: 760px) {
-		
+	@media screen(max-width: 760px) {
+		#slides .inner {
+			padding-top: 40px;
+			margin-left: 40px;
+			width: 75%;
+		}	
+		#slides .swiper-slide .read p,
+		#slides .swiper-slide .read ul {
+		font-size: 14px;
+		line-height: 20px;
+		}
+		#slides .swiper-slide h2 {
+		font-size: 35px;
+		}
 	}
 
 	@media (max-width: 480px){
