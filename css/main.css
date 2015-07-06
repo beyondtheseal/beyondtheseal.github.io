@@ -78,10 +78,6 @@
 	}
 
 
-	@media screen and (max-device-width: 760px) {
-		#bgvid { display: none; }
-		}
-	}
 
 	@media screen(max-width: 760px) {
 		#slides .inner {
