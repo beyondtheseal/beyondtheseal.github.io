@@ -54,6 +54,10 @@
 		width: 45%;
 	}
 
+	#slides .swiper-slide {
+		opacity: 0;
+	}
+
 	#slides .swiper-slide h2 {
 		color: rgba(187, 234, 105, 1);
 		font-weight: bold;

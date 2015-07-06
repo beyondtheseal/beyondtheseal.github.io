@@ -1,6 +1,7 @@
 var mySwiper;
 var viewportHeight;
 var viewportWidth;
+var fullScreenVids = [];
 
 $(document).ready(function () {
  
@@ -21,12 +22,12 @@ $(document).ready(function () {
     	viewportHeight = $(window).height();
     	viewportWidth = $(window).width();
 
-    	$("#slides .slide").css("min-height", viewportHeight);
-    	_V_("full-vid-intro").width(viewportWidth).height(viewportHeight);
-    	
+    	$(".swiper-slide").css("height", viewportHeight);
+    	fullScreenVids.forEach(function(instance) {
+    		_V_(instance).width(viewportWidth).height(viewportHeight);
+    	})    	
     }
 
-	onResize();
 	resizeListener();
 
 
@@ -35,9 +36,20 @@ $(document).ready(function () {
 		var curr = swiper.previousIndex;
 	    var next = swiper.activeIndex;
 
-	    $(swiper.slides[curr]).animate({opacity: 0}, 2000);
-	    $(swiper.slides[next]).fadeTo({opacity: 1}, 2000);
     	// Content opacity: Fade in/fade out
+	    if (curr == next)	// If initial load
+	    {
+	    	$(swiper.slides[curr]).animate({opacity: 1}, 3000);
+	    }
+	    else // If swipe/slide change
+	    {
+	    	$(swiper.slides[curr]).animate({opacity: 0}, 1500);
+	    	$(swiper.slides[next]).animate({opacity: 1}, 1500);
+	    }
+
+	    
+	    
+
 
 		// Background audio: Fade in/fade out	
 		var currBgVideo = $(swiper.slides[curr]).find("video.bgvid").get(0);
@@ -87,8 +99,17 @@ $(document).ready(function () {
 	    // Main
 	    direction: 'vertical',
 	    loop: false,
-	   	speed: 1000,
+	   	speed: 1500,
 	   	hashnav: true,
+
+	   	// Pagination
+	   	pagination: '.swiper-pagination',
+	   	paginationClickable: true,
+
+	   	// Load slides one by one
+	   	preloadImages: false,
+	   	lazyLoading: true,	
+	   	lazyLoadingInPrevNext: true,
 	    
 	    // And if we need scrollbar
 	    scrollbar: '.swiper-scrollbar',
@@ -107,7 +128,14 @@ $(document).ready(function () {
 			// Pause all video
 			$("video.bgvid").each(function() {
 				$(this).get(0).pause();
-			})
+			});
+
+			// Save the IDs of all full-screen videos
+			$(".video-js").each(function() 
+			{
+				fullScreenVids.push($(this).attr("id"));
+			});
+			onResize();
 			turnActiveSlideOnTurnPrevOff(swiper);
 	    },
 
