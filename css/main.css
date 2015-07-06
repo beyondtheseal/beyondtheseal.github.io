@@ -1,0 +1,96 @@
+	@import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
+
+
+    html, body {
+        position: relative;
+        height: 100%;
+    }
+    body {
+        background: #000;
+        margin: 0;
+        padding: 0;
+    }
+	* {
+		font-family: 'Droid Serif', serif;
+	}
+
+	.gradient {
+		height: 100%;
+		width: 100%;
+		position: absolute;
+		top:0;
+		left:0;
+		z-index: -10;
+		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&amp;0.7+0,0.55+32,0+65,0+65 */
+		background: -moz-linear-gradient(left,  rgba(0,0,0,0.7) 0%, rgba(0,0,0,0.55) 32%, rgba(0,0,0,0) 65%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.7)), color-stop(32%,rgba(0,0,0,0.55)), color-stop(65%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(left,  rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.55) 32%,rgba(0,0,0,0) 65%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left,  rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.55) 32%,rgba(0,0,0,0) 65%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left,  rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.55) 32%,rgba(0,0,0,0) 65%,rgba(0,0,0,0) 100%); /* IE10+ */
+		background: linear-gradient(to right,  rgba(0,0,0,0.7) 0%,rgba(0,0,0,0.55) 32%,rgba(0,0,0,0) 65%,rgba(0,0,0,0) 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#b3000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+
+	}
+
+	video.bgvid {
+		position: fixed; 
+		right: 0; bottom: 0;
+		min-width: 100%; 
+		min-height: 100%;
+		background-size: cover;	
+		z-index: -20;
+	}
+
+
+	#slides {
+        width: 100%;
+        height: 100%;
+        background-color: #000;
+    }
+
+	#slides .inner {
+		padding-top: 80px;
+		margin-left: 70px;
+		width: 45%;
+	}
+
+	#slides .swiper-slide h2 {
+		color: rgba(187, 234, 105, 1);
+		font-weight: bold;
+		font-size: 45px;
+	}
+	#slides .swiper-slide .read p,
+	#slides .swiper-slide .read ul {
+		color: #FFF;
+		font-size: 16px;
+		line-height: 22px;
+	}
+
+	.vjs-fade-in,.vjs-fade-out {
+		visibility: visible !important;
+		opacity: 1 !important;
+		transition-duration: 0s!important;
+	}
+
+
+
+	@media (max-width: 760px) {
+		
+	}
+
+	@media (max-width: 480px){
+	}
+
+	/* Landscape */
+	@media (min-aspect-ratio: 16/9){
+		video.bgvid {
+			width: 1px; height: auto; 
+		}
+	}
+
+	/* Landscape */
+	@media (max-aspect-ratio: 16/9){
+		video.bgvid {
+			width: auto; height: 1px; 
+		}
+	}
