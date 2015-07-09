@@ -73,6 +73,7 @@
 	}
 
 	#slides .swiper-slide {
+		position: relative;
 		opacity: 0;
 		overflow: scroll;
 	}
@@ -168,13 +169,9 @@
 		video.bgvid {
 			width: 1px; height: auto; 
 		}
-
 	}
-	/* Landscape */
-	@media (max-aspect-ratio: 16/9){
-		.bgvid {
-			width: auto; height: 1px; 
-			position: absolute;
-			z-index: 1
-		}
+	.bgimg {
+		position: absolute;
+		z-index: -1;
+		top: 0;
 	}
