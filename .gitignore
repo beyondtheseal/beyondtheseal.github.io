@@ -8,3 +8,5 @@ video/full/panama-disease.mp4
 video/full/worker-plight.mp4
 
 .DS_Store
+
+node_modules
