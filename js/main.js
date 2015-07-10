@@ -4,8 +4,7 @@ var viewportWidth;
 var fullScreenVids = [];
 
 $(document).ready(function () {
-
-
+  $('.lazy').laziestloader();
   function resizeListener() // Use underscore.js to throttle firing
   {
     var updateLayout = _.debounce(function(e) {
@@ -28,7 +27,7 @@ $(document).ready(function () {
       // Reload the timeline (this is quick and dirty – it shouldn't stay in production)
       var iframe = $("#history-timeline");
       iframe.src = iframe.src;
-      $( '#history-timeline' ).attr( 'src', function ( i, val ) { return val; });
+      iframe.attr( 'src', function ( i, val ) { return val; });
 
       fullScreenVids.forEach(function(instance) {
         _V_(instance).width(viewportWidth).height(viewportHeight);
