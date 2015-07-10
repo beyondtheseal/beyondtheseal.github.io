@@ -92,7 +92,7 @@
 		font-family: "Source Serif Pro", serif;
 		line-height: 60px;
 	}
-		#slides .swiper-slide h3 {
+	#slides .swiper-slide h3 {
 		color: rgba(164, 193, 108, 0.9);
 		font-weight: bold;
 		font-size: 30px;
@@ -123,14 +123,7 @@
 		background: #fff  no-repeat scroll left;
 		margin-left: 0em;
 		margin-right: 15em;
-		width:23em;
-		height:.03em;
-	}
-	div.hr {
-		background: #fff  no-repeat scroll left;
-		margin-left: 0em;
-		margin-right: 15em;
-		width:35em;
+		width:22.5em;
 		height:.03em;
 	}
 	div.hr hr {
@@ -174,4 +167,14 @@
 		position: absolute;
 		z-index: -1;
 		top: 0;
+	}
+
+	.fgimg {
+		position: absolute;
+		right: 0; bottom: 0;
+		min-width: 100%; 
+		min-height: 100%;
+		background-size: auto;	
+		z-index: 1;
+		}
 	}
