@@ -88,13 +88,13 @@ $(document).ready(function () {
       var player = videojs(nextFullVideo);
       // Play video
       player.play();
+
+      function Handler(e) {
+          if(!e) { e = window.event; }
+          swiper.slideNext();
+      }
       // On end, move to next slide
       document.getElementById(nextFullVideo).addEventListener('ended', Handler, false);
-        function Handler(e) 
-        {
-            if(!e) { e = window.event; }
-            swiper.slideNext();
-        }
     }
   }
 
