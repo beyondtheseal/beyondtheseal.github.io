@@ -26,7 +26,7 @@
 		font-family: 'Source Serif Pro';
 		float: left;
 		line-height: 45px;
-		padding-top: 20px;
+		padding-top: 16px;
 		padding-right: 5px; 
 	}
 
@@ -37,13 +37,13 @@
 		top:0;
 		left:0;
 		z-index: 2;
-		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+23,000000+100&amp;0.65+34,0+100 */
-		background: -moz-linear-gradient(left,  rgba(0,0,0,0.65) 23%, rgba(0,0,0,0.65) 34%, rgba(0,0,0,0) 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, right top, color-stop(23%,rgba(0,0,0,0.65)), color-stop(34%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(left,  rgba(0,0,0,0.65) 23%,rgba(0,0,0,0.65) 34%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(left,  rgba(0,0,0,0.65) 23%,rgba(0,0,0,0.65) 34%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(left,  rgba(0,0,0,0.65) 23%,rgba(0,0,0,0.65) 34%,rgba(0,0,0,0) 100%); /* IE10+ */
-		background: linear-gradient(to right,  rgba(0,0,0,0.65) 23%,rgba(0,0,0,0.65) 34%,rgba(0,0,0,0) 100%); /* W3C */
+		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&amp;0.65+16,0+75 */
+		background: -moz-linear-gradient(left,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.65) 16%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.65)), color-stop(16%,rgba(0,0,0,0.65)), color-stop(75%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* IE10+ */
+		background: linear-gradient(to right,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* W3C */
 		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
 
 	}
@@ -57,6 +57,9 @@
 		z-index: 1;	
 	}
 
+	audio.bgaud {
+
+	}
 
 	#slides {
         width: 100%;
@@ -172,9 +175,9 @@
 	.fgimg {
 		position: absolute;
 		right: 0; bottom: 0;
-		min-width: 70%%; 
-		min-height: 70%;
-		background-size: auto;	
+		min-width: 100%%; 
+		min-height: 100%;
+		background-size: cover;	
 		z-index: 2;
 		}
 
