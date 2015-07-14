@@ -4,7 +4,10 @@ var viewportWidth;
 var fullScreenVids = [];
 
 $(document).ready(function () {
+  var loadVideoAt = window.innerHeight;
   $('.lazy').laziestloader();
+  // Load video one slide prior to it coming on screen
+  $('video').laziestloader({ threshold: window.innerHeight });
   function resizeListener() // Use underscore.js to throttle firing
   {
     var updateLayout = _.debounce(function(e) {
