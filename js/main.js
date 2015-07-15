@@ -4,11 +4,9 @@ var viewportWidth;
 var fullScreenVids = [];
 
 $(document).ready(function () {
-  $('.lazy').laziestloader();
-  // Load video one slide prior to it coming on screen
-  $('video').laziestloader({ threshold: window.innerHeight });
-  function resizeListener() // Use underscore.js to throttle firing
-  {
+  // TODO: Use a pure JS solution so we can get rid of underscore
+  // Use underscore.js to throttle firing
+  function resizeListener(){
     var updateLayout = _.debounce(function(e) {
         onResize();
     }, 200); // Maximum run of once per 200 milliseconds
@@ -17,14 +15,12 @@ $(document).ready(function () {
     window.addEventListener("resize", updateLayout, false);
   }
 
-  function onResize()
-    // Housekeeping items on event on window resizing
-    {
+  // Housekeeping items on event on window resizing
+  function onResize(){
       viewportHeight = $(window).height();
       viewportWidth = $(window).width();
 
-      $("#history-timeline").height(viewportHeight);
-      $("#history-timeline").width(viewportWidth);
+      $("#history-timeline").height(viewportHeight).width(viewportWidth);
 
       // Reload the timeline (this is quick and dirty – it shouldn't stay in production)
       var iframe = $("#history-timeline");
@@ -41,54 +37,48 @@ $(document).ready(function () {
   resizeListener();
 
 
-  function turnActiveSlideOnTurnPrevOff(swiper)
-  {
+  function turnActiveSlideOnTurnPrevOff(swiper){
     var curr = swiper.previousIndex;
-      var next = swiper.activeIndex;
+    var next = swiper.activeIndex;
 
-      // Content opacity: Fade in/fade out
-      if (curr == next) // If initial load
-      {
-        $(swiper.slides[curr]).animate({opacity: 1}, 3000);
-      }
-      else // If swipe/slide change
-      {
-        $(swiper.slides[curr]).animate({opacity: 0}, 1500);
-        $(swiper.slides[next]).animate({opacity: 1}, 1500);
-      }
+    // Content opacity: Fade in/fade out
+    // If initial load
+    if (curr == next){
+      $(swiper.slides[curr]).animate({opacity: 1}, 3000);
+    } else {
+     // If swipe/slide change
+      $(swiper.slides[curr]).animate({opacity: 0}, 1500);
+      $(swiper.slides[next]).animate({opacity: 1}, 1500);
+    }
 
 
     // Background audio: Fade in/fade out
     var currBgVideo = $(swiper.slides[curr]).find("video.bgvid").get(0);
-    var nextBgVideo = $(swiper.slides[next]).find("video.bgvid").get(0)
-    if (typeof currBgVideo != "undefined")
-    {
-      $(currBgVideo).animate({volume: 0}, 1500);
+    var nextBgVideo = $(swiper.slides[next]).find("video.bgvid").get(0);
 
+    if (typeof currBgVideo != "undefined") {
+      $(currBgVideo).animate({volume: 0}, 1500);
       setTimeout(function() {
         currBgVideo.pause();
       }, 5000)
     }
-    if (typeof nextBgVideo != "undefined")
-    {
+
+    if (typeof nextBgVideo != "undefined") {
       nextBgVideo.play();
       $(nextBgVideo).animate({volume: 1}, 3000);
     }
 
-      // Pause current full-screen video (if any)
+    // Pause current full-screen video (if any)
     currFullVideo = $(swiper.slides[curr]).find("div.full-screen video").attr("id");
-    if (typeof currFullVideo != "undefined")
-    {
+    if (typeof currFullVideo != "undefined") {
       var player = videojs(currFullVideo);
       player.pause();
     }
 
     // Play next full-screen video (if any)
     nextFullVideo = $(swiper.slides[next]).find("div.full-screen video").attr("id");
-    if (typeof nextFullVideo != "undefined")
-    {
+    if (typeof nextFullVideo != "undefined") {
       var player = videojs(nextFullVideo);
-      // Play video
       player.play();
 
       function Handler(e) {
@@ -97,6 +87,17 @@ $(document).ready(function () {
       }
       // On end, move to next slide
       document.getElementById(nextFullVideo).addEventListener('ended', Handler, false);
+    }
+  }
+
+  function leisurelyLoad(swiper){
+    var tags = ["video", "img.lazy"];
+    //Check to see if any of the targeted elements exist on the next slide
+    // Make this a for tag in tags style thing
+    var upcoming = $('.swiper-slide-next').find("video");
+    if (upcoming.length){
+      // TODO: Make video and imgs use the same data-attr so this can be abstracted
+      upcoming.attr("src", upcoming.data("pattern"));
     }
   }
 
@@ -127,36 +128,34 @@ $(document).ready(function () {
       mousewheelControl:  true,
 
       // Callback function, will be executed right after Swiper initialization
-      onInit: function(swiper)
-      {
+      onInit: function(swiper) {
 
         // Pause all video
-      $("video.bgvid").animate({volume: 0}, 1); 
+        $("video.bgvid").animate({volume: 0}, 1);
 
-      // Pause all video
-      $("video.bgvid").each(function() {
-        $(this).get(0).pause();
-      });
+        // Pause all video
+        $("video.bgvid").each(function() {
+          $(this).get(0).pause();
+        });
 
-      // Save the IDs of all full-screen videos
-      $(".video-js").each(function() 
-      {
-        fullScreenVids.push($(this).attr("id"));
-      });
-      onResize();
-      turnActiveSlideOnTurnPrevOff(swiper);
+        // Save the IDs of all full-screen videos
+        $(".video-js").each(function() {
+          fullScreenVids.push($(this).attr("id"));
+        });
+
+        onResize();
+
+        turnActiveSlideOnTurnPrevOff(swiper);
+        leisurelyLoad(swiper);
       },
-
-      onTransitionEnd: function(swiper)
-      {
-
+      // was onTransitionStart
+      onSlideChangeStart: function(swiper){
+        turnActiveSlideOnTurnPrevOff(swiper);
       },
-
-      onTransitionStart: function(swiper)
-      {
-      turnActiveSlideOnTurnPrevOff(swiper);
-      },
-  });  
+      onSlideChangeEnd: function(swiper){
+        leisurelyLoad(swiper);
+      }
+  });
 
 
 });
