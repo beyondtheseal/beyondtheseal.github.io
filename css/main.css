@@ -26,7 +26,7 @@
 		font-family: 'Source Serif Pro';
 		float: left;
 		line-height: 45px;
-		padding-top: 16px;
+		padding-top: 18px;
 		padding-right: 5px; 
 	}
 
@@ -121,16 +121,7 @@
 		font-variant: normal;
 		font-weight: 100;
 		line-height: 12px;
-	}
-	div.hr {
-		background: #fff  no-repeat scroll left;
-		margin-left: 0em;
-		margin-right: 15em;
-		width:22.5em;
-		height:.03em;
-	}
-	div.hr hr {
-		display: none;
+
 	}
 	.vjs-fade-in,.vjs-fade-out {
 		visibility: visible !important;
@@ -138,7 +129,15 @@
 		transition-duration: 0s!important;
 	}
 
+	.hairline {
+		border-top: solid 1px #fff;
+		display: inline-block;
 
+	}
+
+	.names {
+		margin-top: 30px;
+	}
 
 	@media screen(max-width: 760px) {
 		#slides .inner {
@@ -170,6 +169,7 @@
 		position: absolute;
 		z-index: -1;
 		top: 0;
+		right: 0;
 	}
 
 	.fgimg {
