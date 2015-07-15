@@ -4,7 +4,6 @@ var viewportWidth;
 var fullScreenVids = [];
 
 $(document).ready(function () {
-  var loadVideoAt = window.innerHeight;
   $('.lazy').laziestloader();
   // Load video one slide prior to it coming on screen
   $('video').laziestloader({ threshold: window.innerHeight });
@@ -29,8 +28,10 @@ $(document).ready(function () {
 
       // Reload the timeline (this is quick and dirty – it shouldn't stay in production)
       var iframe = $("#history-timeline");
-      iframe.src = iframe.src;
-      iframe.attr( 'src', function ( i, val ) { return val; });
+      if (iframe){
+        iframe.src = iframe.src;
+        iframe.attr( 'src', function ( i, val ) { return val; });
+      }
 
       fullScreenVids.forEach(function(instance) {
         _V_(instance).width(viewportWidth).height(viewportHeight);
