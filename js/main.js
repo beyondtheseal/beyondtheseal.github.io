@@ -90,14 +90,17 @@ $(document).ready(function () {
     }
   }
 
-  function leisurelyLoad(swiper){
-    var tags = ["video", "img.lazy"];
-    //Check to see if any of the targeted elements exist on the next slide
-    // Make this a for tag in tags style thing
-    var upcoming = $('.swiper-slide-next').find("video");
-    if (upcoming.length){
-      // TODO: Make video and imgs use the same data-attr so this can be abstracted
-      upcoming.attr("src", upcoming.data("pattern"));
+  function leisurelyLoad(swiper, slidesToCheck){
+    var media = ["video", "img.lazy"];
+    //var slidesToCheck = [$('.swiper-slide-next'), $('.swiper-slide-prev')];
+    // Check to see if any of the targeted elements exist on adjacent slides
+    for (i in slidesToCheck){
+      for (index in media){
+        var hasMedia = slidesToCheck[i].find(media[index]);
+        if (hasMedia.length){
+          hasMedia.attr("src", hasMedia.data("src"));
+        }
+      }
     }
   }
 
@@ -121,7 +124,7 @@ $(document).ready(function () {
       lazyLoadingInPrevNext: true,
 
       // And if we need scrollbar
-      scrollbar: '.swiper-scrollbar',
+      //scrollbar: '.swiper-scrollbar',
 
       // Keyboard / Mousewheel controls
       keyboardControl:  true,
@@ -146,14 +149,14 @@ $(document).ready(function () {
         onResize();
 
         turnActiveSlideOnTurnPrevOff(swiper);
-        leisurelyLoad(swiper);
+        leisurelyLoad(swiper, [$('.swiper-slide-active'), $('.swiper-slide-next')]);
       },
       // was onTransitionStart
       onSlideChangeStart: function(swiper){
         turnActiveSlideOnTurnPrevOff(swiper);
       },
       onSlideChangeEnd: function(swiper){
-        leisurelyLoad(swiper);
+        leisurelyLoad(swiper, [$('.swiper-slide-prev'), $('.swiper-slide-next')]);
       }
   });
 
