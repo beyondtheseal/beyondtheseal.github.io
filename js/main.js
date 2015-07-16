@@ -109,8 +109,12 @@ $(document).ready(function () {
       // Main
       direction: 'vertical',
       loop: false,
-      speed: 500,
+      speed: 300,
       hashnav: false,
+      slidesPerView: 1,
+      longSwipes: false,  // This is to make sure user doesn't scroll through several pages
+      longSwipesRatio: 0.9,
+      longSwipesMs: 600,
 
       // Pagination
       pagination: '.swiper-pagination',
@@ -152,9 +156,13 @@ $(document).ready(function () {
       // was onTransitionStart
       onSlideChangeStart: function(swiper){
         turnActiveSlideOnTurnPrevOff(swiper);
+        swiper.lockSwipeToNext();
+        console.log("swipe locked");
       },
       onSlideChangeEnd: function(swiper){
         leisurelyLoad(swiper, [$('.swiper-slide-prev'), $('.swiper-slide-next')]);
+        swiper.unlockSwipeToNext();
+        console.log("swipe unlocked");
       }
   });
 
