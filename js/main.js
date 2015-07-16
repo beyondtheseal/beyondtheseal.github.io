@@ -157,5 +157,11 @@ $(document).ready(function () {
       },
   });  
 
+    $("#history-timeline").height(viewportHeight);
+    $("#history-timeline").width(viewportWidth);
+      // Reload the timeline (this is quick and dirty – it shouldn't stay in production)
+      var iframe = document.getElementById("#history-timeline");
+    iframe.src = iframe.src;
+    $( '#history-timeline' ).attr( 'src', function ( i, val ) { return val; });
 
 });

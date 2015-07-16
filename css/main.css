@@ -30,6 +30,17 @@
 		padding-right: 5px; 
 	}
 
+	.secondcharacter {
+		float: left; 
+		color: rgba(164, 193, 108, 0.9); 
+		font-size: 100px; 
+		font-family: 'Source Serif Pro';
+		float: left;
+		line-height: 50px;
+		padding-top: 40px;
+		padding-right: 5px; 
+	}
+
 	.gradient {
 		height: 100%;
 		width: 100%;
@@ -67,7 +78,7 @@
         background-color: #000;
     }
 
-	#slides .inner {
+	.inner {
 		padding-top: 80px;
 		margin-left: 70px;
 		width: 45%;
@@ -75,45 +86,47 @@
 		z-index:3;
 	}
 
-	#slides .swiper-slide {
+	.swiper-slide {
 		position: relative;
 		opacity: 0;
 		overflow: scroll;
 	}
 
-	#slides .swiper-slide h2 {
+	.read h2 {
 		color: rgba(164, 193, 108, 0.9);
 		font-weight: bold;
 		font-size: 52px;
 		font-family: "Source Serif Pro", serif;
 		line-height: 60px;
 	}
-	#slides .swiper-slide .read h2 {
+
+	.inner h2 {
 		color: rgba(164, 193, 108, 0.9);
 		font-weight: bold;
 		font-size: 52px;
 		font-family: "Source Serif Pro", serif;
 		line-height: 60px;
 	}
-	#slides .swiper-slide h3 {
+
+	.read h3 {
 		color: rgba(164, 193, 108, 0.9);
 		font-weight: bold;
 		font-size: 30px;
 		font-family: "Source Serif Pro", serif;
 		line-height: 40px;
 	}
-	#slides .swiper-slide .read p,
-	#slides .swiper-slide .read ul {
+	.read p,
+	.read ul {
 		color: rgba(232, 232, 232, 1);
 		font-size: 19px;
 		line-height: 26px;
 	}
-	#slides .swiper-slide .tagline p {
+	.tagline p {
 		color: rgba(208, 208, 208, 1);
 		font-size: 24px;
 		line-height: 12px;
 	}
-	#slides .swiper-slide .names p {
+	.names p {
 		color: rgba(232, 232, 232, 1);
 		font-family: 'Source Sans Pro', sans-serif;
 		font-size: 18px;
