@@ -109,8 +109,8 @@ $(document).ready(function () {
       // Main
       direction: 'vertical',
       loop: false,
-      speed: 1500,
-      hashnav: true,
+      speed: 500,
+      hashnav: false,
       slidesPerView: 1,
       longSwipes: false,  // This is to make sure user doesn't scroll through several pages
 
