@@ -113,8 +113,8 @@ $(document).ready(function () {
       hashnav: false,
       slidesPerView: 1,
       longSwipes: false,  // This is to make sure user doesn't scroll through several pages
-      longSwipesRatio: 0.9,
-      longSwipesMs: 600,
+      longSwipesRatio: 0.2,
+      longSwipesMs: 1200,
 
       // Pagination
       pagination: '.swiper-pagination',
