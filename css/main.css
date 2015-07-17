@@ -1,5 +1,3 @@
-    @import url(http://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic);
-
 
     html, body {
         position: relative;
@@ -10,54 +8,6 @@
         background: #000;
         margin: 0;
         padding: 0;
-    }
-    * {
-        font-family: 'Source Serif Pro', serif;
-    }
-
-    h2 {
-        font-family: 'Source Serif Pro', serif;
-    }
-
-    .firstcharacter {
-        float: left; 
-        color: rgba(208, 208, 208, 1); 
-        font-size: 100px; 
-        font-family: 'Source Serif Pro';
-        float: left;
-        line-height: 45px;
-        padding-top: 16px;
-        padding-right: 5px; 
-    }
-
-    .gradient {
-        height: 100%;
-        width: 100%;
-        position: absolute;
-        top:0;
-        left:0;
-        z-index: 2;
-        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&amp;0.65+16,0+75 */
-        background: -moz-linear-gradient(left,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.65) 16%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 100%); /* FF3.6+ */
-        background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.65)), color-stop(16%,rgba(0,0,0,0.65)), color-stop(75%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
-        background: -webkit-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
-        background: -o-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
-        background: -ms-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* IE10+ */
-        background: linear-gradient(to right,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* W3C */
-        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
-
-    }
-
-    video.bgvid {
-        position: absolute; 
-        right: 0; bottom: 0;
-        min-width: 100%; 
-        min-height: 100%;
-        background-size: cover;
-        z-index: 1; 
-    }
-
-    audio.bgaud {
 
     }
     #control-wrapper {
@@ -106,7 +56,110 @@
         margin-bottom: 20px;
         text-align: center;
     }
-    #slides {
+
+	* {
+		font-family: 'Mate', serif;
+	}
+
+h1 {
+	font-family: Mate;
+	font-size: 50px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: bold;
+	line-height: 45px;
+	color: rgba(164, 193, 108, 0.9);
+}
+h3 {
+	font-family: Mate;
+	font-size: 25px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 25px;
+	color: #fff;
+}
+p {
+	font-family: Mate;
+	font-size: 17px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 100;
+	line-height: 22.3999996185303px;
+}
+blockquote {
+	font-family: Mate;
+	font-size: 24px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 100;
+	line-height: 33.5999984741211px;
+}
+pre {
+	font-family: Mate;
+	font-size: 11px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 400;
+	line-height: 23px;
+
+}
+
+	.firstcharacter {
+		float: left; 
+		color: rgba(208, 208, 208, 1); 
+		font-size: 100px; 
+		font-family: 'Source Serif Pro';
+		float: left;
+		line-height: 45px;
+		padding-top: 18px;
+		padding-right: 5px; 
+	}
+
+	.secondcharacter {
+		float: left; 
+		color: rgba(164, 193, 108, 0.9); 
+		font-size: 100px; 
+		font-family: 'Source Serif Pro';
+		float: left;
+		line-height: 50px;
+		padding-top: 40px;
+		padding-right: 5px; 
+	}
+
+	.gradient {
+		height: 100%;
+		width: 100%;
+		position: absolute;
+		top:0;
+		left:0;
+		z-index: 2;
+		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&amp;0.65+16,0+75 */
+		background: -moz-linear-gradient(left,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.65) 16%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+		background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.65)), color-stop(16%,rgba(0,0,0,0.65)), color-stop(75%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+		background: -webkit-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+		background: -o-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+		background: -ms-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* IE10+ */
+		background: linear-gradient(to right,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* W3C */
+		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+
+	}
+
+	video.bgvid {
+		position: absolute; 
+		right: 0; bottom: 0;
+		min-width: 100%; 
+		min-height: 100%;
+		background-size: cover;
+		z-index: 1;	
+	}
+
+	audio.bgaud {
+
+	}
+
+	#slides {
+
         width: 100%;
         height: 100%;
         background-color: #000;
@@ -217,12 +270,120 @@
         top: 0;
     }
 
-    .fgimg {
-        position: absolute;
-        right: 0; bottom: 0;
-        min-width: 100%%; 
-        min-height: 100%;
-        background-size: cover; 
-        z-index: 2;
-        }
+	.inner {
+		padding-top: 80px;
+		margin-left: 70px;
+		width: 45%;
+		position:relative;
+		z-index:3;
+	}
+
+	.swiper-slide {
+		position: relative;
+		opacity: 0;
+		overflow: scroll;
+	}
+
+	.read h2 {
+		color: rgba(164, 193, 108, 0.9);
+		font-weight: bold;
+		font-size: 52px;
+		font-family: "Source Serif Pro", serif;
+		line-height: 60px;
+	}
+
+	.inner h2 {
+		color: rgba(164, 193, 108, 0.9);
+		font-weight: bold;
+		font-size: 52px;
+		font-family: "Source Serif Pro", serif;
+		line-height: 60px;
+	}
+
+	.read h3 {
+		color: rgba(164, 193, 108, 0.9);
+		font-weight: bold;
+		font-size: 30px;
+		font-family: "Mate", serif;
+		line-height: 40px;
+	}
+	.read p,
+	.read ul {
+		color: rgba(232, 232, 232, 1);
+		font-size: 19px;
+		line-height: 26px;
+	}
+	.tagline p {
+		color: rgba(208, 208, 208, 1);
+		font-size: 24px;
+		line-height: 12px;
+	}
+	.names p {
+		color: rgba(232, 232, 232, 1);
+		font-family: 'Source Sans Pro', sans-serif;
+		font-size: 18px;
+		font-style: normal;
+		font-variant: normal;
+		font-weight: 100;
+		line-height: 12px;
+
+	}
+	.vjs-fade-in,.vjs-fade-out {
+		visibility: visible !important;
+		opacity: 1 !important;
+		transition-duration: 0s!important;
+	}
+
+	.hairline {
+		border-top: solid 1px #fff;
+		display: inline-block;
+
+	}
+
+	.names {
+		margin-top: 30px;
+	}
+
+	@media screen(max-width: 760px) {
+		#slides .inner {
+			padding-top: 40px;
+			margin-left: 40px;
+			width: 75%;
+		}	
+		#slides .swiper-slide .read p,
+		#slides .swiper-slide .read ul {
+		font-size: 14px;
+		line-height: 20px;
+		}
+		#slides .swiper-slide h2 {
+		font-size: 35px;
+		font-family: 'Source Serif Pro', serif;
+		}
+	}
+
+	@media (max-width: 480px){
+	}
+
+	/* Landscape */
+	@media (min-aspect-ratio: 16/9){
+		video.bgvid {
+			width: 1px; height: auto; 
+		}
+	}
+	.bgimg {
+		position: absolute;
+		z-index: -1;
+		top: 0;
+		right: 0;
+	}
+
+	.fgimg {
+		position: absolute;
+		right: 0; bottom: 0;
+		min-width: 100%%; 
+		min-height: 100%;
+		background-size: cover;	
+		z-index: 2;
+		}
+
 
