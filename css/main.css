@@ -9,46 +9,51 @@
         padding: 0;
     }
 	* {
-		font-family: 'Source Serif Pro', serif;
+		font-family: 'Mate', serif;
 	}
 
-	h1 {
+h1 {
+	font-family: Mate;
 	font-size: 50px;
 	font-style: normal;
+	font-variant: normal;
 	font-weight: bold;
-	line-height: 38.5px;
+	line-height: 45px;
 	color: rgba(164, 193, 108, 0.9);
-	}
-
-	h3 {
-	font-size: 20px;
-	font-style: normal;
-	font-weight: 100;
-	line-height: 22px;
-	color: #fff);
-	}
-	
-	p {
-	font-size: 15.5px;
-	font-style: normal;
-	font-weight: 100;
-	line-height: 22.8571434020996px;
-	}
-
-	blockquote {
-	font-size: 24px;
+}
+h3 {
+	font-family: Mate;
+	font-size: 25px;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 400;
-	line-height: 34.2857170104981px;
-	}
-
-	pre {
+	line-height: 25px;
+	color: #fff;
+}
+p {
+	font-family: Mate;
+	font-size: 17px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 100;
+	line-height: 22.3999996185303px;
+}
+blockquote {
+	font-family: Mate;
+	font-size: 24px;
+	font-style: normal;
+	font-variant: normal;
+	font-weight: 100;
+	line-height: 33.5999984741211px;
+}
+pre {
+	font-family: Mate;
 	font-size: 11px;
 	font-style: normal;
 	font-variant: normal;
 	font-weight: 400;
 	line-height: 23px;
+
 }
 
 	.firstcharacter {
@@ -144,7 +149,7 @@
 		color: rgba(164, 193, 108, 0.9);
 		font-weight: bold;
 		font-size: 30px;
-		font-family: "Source Serif Pro", serif;
+		font-family: "Mate", serif;
 		line-height: 40px;
 	}
 	.read p,
