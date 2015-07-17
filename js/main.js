@@ -110,7 +110,7 @@ $(document).ready(function () {
       direction: 'vertical',
       loop: false,
       speed: 300,
-      hashnav: false,
+      hashnav: true,
       slidesPerView: 1,
       longSwipesRatio: 0.9,
       longSwipesMs: 1600,
