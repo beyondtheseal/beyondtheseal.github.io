@@ -62,35 +62,47 @@
     }
     #control-wrapper {
         position: absolute;
-        bottom: 0;
         right: 0;
-        width: 25%;
         z-index: 100;
         font-size: 20px;
-        opacity: 0.7
-    }
-    #control-wrapper{
-        display: inline;
         text-align: center;
-        margin: auto;
+        top: 40%;
+    }
+    #controls {
+        width: 80px;
+        height: 220px;
+        margin-right: 30px;
+    }
+    #retreat.swiper-button-disabled,
+    #proceed.swiper-button-disabled {
+        visibility: none;
     }
     #retreat,
     #proceed {
-        display: inline-block;
-        margin: 0 0px 40px 20px;
-        background-color:#000;
+        margin: 0 20px 10px 0;
+        background-color: rgba(255, 255, 255, 0.45);
         color: #dfdfdf;
-        padding: 10px 20px;
-        border-radius: 8px;
-        border: 1px solid #333;
+        /*padding: 10px 20px;*/
+        padding: 0;
+        border-radius: 88px;
         font-family: 'Source Sans Pro', sans-serif;
         text-transform: uppercase;
+        width: 69px;
+        height: 68px;
+        opacity: 0.5;
+    }
+    #retreat img,
+    #proceed img {
+        width: 50px;
+        margin: 15px auto;
+    }
+    #proceed img {
+        margin-top: 22px;
     }
     #arrowkeys {
         color: #333;
         font-family: sans-serif;
         font-size: 12px;
-        margin-top: -31px;
         margin-bottom: 20px;
         text-align: center;
     }
