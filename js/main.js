@@ -90,15 +90,15 @@ $(document).ready(function () {
     }
   }
 
-  function leisurelyLoad(swiper, slidesToCheck){
+  function leisurelyLoad(slidesToCheck){
     var media = ["video", "img.lazy"];
-    //var slidesToCheck = [$('.swiper-slide-next'), $('.swiper-slide-prev')];
+    console.log(slidesToCheck);
     // Check to see if any of the targeted elements exist on adjacent slides
     for (i in slidesToCheck){
       for (index in media){
         var hasMedia = slidesToCheck[i].find(media[index]);
-        if (hasMedia.length){
-          hasMedia.attr("src", hasMedia.data("src"));
+        if (hasMedia.length && (hasMedia.attr("src") != hasMedia.data("src"))){
+            hasMedia.attr("src", hasMedia.data("src"));
         }
       }
     }
@@ -142,22 +142,32 @@ $(document).ready(function () {
         onResize();
 
         turnActiveSlideOnTurnPrevOff(swiper);
-        leisurelyLoad(swiper, [$('.swiper-slide-active'), $('.swiper-slide-next')]);
+        leisurelyLoad([$('.swiper-slide-active'), $('.swiper-slide-next')]);
       },
       // was onTransitionStart
       onSlideChangeStart: function(swiper){
         turnActiveSlideOnTurnPrevOff(swiper);
       },
       onSlideChangeEnd: function(swiper){
-        leisurelyLoad(swiper, [$('.swiper-slide-prev'), $('.swiper-slide-next')]);
+        leisurelyLoad([$('.swiper-slide-prev'), $('.swiper-slide-active'), $('.swiper-slide-next')]);
       }
   });
 
-    $("#history-timeline").height(viewportHeight);
-    $("#history-timeline").width(viewportWidth);
-      // Reload the timeline (this is quick and dirty – it shouldn't stay in production)
-      var iframe = document.getElementById("#history-timeline");
+  $("#history-timeline").height(viewportHeight);
+  $("#history-timeline").width(viewportWidth);
+  // Reload the timeline (this is quick and dirty – it shouldn't stay in production)
+  var iframe = document.getElementById("#history-timeline");
+  if (iframe){
     iframe.src = iframe.src;
-    $( '#history-timeline' ).attr( 'src', function ( i, val ) { return val; });
+  }
+  $( '#history-timeline' ).attr( 'src', function ( i, val ) { return val; });
+
+  // We actually have to use Javascript to freaking scroll to other slides.
+  $('.chapter-nav').on("click", function(){
+    var targetSlide = ($(this).data("target"));
+    mySwiper.slideTo(targetSlide, 400);
+  });
+
+
 
 });
