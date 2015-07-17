@@ -33,42 +33,42 @@
         padding: 10px 20px;
         border-radius: 8px;
         border: 1px solid #333;
-        font-family: 'Source Sans Pro', sans-serif;
+        font-family: 'Lustria', serif;
         text-transform: uppercase;
     }
 
-	* {
-		font-family: 'Mate', serif;
-	}
 
 h1 {
-	font-family: Mate;
+	font-family: 'Lustria', serif;
 	font-size: 50px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: bold;
+	font-weight: 700;
 	line-height: 45px;
 	color: rgba(164, 193, 108, 0.9);
 }
-h3 {
-	font-family: Mate;
+
+h2 {
+	font-family: 'Lato', sans-serif;
 	font-size: 25px;
-	font-style: normal;
-	font-variant: normal;
 	font-weight: 400;
-	line-height: 25px;
+	line-height: 40px;
+	color: rgba(232, 232, 232, 1);
+}
+
+h3 {
+	font-family: 'Lustria', sans-serif;
+	font-size: 35px;
+	font-weight: 400;
+	line-height: 40px;
 	color: #fff;
 }
 p {
-	font-family: Mate;
-	font-size: 17px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 100;
-	line-height: 22.3999996185303px;
+	font-family: 'Lato', sans-serif;
+	font-size: 15px;
+	font-weight: 300;
+	line-height: 24.9999996185303px;
 }
 blockquote {
-	font-family: Mate;
+	font-family: 'Lato';
 	font-size: 24px;
 	font-style: normal;
 	font-variant: normal;
@@ -76,7 +76,7 @@ blockquote {
 	line-height: 33.5999984741211px;
 }
 pre {
-	font-family: Mate;
+	font-family: 'Lato';
 	font-size: 11px;
 	font-style: normal;
 	font-variant: normal;
@@ -89,7 +89,7 @@ pre {
 		float: left; 
 		color: rgba(208, 208, 208, 1); 
 		font-size: 100px; 
-		font-family: 'Source Serif Pro';
+		font-family: 'Lato', serif;
 		float: left;
 		line-height: 45px;
 		padding-top: 18px;
@@ -100,7 +100,7 @@ pre {
 		float: left; 
 		color: rgba(164, 193, 108, 0.9); 
 		font-size: 100px; 
-		font-family: 'Source Serif Pro';
+		font-family: 'Lato', serif;
 		float: left;
 		line-height: 50px;
 		padding-top: 40px;
@@ -148,28 +148,7 @@ pre {
         /*position: relative;*/
         /*opacity: 0;*/
         /*overflow: scroll;*/
-    }
 
-    #slides .swiper-slide h2 {
-        color: rgba(164, 193, 108, 0.9);
-        font-weight: bold;
-        font-size: 52px;
-        font-family: "Source Serif Pro", serif;
-        line-height: 60px;
-    }
-    #slides .swiper-slide .read h2 {
-        color: rgba(164, 193, 108, 0.9);
-        font-weight: bold;
-        font-size: 52px;
-        font-family: "Source Serif Pro", serif;
-        line-height: 60px;
-    }
-    #slides .swiper-slide h3 {
-        color: rgba(164, 193, 108, 0.9);
-        font-weight: bold;
-        font-size: 30px;
-        font-family: "Source Serif Pro", serif;
-        line-height: 40px;
     }
     #slides .swiper-slide .read p,
     #slides .swiper-slide .read ul {
@@ -193,7 +172,6 @@ pre {
 
     #slides .swiper-slide .names p {
         color: rgba(232, 232, 232, 1);
-        font-family: 'Source Sans Pro', sans-serif;
         font-size: 18px;
         font-style: normal;
         font-variant: normal;
@@ -229,11 +207,7 @@ pre {
         font-size: 14px;
         line-height: 20px;
         }
-        #slides .swiper-slide h2 {
-        font-size: 35px;
-        font-family: 'Source Serif Pro', serif;
-        }
-    }
+
 
     @media (max-width: 480px){
     }
@@ -262,14 +236,6 @@ pre {
 		position: relative;
 		opacity: 0;
 		overflow: scroll;
-	}
-
-	.read h2 {
-		color: rgba(164, 193, 108, 0.9);
-		font-weight: bold;
-		font-size: 52px;
-		font-family: "Source Serif Pro", serif;
-		line-height: 60px;
 	}
 
 	.inner h2 {
