@@ -104,7 +104,7 @@ $(document).ready(function () {
     }
   }
 
-  mySwiper = new Swiper ('#slides', {
+  mySwiper = new Swiper ('.swiper-container', {
 
       // Main
       direction: 'vertical',
@@ -112,25 +112,16 @@ $(document).ready(function () {
       speed: 300,
       hashnav: false,
       slidesPerView: 1,
-      longSwipes: true,  // This is to make sure user doesn't scroll through several pages
       longSwipesRatio: 0.9,
       longSwipesMs: 1600,
-
-      // Pagination
       pagination: '.swiper-pagination',
       paginationClickable: true,
-
-      // Load slides one by one
       preloadImages: false,
-      lazyLoading: true,
-      lazyLoadingInPrevNext: true,
-
-      // And if we need scrollbar
-      //scrollbar: '.swiper-scrollbar',
-
-      // Keyboard / Mousewheel controls
-      keyboardControl:  true,
-      mousewheelControl:  true,
+      noSwiping: true,
+      //onlyExternal: true,
+      nextButton: '#proceed',
+      prevButton: '#retreat',
+      keyboardControl: true,
 
       // Callback function, will be executed right after Swiper initialization
       onInit: function(swiper) {
@@ -156,13 +147,9 @@ $(document).ready(function () {
       // was onTransitionStart
       onSlideChangeStart: function(swiper){
         turnActiveSlideOnTurnPrevOff(swiper);
-        swiper.lockSwipeToNext();
-        console.log("swipe locked");
       },
       onSlideChangeEnd: function(swiper){
         leisurelyLoad(swiper, [$('.swiper-slide-prev'), $('.swiper-slide-next')]);
-        swiper.unlockSwipeToNext();
-        console.log("swipe unlocked");
       }
   });
 
