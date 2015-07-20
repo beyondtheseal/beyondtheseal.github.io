@@ -4,6 +4,9 @@ var viewportWidth;
 var fullScreenVids = [];
 
 $(document).ready(function () {
+
+  var Chapters = buildChapterNav();
+
   // TODO: Use a pure JS solution so we can get rid of underscore
   // Use underscore.js to throttle firing
   function resizeListener(){
@@ -33,9 +36,6 @@ $(document).ready(function () {
         _V_(instance).width(viewportWidth).height(viewportHeight);
       })
     }
-
-  resizeListener();
-
 
   function turnActiveSlideOnTurnPrevOff(swiper){
     var curr = swiper.previousIndex;
@@ -92,7 +92,6 @@ $(document).ready(function () {
 
   function leisurelyLoad(slidesToCheck){
     var media = ["video", "img.lazy"];
-    console.log(slidesToCheck);
     // Check to see if any of the targeted elements exist on adjacent slides
     for (i in slidesToCheck){
       for (index in media){
@@ -103,6 +102,42 @@ $(document).ready(function () {
       }
     }
   }
+
+  function setUpTimeline(){
+    $("#history-timeline").height(viewportHeight);
+    $("#history-timeline").width(viewportWidth);
+    // Reload the timeline (this is quick and dirty – it shouldn't stay in production)
+    var iframe = document.getElementById("#history-timeline");
+    if (iframe){
+      iframe.src = iframe.src;
+    }
+    $( '#history-timeline' ).attr( 'src', function ( i, val ) { return val; });
+  }
+
+  function buildChapterNav(){
+    // We actually have to use Javascript to freaking scroll to other slides.
+    $('.chapter-nav').on("click", function(){
+      var targetSlide = ($(this).data("target"));
+      $(this).siblings().removeClass("current");
+      $(this).addClass("current");
+      mySwiper.slideTo(targetSlide, 400);
+    });
+
+    var chapters = [];
+    var chapterDivs = $('.chapter-nav');
+    $.each(chapterDivs, function(index){
+      if ($(this).data("target")){
+        chapters.push($(this).data("target"));
+      }
+    });
+    return chapters;
+  };
+
+  function highlightCurrentChapter(activeIndex, Chapters){
+
+    console.log(Chapters);
+  };
+
 
   mySwiper = new Swiper ('.swiper-container', {
 
@@ -150,24 +185,10 @@ $(document).ready(function () {
       },
       onSlideChangeEnd: function(swiper){
         leisurelyLoad([$('.swiper-slide-prev'), $('.swiper-slide-active'), $('.swiper-slide-next')]);
+        highlightCurrentChapter(swiper.activeIndex, Chapters);
       }
   });
 
-  $("#history-timeline").height(viewportHeight);
-  $("#history-timeline").width(viewportWidth);
-  // Reload the timeline (this is quick and dirty – it shouldn't stay in production)
-  var iframe = document.getElementById("#history-timeline");
-  if (iframe){
-    iframe.src = iframe.src;
-  }
-  $( '#history-timeline' ).attr( 'src', function ( i, val ) { return val; });
-
-  // We actually have to use Javascript to freaking scroll to other slides.
-  $('.chapter-nav').on("click", function(){
-    var targetSlide = ($(this).data("target"));
-    mySwiper.slideTo(targetSlide, 400);
-  });
-
-
-
+  resizeListener();
+  setUpTimeline();
 });

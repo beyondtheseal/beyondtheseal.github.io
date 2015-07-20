@@ -161,7 +161,7 @@ audio.bgaud {
         font-size: 12px;
         margin-bottom: 0;
     }
-    .chapter-nav p.active {
+    .chapter-nav.current p {
         color: #fff;
     }
     #controls {
