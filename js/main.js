@@ -1,4 +1,4 @@
-var mySwiper;
+ var mySwiper;
 var viewportHeight;
 var viewportWidth;
 var fullScreenVids = [];
