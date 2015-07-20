@@ -90,7 +90,6 @@ pre {
     background: -ms-linear-gradient(left,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* IE10+ */
     background: linear-gradient(to right,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* W3C */
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
-
 }
 
 video.bgvid {
@@ -299,4 +298,27 @@ div.hr hr {
     min-height: 100%;
     background-size: cover; 
     z-index: 2;
+}
+
+@media screen and (max-width: 460px) {
+    #control-wrapper { background-color: rgba(0,0,0,0); height: auto; bottom: 0; }
+    .chapter-nav { display: none; }
+    #controls { opacity: 0.9; width: 100%; }
+    #retreat,
+    #proceed { float: right; opacity: 0.9;}
+    .inner {
+        width: auto;
+        padding: 0;
+        margin: 20px;
+    }
+
+    .gradient {
+        background: -moz-linear-gradient(top,  rgba(0,0,0,1) 1%, rgba(0,0,0,1) 28%, rgba(0,0,0,0.65) 54%, rgba(0,0,0,0.06) 96%, rgba(0,0,0,0.06) 99%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, top, bottom, color-stop(1%,rgba(0,0,0,1)), color-stop(28%,rgba(0,0,0,1)), color-stop(54%,rgba(0,0,0,0.65)), color-stop(96%,rgba(0,0,0,0.06)), color-stop(99%,rgba(0,0,0,0.06)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(top,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(top,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(top,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* IE10+ */
+        background: linear-gradient(to bpttp,,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+    }
 }
