@@ -17,12 +17,12 @@ h1 {
     font-size: 50px;
     font-weight: 700;
     line-height: 20px;
-    color: rgba(164, 193, 108, 0.9);
+    color: rgba(164, 193, 108, 0.8);
 }
 
 h2 {
     font-size: 25px;
-    font-weight: 400;
+    font-weight: 300;
     line-height: 20px;
     color: rgba(232, 232, 232, 0.7);
 }
@@ -57,7 +57,7 @@ pre {
 
 .firstcharacter {
 	float: left; 
-	color: rgba(208, 208, 208, 1); 
+	color: rgba(208, 208, 208, 0.8); 
 	font-size: 100px; 
 	float: left;
 	line-height: 45px;
@@ -144,7 +144,6 @@ div.hr hr {
     color: #999;
     text-align: left;
     font-size: 14px;
-    font-family: 'Source Sans Pro', sans-serif;
     font-style: italic;
     margin: 5px 0 5px;
 }
@@ -173,7 +172,6 @@ div.hr hr {
     /*padding: 10px 20px;*/
     padding: 0;
     border-radius: 88px;
-    font-family: 'Source Sans Pro', sans-serif;
     text-transform: uppercase;
     width: 69px;
     height: 68px;
@@ -209,9 +207,9 @@ div.hr hr {
 .read h2 {
     color: rgba(164, 193, 108, 0.9);
     font-weight: bold;
-    font-size: 48px;
+    font-size: 45px;
     font-family: "Lustria", serif;
-    line-height: 40px;
+    line-height: 20px;
 }
 
 .inner {
@@ -278,7 +276,6 @@ div.hr hr {
     }
     .swiper-slide h2 {
     font-size: 35px;
-    font-family: 'Source Serif Pro', serif;
     }
 }
 
