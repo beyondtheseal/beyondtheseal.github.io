@@ -146,6 +146,7 @@ audio.bgaud {
     .chapter-nav {
         border-bottom: 1px solid #999;
         padding: 10px 5px;
+        cursor: pointer;
     }
     .chapter-nav p {
         color: #999;
@@ -241,6 +242,7 @@ audio.bgaud {
         position: absolute;
         z-index: -1;
         top: 0;
+        right:0;
     }
 
     .inner {
@@ -251,11 +253,6 @@ audio.bgaud {
         z-index:3;
     }
 
-    .swiper-slide {
-        position: relative;
-        opacity: 0;
-        overflow: scroll;
-    }
 
     .read h2 {
         color: rgba(164, 193, 108, 0.9);
@@ -322,16 +319,13 @@ audio.bgaud {
             padding-top: 40px;
             margin-left: 40px;
             width: 75%;
-        }   
+        }
         #slides .swiper-slide .read p,
         #slides .swiper-slide .read ul {
         font-size: 14px;
         line-height: 20px;
         }
 
-
-    @media (max-width: 480px){
-    }
 
     /* Landscape */
     @media (min-aspect-ratio: 16/9){
@@ -357,7 +351,7 @@ audio.bgaud {
 	.swiper-slide {
 		position: relative;
 		opacity: 0;
-		overflow: scroll;
+		overflow: hidden;
 	}
 
 	.inner h2 {
