@@ -38,6 +38,7 @@ p {
     font-size: 15px;
     font-weight: 300;
     line-height: 24.9999996185303px;
+    color: rgba(232, 232, 232, 0.8);
 }
 blockquote {
     font-size: 24px;
@@ -230,12 +231,12 @@ div.hr hr {
 }
 .read p,
 .read ul {
-    color: rgba(232, 232, 232, 1);
+    color: rgba(232, 232, 232, 0.7);
     font-size: 19px;
     line-height: 26px;
 }
 .tagline p {
-    color: rgba(208, 208, 208, 1);
+    color: rgba(208, 208, 208, 0.7);
     font-size: 24px;
     line-height: 12px;
 }
