@@ -125,7 +125,7 @@ $(document).ready(function () {
 
     var chapters = [];
     var chapterDivs = $('.chapter-nav');
-    $.each(chapterDivs, function(index){
+    $.each(chapterDivs, function(){
       if ($(this).data("target")){
         chapters.push($(this).data("target"));
       }
@@ -134,8 +134,13 @@ $(document).ready(function () {
   };
 
   function highlightCurrentChapter(activeIndex, Chapters){
-
-    console.log(Chapters);
+    $.each(Chapters, function(index){
+      if ((activeIndex >= Chapters[index] && activeIndex < Chapters[index+1]) || (activeIndex >= Chapters[index] &&!(Chapters[index+1]))){
+        $('#control-wrapper').find('[data-target="'+ Chapters[index] + '"]')
+                             .addClass("current")
+                             .siblings().removeClass("current");
+      }
+    });
   };
 
 
