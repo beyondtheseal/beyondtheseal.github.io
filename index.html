@@ -24,6 +24,51 @@
 
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
 
+        <title>Farmer face slideshow</title>
+
+        <script language="JavaScript">
+          var interval= 2000;
+          var random_display= 0;
+          var imageDir= "img/faces/";
+          
+          var imageNum = 0;
+          imageArray = new Array();
+          imageArray[imageNum++] = new imageItem(imageDir + "jimena.png");
+          imageArray[imageNum++] = new imageItem(imageDir + "anibal.png");
+          imageArray[imageNum++] = new imageItem(imageDir + "siguerto.png");
+          imageArray[imageNum++] = new imageItem(imageDir + "jorge.png");
+          imageArray[imageNum++] = new imageItem(imageDir + "javier.png");
+          imageArray[imageNum++] = new imageItem(imageDir + "ramon.png");
+          var totalImages = imageArray.length;
+
+          function imageItem(image_location) {
+
+          this.image_item = new Image();
+          this.image_item.src = image_location;
+          }
+
+          function get_ImageItemLocation(imageObj) {
+          return(imageObj.image_item.src)
+          }
+          function getNextImage() {
+          if (random_display) {
+          imageNum = randNum(0, totalImages-1);
+          }
+          else {
+          imageNum = (imageNum+1) % totalImages;
+          }
+          var new_image = get_ImageItemLocation(imageArray[imageNum]);
+          return(new_image);
+          }
+
+          function switchImage(place) {
+          var new_image = getNextImage();
+          document[place].src = new_image;
+          var recur_call = "switchImage('"+place+"')";
+          timerID = setTimeout(recur_call, interval);
+          }
+        </script>
+
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -73,11 +118,14 @@
               <p>&nbsp;</p>
               <h1>Beyond the Seal</h1>
                 <h2>Small banana farmers fight for a Fair Trade fruit.</h2>
-              <div class="names hairline">
+              <div class="names nameline">
                 <p>by KATHERINE NAGASAWA and LEAH VARJACQUES</p>
               </div>
             </div>
-            <img src="img/faces/jimena.png" class="fgimg"/>
+            <body onLoad="switchImage('slideImg')">
+            <img name="slideImg" src="img/faces/jimena.png" class="fgimg"/>
+            <img name="slideImg" src="img/faces/anibal.png" class="fgimg"/>
+            </body>
           </div><!-- swiper-slide -->
 
 
@@ -90,9 +138,7 @@
                 <div class="hairline">
                 <p style="font-size: 24px; text-align: center">The story we get from our banana stickers isn't so simple.</p>
                 </div>
-                <div class="hairline">
                 <p>On this end of the supply chain, in many countries throughout Latin America, bananas mean livelihood for hundreds of thousands of workers.  They also represent a century-long history of private coups, massacres and feats of infrastructure and scale previously unimaginable for any industry--all to bring spotless yellow bananas to our kitchen tables year-round for half the price of apples. This was the story of bananas until now.</p> 
-                </div> 
               </div>
             </div>
           <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p0.jpg" class="lazy bgimg"/>
@@ -107,9 +153,7 @@
               <div class="hairline">
               <p style="font-size: 24px; text-align: center">This is the story of the small farmers striving to change the way American consumers view and eat bananas.</p>
               </div>
-              <div class="hairline">
               <p>This is the story of the small farmers--and the activists and businesspeople behind them--striving to change the way American consumers view and eat bananas. In an industry in which large multinational companies own and control every stage of production, these producers have committed to build a more just supply chain, one that prioritizes their health, their families and their community.  </p> 
-              </div> 
             </div>
           </div>
         <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p0.jpg" class="lazy bgimg"/>
@@ -141,10 +185,11 @@
                 <span class="firstcharacter">A</span>
               </div>
               <div class="read">
-                <p>long the southwest coast of Ecuador in the sprawling province of El Oro lies Machala, the banana capital of the world. Machala is an unassuming city of unpainted buildings, motorbike exhaust and grimy Chinese restaurants. It also serves as one of the main ports through which around 5 million tons of the world’s exported bananas pass each year. Every September, Machala hosts the annual International Banana Festival, where local farmers compete for the largest banana stalk while women from banana-producing Latin American countries compete for the title of Reina del Banano, or Banana Queen.</p>
+                <p>long the southwest coast of Ecuador in the sprawling province of El Oro lies Machala, the banana capital of the world. Machala is an unassuming city of unpainted buildings, motorbike exhaust and grimy Chinese restaurants. It also serves as one of the main ports through which around 5 million tons of the world’s exported bananas pass each year.</p> 
                 <div class="hairline">
                 <p style="font-size: 24px; text-align: center">Machala is the banana capital of the world.</p>
                 </div>
+                <p>Every September, Machala hosts the annual International Banana Festival, where local farmers compete for the largest banana stalk while women from banana-producing Latin American countries compete for the title of Reina del Banano, or Banana Queen.</p>
               </div>
             </div>
           <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/ecuador.jpg" class="lazy bgimg"/>
@@ -159,9 +204,7 @@
                 <div class="hairline"> 
                 <p style="font-size: 24px; text-align: center">This concrete oasis breaking the leafy horizon is home to the world’s first Fair Trade banana organization.</p>
                 </div>
-                <div class="hairline">
                 <p>The town of El Guabo stands out like an island tucked between this sea of deep green plantations. This concrete oasis breaking the leafy horizon is home to the world’s first Fair Trade banana organization.  Through the Association of Small Producers of El Guabo (Asoguabo), 135 organized small farmers harvest and ship ten tons of Fair Trade bananas every week to the U.S. and Europe. They are living out the vision of 14 Ecuadorian farmers from the late 1990s to build a fairer market and carve a place for small producers within the global banana industry.</p>
-                </div>
               </div>
             </div>
           <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p1.jpg" class="lazy bgimg"/>
@@ -179,9 +222,7 @@
               <div class="hairline"> 
               <p style="font-size: 24px; text-align: center">Today, Ecuador exports 32 percent of the world's bananas.</p>
               </div>
-              <div class="hairline">
               <p>Beyond unstable economies, banana republics suffered rampant labor, human and environmental rights violations to workers on large plantations. Dan Koeppel, author of <em>Bananas: The Fate of the Fruit That Changed the World</em>, calls these farms “Cavendish factories” since every commercial banana comes from a single variety called the Cavendish.</p>
-            </div>
           </div>
         </div>
         <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p3.jpg" class="lazy bgimg"/>
@@ -196,8 +237,8 @@
           <div class="inner">
             <div class="read">
               <h3>Ecuador today</h3>
-              <p>While the banana industry no longer partakes in bloody coups and civil wars like it did in the 1970s, it retains aspects of this legacy today.</p>
-              <p>Jorge Acosta would know—a trained pilot, he spent 17 years fumigating banana plantations in Ecuador.  One day after feeling sick from his plane’s fumes, Acosta researched the chemical he had been handling for so many years.  Its name was Mancozeb, a known carcinogen banned in the U.S. and Europe, only to be mysteriously dumped in Latin America and used as a pesticide.</p>
+              <p>While the banana industry no longer partakes in bloody coups and civil wars like it did in the 1970s, it still suffers the consequences today.</p>
+              <p>Jorge Acosta knows these legacies well—a trained pilot, he spent 17 years fumigating banana plantations in Ecuador.  One day after feeling sick from his plane’s fumes, Jorge researched the chemical he had been handling for so many years.  Its name was Mancozeb, a known carcinogen banned in the U.S. and Europe, only to be mysteriously dumped in Latin America and used as a pesticide.</p>
             </div>
           </div>
           <img src="img/faces/jorge.png" class="fgimg"/>
@@ -212,8 +253,8 @@
               <p></p>
             </div>
           </div>
-          <img src="img/faces/javier.png" class="fgimg"/>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p4.jpg" class="lazy bgimg"/>
+          <img src="img/facesnames/javiername.png" class="fgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p13.jpg" class="lazy bgimg"/>
         </div>
 
 
