@@ -39,91 +39,91 @@
 
 
 h1 {
-	font-family: 'Lustria', serif;
-	font-size: 50px;
-	font-weight: 700;
-	line-height: 45px;
-	color: rgba(164, 193, 108, 0.9);
+    font-family: 'Lustria', serif;
+    font-size: 50px;
+    font-weight: 700;
+    line-height: 45px;
+    color: rgba(164, 193, 108, 0.9);
 }
 
 h2 {
-	font-family: 'Lato', sans-serif;
-	font-size: 25px;
-	font-weight: 400;
-	line-height: 40px;
-	color: rgba(232, 232, 232, 1);
+    font-family: 'Lato', sans-serif;
+    font-size: 25px;
+    font-weight: 400;
+    line-height: 40px;
+    color: rgba(232, 232, 232, 1);
 }
 
 h3 {
-	font-family: 'Lustria', sans-serif;
-	font-size: 35px;
-	font-weight: 400;
-	line-height: 40px;
-	color: #fff;
+    font-family: 'Lustria', sans-serif;
+    font-size: 35px;
+    font-weight: 400;
+    line-height: 40px;
+    color: #fff;
 }
 p {
-	font-family: 'Lato', sans-serif;
-	font-size: 15px;
-	font-weight: 300;
-	line-height: 24.9999996185303px;
+    font-family: 'Lato', sans-serif;
+    font-size: 15px;
+    font-weight: 300;
+    line-height: 24.9999996185303px;
 }
 blockquote {
-	font-family: 'Lato';
-	font-size: 24px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 100;
-	line-height: 33.5999984741211px;
+    font-family: 'Lato';
+    font-size: 24px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 100;
+    line-height: 33.5999984741211px;
 }
 pre {
-	font-family: 'Lato';
-	font-size: 11px;
-	font-style: normal;
-	font-variant: normal;
-	font-weight: 400;
-	line-height: 23px;
+    font-family: 'Lato';
+    font-size: 11px;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 23px;
 }
 
 
-	.firstcharacter {
-		float: left; 
-		color: rgba(208, 208, 208, 1); 
-		font-size: 100px; 
-		font-family: 'Lato', serif;
-		float: left;
-		line-height: 45px;
-		padding-top: 18px;
-		padding-right: 5px; 
-	}
+    .firstcharacter {
+        float: left; 
+        color: rgba(208, 208, 208, 1); 
+        font-size: 100px; 
+        font-family: 'Lato', serif;
+        float: left;
+        line-height: 45px;
+        padding-top: 18px;
+        padding-right: 5px; 
+    }
 
-	.secondcharacter {
-		float: left; 
-		color: rgba(164, 193, 108, 0.9); 
-		font-size: 100px; 
-		font-family: 'Lato', serif;
-		float: left;
-		line-height: 50px;
-		padding-top: 40px;
-		padding-right: 5px; 
-	}
+    .secondcharacter {
+        float: left; 
+        color: rgba(164, 193, 108, 0.9); 
+        font-size: 100px; 
+        font-family: 'Lato', serif;
+        float: left;
+        line-height: 50px;
+        padding-top: 40px;
+        padding-right: 5px; 
+    }
 
-	.gradient {
-		height: 100%;
-		width: 100%;
-		position: absolute;
-		top:0;
-		left:0;
-		z-index: 2;
-		/* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&amp;0.65+16,0+75 */
-		background: -moz-linear-gradient(left,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.65) 16%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 100%); /* FF3.6+ */
-		background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.65)), color-stop(16%,rgba(0,0,0,0.65)), color-stop(75%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
-		background: -webkit-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
-		background: -o-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
-		background: -ms-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* IE10+ */
-		background: linear-gradient(to right,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* W3C */
-		filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+    .gradient {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top:0;
+        left:0;
+        z-index: 2;
+        /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+0,000000+100&amp;0.65+16,0+75 */
+        background: -moz-linear-gradient(left,  rgba(0,0,0,0.65) 0%, rgba(0,0,0,0.65) 16%, rgba(0,0,0,0) 75%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+        background: -webkit-gradient(linear, left top, right top, color-stop(0%,rgba(0,0,0,0.65)), color-stop(16%,rgba(0,0,0,0.65)), color-stop(75%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+        background: -webkit-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+        background: -o-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+        background: -ms-linear-gradient(left,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* IE10+ */
+        background: linear-gradient(to right,  rgba(0,0,0,0.65) 0%,rgba(0,0,0,0.65) 16%,rgba(0,0,0,0) 75%,rgba(0,0,0,0) 100%); /* W3C */
+        filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#a6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
 
-	}
+    }
 
 
 
@@ -138,46 +138,6 @@ video.bgvid {
 
 audio.bgaud {
 }
-
-    #slides {
-        width: 100%;
-        height: 100%;
-        background-color: #000;
-    }
-    #slides .swiper-slide {
-        /*position: relative;*/
-        /*opacity: 0;*/
-        /*overflow: scroll;*/
-
-    }
-    #slides .swiper-slide .read p,
-    #slides .swiper-slide .read ul {
-        color: rgba(232, 232, 232, 1);
-        font-size: 19px;
-        line-height: 26px;
-    }
-    #slides .swiper-slide .tagline p {
-        color: rgba(208, 208, 208, 1);
-        font-size: 24px;
-        line-height: 12px;
-    }
-
-    #slides .inner {
-        padding-top: 80px;
-        margin-left: 70px;
-        width: 45%;
-        position:relative;
-        z-index:3;
-    }
-
-    #slides .swiper-slide .names p {
-        color: rgba(232, 232, 232, 1);
-        font-size: 18px;
-        font-style: normal;
-        font-variant: normal;
-        font-weight: 100;
-        line-height: 12px;
-    }
     div.hr {
         background: #fff  no-repeat scroll left;
         margin-left: 0em;
@@ -271,51 +231,10 @@ audio.bgaud {
         font-family: 'Mate', serif;
     }
 
-
-    @media screen(max-width: 760px) {
-        #slides .inner {
-            padding-top: 40px;
-            margin-left: 40px;
-            width: 75%;
-        }   
-        #slides .swiper-slide .read p,
-        #slides .swiper-slide .read ul {
-        font-size: 14px;
-        line-height: 20px;
-        }
-        #slides .swiper-slide h2 {
-        font-size: 35px;
-        font-family: 'Source Serif Pro', serif;
-        }
-    }
-
-    @media (max-width: 480px){
-    }
-
-    /* Landscape */
-    @media (min-aspect-ratio: 16/9){
-        video.bgvid {
-            width: 1px; height: auto; 
-        }
-    }
-    .bgimg {
-        position: absolute;
-        z-index: -1;
-        top: 0;
-    }
-
-    .inner {
-        padding-top: 80px;
-        margin-left: 70px;
-        width: 45%;
-        position:relative;
-        z-index:3;
-    }
-
-    .swiper-slide {
+     .swiper-slide {
         position: relative;
         opacity: 0;
-        overflow: scroll;
+        overflow: hidden;
     }
 
     .read h2 {
@@ -326,11 +245,27 @@ audio.bgaud {
         line-height: 60px;
     }
 
+    .inner {
+        padding-top: 80px;
+        margin-left: 70px;
+        width: 45%;
+        position:relative;
+        z-index:3;
+    }
+
+    .inner h2 {
+        color: rgba(164, 193, 108, 0.9);
+        font-weight: bold;
+        font-size: 52px;
+        font-family: "Lato", serif;
+        line-height: 60px;
+    }
+
     .read h3 {
         color: rgba(164, 193, 108, 0.9);
         font-weight: bold;
         font-size: 30px;
-        font-family: "Mate", serif;
+        font-family: "Lato", serif;
         line-height: 40px;
     }
     .read p,
@@ -371,19 +306,20 @@ audio.bgaud {
     }
 
     @media screen(max-width: 760px) {
-        #slides .inner {
+        .inner {
             padding-top: 40px;
             margin-left: 40px;
             width: 75%;
-        }   
-        #slides .swiper-slide .read p,
-        #slides .swiper-slide .read ul {
+        }
+        .read p,
+        .read ul {
         font-size: 14px;
         line-height: 20px;
         }
-
-
-    @media (max-width: 480px){
+        .swiper-slide h2 {
+        font-size: 35px;
+        font-family: 'Source Serif Pro', serif;
+        }
     }
 
     /* Landscape */
@@ -399,113 +335,14 @@ audio.bgaud {
         right: 0;
     }
 
-	.inner {
-		padding-top: 80px;
-		margin-left: 70px;
-		width: 45%;
-		position:relative;
-		z-index:3;
-	}
-
-	.swiper-slide {
-		position: relative;
-		opacity: 0;
-		overflow: scroll;
-	}
-
-	.inner h2 {
-		color: rgba(164, 193, 108, 0.9);
-		font-weight: bold;
-		font-size: 52px;
-		font-family: "Lato", serif;
-		line-height: 60px;
-	}
-
-	.read h3 {
-		color: rgba(164, 193, 108, 0.9);
-		font-weight: bold;
-		font-size: 30px;
-		font-family: "Lato", serif;
-		line-height: 40px;
-	}
-	.read p,
-	.read ul {
-		color: rgba(232, 232, 232, 1);
-		font-size: 19px;
-		line-height: 26px;
-	}
-	.tagline p {
-		color: rgba(208, 208, 208, 1);
-		font-size: 24px;
-		line-height: 12px;
-	}
-	.names p {
-		color: rgba(232, 232, 232, 1);
-		font-family: 'Lato', sans-serif;
-		font-size: 18px;
-		font-style: normal;
-		font-variant: normal;
-		font-weight: 100;
-		line-height: 12px;
-
-	}
-	.vjs-fade-in,.vjs-fade-out {
-		visibility: visible !important;
-		opacity: 1 !important;
-		transition-duration: 0s!important;
-	}
-
-	.hairline {
-		border-top: solid 1px #fff;
-		display: inline-block;
-
-	}
-
-	.names {
-		margin-top: 30px;
-	}
-
-	@media screen(max-width: 760px) {
-		#slides .inner {
-			padding-top: 40px;
-			margin-left: 40px;
-			width: 75%;
-		}	
-		#slides .swiper-slide .read p,
-		#slides .swiper-slide .read ul {
-		font-size: 14px;
-		line-height: 20px;
-		}
-		#slides .swiper-slide h2 {
-		font-size: 35px;
-		font-family: 'Source Serif Pro', serif;
-		}
-	}
-
-	@media (max-width: 480px){
-	}
-
-	/* Landscape */
-	@media (min-aspect-ratio: 16/9){
-		video.bgvid {
-			width: 1px; height: auto; 
-		}
-	}
-	.bgimg {
-		position: absolute;
-		z-index: -1;
-		top: 0;
-		right: 0;
-	}
-
-	.fgimg {
-		position: absolute;
-		right: 0; bottom: 0;
-		min-width: 100%%; 
-		min-height: 100%;
-		background-size: cover;	
-		z-index: 2;
-		}
+    .fgimg {
+        position: absolute;
+        right: 0; bottom: 0;
+        min-width: 100%%; 
+        min-height: 100%;
+        background-size: cover; 
+        z-index: 2;
+        }
 
 
 
