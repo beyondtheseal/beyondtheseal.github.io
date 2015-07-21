@@ -24,8 +24,6 @@
 
         <link href='http://fonts.googleapis.com/css?family=Lato:300,400,300italic,400italic' rel='stylesheet' type='text/css'>
 
-        <title>Farmer face slideshow</title>
-
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -52,10 +50,10 @@
           <p class="ch">Chapter 4</p>
           <p>Challenges ahead</p>
       </div>
-      <div class="chapter-nav">
+      <div class="chapter-nav" data-target="25">
           <p>Resources</p>
       </div>
-      <div class="chapter-nav">
+      <div class="chapter-nav" data-target="26">
           <p>Credits</p>
       </div>
       <div id="controls">
@@ -82,9 +80,11 @@
 
             <div id="slideshow">
               <img src="img/faces/jimena.png" class="active" />
+              <img src="img/faces/anibal.png" />
               <img src="img/faces/siguerto.png" />
               <img src="img/faces/javier.png" />
               <img src="img/faces/ramon.png" />
+              <img src="img/faces/jorge.png" />
             </div>
 
           </div><!-- swiper-slide -->
@@ -147,7 +147,7 @@
               </div>
               <div class="read">
                 <p>long the southwest coast of Ecuador in the sprawling province of El Oro lies Machala, the banana capital of the world. Machala is an unassuming city of unpainted buildings, motorbike exhaust and grimy Chinese restaurants. It also serves as one of the main ports through which around 5 million tons of the world’s exported bananas pass each year.</p> 
-                <div class="hairline">
+                <div class="hairline" align="center">
                 <p style="font-size: 24px; text-align: center">Machala is the banana capital of the world.</p>
                 </div>
                 <p>Every September, Machala hosts the annual International Banana Festival, where local farmers compete for the largest banana stalk while women from banana-producing Latin American countries compete for the title of Reina del Banano, or Banana Queen.</p>
@@ -173,6 +173,7 @@
 
 
       <div class="swiper-slide" data-hash="7">
+          <img src="img/bg-small/stats.png" class="fgimg"/>
           <div class="gradient"></div>
           <div class="inner">
           <div class="firstcharacter">
@@ -199,10 +200,10 @@
             <div class="read">
               <h3>Ecuador today</h3>
               <p>While the banana industry no longer partakes in bloody coups and civil wars like it did in the 1970s, it still suffers the consequences today.</p>
-              <p>Jorge Acosta knows these legacies well—a trained pilot, he spent 17 years fumigating banana plantations in Ecuador.  One day after feeling sick from his plane’s fumes, Jorge researched the chemical he had been handling for so many years.  Its name was Mancozeb, a known carcinogen banned in the U.S. and Europe, only to be mysteriously dumped in Latin America and used as a pesticide.</p>
+              <p>Jorge Acosta knows these legacies well—a trained pilot, he spent 17 years fumigating banana plantations in Ecuador.  One day after feeling sick from his plane’s fumes, Jorge researched the chemical he had been handling for so many years.  Its name was Mancozeb, a known carcinogen banned in the U.S. and Europe but commonly used as a pesticide throughout Latin America.</p>
             </div>
           </div>
-          <img src="img/faces/jorge.png" class="fgimg"/>
+          <img src="img/facesnames/jorgename.png" class="fgimg"/>
           <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p4.jpg" class="lazy bgimg"/>
         </div>
 
@@ -226,7 +227,6 @@
 
 
         <div class="swiper-slide" data-hash="12">
-          <div class="gradient"></div>
           <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" data-src="video/chapter/2.mp4" type="video/mp4"></video>
 
           <div class="inner">
@@ -302,6 +302,11 @@
       </div>
 
       <div class="swiper-slide" data-hash="19">
+            <video id="full-vid-social-projects" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/social-projects.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
+      </div>
+
+
+      <div class="swiper-slide" data-hash="20">
         <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" data-src="video/chapter/3.mp4" type="video/mp4"></video>
         <div class="inner">
           <div class="read">
@@ -314,9 +319,6 @@
         </div>
       </div>
 
-      <div class="swiper-slide" data-hash="20">
-             <video id="full-vid-social-projects" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/social-projects.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
-      </div>
 
       <div class="swiper-slide" data-hash="21">
           <div class="gradient"></div>
@@ -341,7 +343,6 @@
               <p>Fair Trade bananas have been around in Europe since the late 1990s and make up nearly one third of the total banana business there.  Fair Trade roots in Europe make it much more of an easy market for Fair Trade, in addition to the general culture around food in Europe; smaller scale agriculture, banned GMOs, and greater organic practices. European consumers are more organized and ready to demand better practices from their food suppliers than American ones.  Asoguabo exported its first container of bananas to the U.S. in 2005. Ten years later, Fair Trade bananas still only make up less than one percent of the total consumed bananas in the U.S.</p>
               <p>In spite of all this, Equal Exchange is determined to bring bananas to American consumers.</p>
               <p>“I don’t know that if at the end of the day this will succeed or this is the right fight to be fighting, or if Equal Exchange should really be doing bananas or should be doing more coffee products where it’s more of a conducive model, it’s not so much pressure and so unlikely to succeed,” says Nicole Vitello, CEO of Oké USA. “But then I’m like, well if Equal Exchange doesn’t do it, who does then?”</p>
-
             </div>
           </div>
           <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p7.jpg" class="lazy bgimg"/>
@@ -360,17 +361,48 @@
           </div>
         </div>
 
-	  <div class="swiper-slide">
+	  <div class="swiper-slide" data-hash="24">
+         <div class="gradient"></div>
          <div class="inner">
            <div class="read">
              <p>The upsurge of labels in the food industry has confused consumers, who have grown suspicious of the truth behind the “Organic” and “Fair Trade” buzzwords. When it comes to the supermarket’s cheapest fruit, 99 cents Fair Trade bananas have been relegated to niche markets like natural food or co-op stores where Fair Trade has also come to signify organic. As the healthy, alternative food market grows, multinationals and plantations have started to break into the fair trade market, posing competition and controversy in the Fair Trade world. And as Equal Exchange hopes to grow demand for Fair Trade bananas, the best way to scale up while not compromising the values of this alternative model has yet to be found. In this next section, explore the different challenges facing the Fair Trade banana supply chain.</p>
             </div>
+      	</div>
+        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p7.jpg" class="lazy bgimg"/>
+      </div>
+
+
+    <div class="swiper-slide" data-hash="25">
+         <div class="gradient"></div>
+         <div class="inner">
+           <div class="read">
+             <h3>Credits</h3>
+             <h4>Reporting and multimedia production</h4>
+             <h5>Katherine Nagasawa and Leah Varjacques</h5>
+             <h4>Web Development</h4>
+             <h5>Heather Billings and Vesko Cholakov</h5>
+             <h4>Original music</h4>
+             <h5>Sasha Bayan</h5>
+             <h4>Icons</h4>
+             <h5>Stefan Parnarov from the Noun Project</h5>
+             <h4>Advising</h4>
+             <h5>Loren Ghiglione and Cecilia Vaisman</h5>
+             <h4>Special thanks to</h4>
+             <h5>Northwestern Knight Lab</h5>
+             <h5>Northwestern Office of Undergraduate Research</h5>
+             <h5>Northwestern Center for Global Engagement</h5>
+             <h5>Northwestern International Program Development</h5>
+             <h5>Equal Exchange Coop</h5>
+             <h5>Asoguabo Coop</h5>
+             <h5>United Students for Fair Trade</h5>
+            </div>
           </div>
           <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p10.jpg" class="lazy bgimg"/>
-      	</div>
+        </div>
         </div><!-- swiper-wrapper? -->
         <div class="swiper-pagination"></div>
     </div>
+
 
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
@@ -378,6 +410,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.8/js/swiper.jquery.min.js"></script>
         <script type="text/javascript" src="js/vendor/underscore-min.js"></script>
         <script src="js/main.js"></script>
+
+        <script type="text/javascript" src="js/vendor/howler.js"></script>
+
     </body>
 
     <script type="text/javascript">
@@ -392,17 +427,17 @@
 
           $active.addClass('last-active');
 
-          $active.animate({opacity: 0.0}, 1500);
+          $active.animate({opacity: 0.0}, 1300);
 
           $next.css({opacity: 0.0})
               .addClass('active')
-              .animate({opacity: 1.0}, 1500, function() {
+              .animate({opacity: 1.0}, 1300, function() {
                   $active.removeClass('active last-active');
               });
       }
 
       $(function() {
-          setInterval( "slideSwitch()", 3000 );
+          setInterval( "slideSwitch()", 6000 );
       });
     </script>
 
@@ -434,5 +469,6 @@
       }
 
     </style>
+
 
 </html>

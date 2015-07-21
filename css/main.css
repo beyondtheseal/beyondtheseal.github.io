@@ -17,7 +17,8 @@ h1 {
     font-size: 50px;
     font-weight: 700;
     line-height: 20px;
-    color: rgba(164, 193, 108, 0.8);
+    color: rgba(164, 193, 108, 0.6);
+    text-shadow: 2px 1px 2px rgba(0, 0, 0, 0.5);
 }
 
 h2 {
@@ -34,8 +35,23 @@ h3 {
     line-height: 30px;
     color: #fff;
 }
+
+h4 {
+    font-weight: 400;
+    color: rgba(232, 232, 232, 0.8);
+    font-size: 20px;
+    line-height: 0px;
+}
+
+h5 {
+    font-weight: 300;
+    color: rgba(232, 232, 232, 0.8);
+    font-size: 17px;
+    line-height: 0px; 
+}
+
 p {
-    font-size: 15px;
+    font-size: 19px;
     font-weight: 300;
     line-height: 24.9999996185303px;
     color: rgba(232, 232, 232, 0.8);
@@ -67,7 +83,7 @@ pre {
 
 .secondcharacter {
 	float: left; 
-	color: rgba(164, 193, 108, 0.9); 
+	color: rgba(164, 193, 108, 0.7); 
 	font-size: 100px; 
 	float: left;
 	line-height: 50px;
@@ -209,6 +225,7 @@ div.hr hr {
     font-size: 45px;
     font-family: "Lustria", serif;
     line-height: 20px;
+    text-shadow: 2px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
 .inner {
@@ -220,7 +237,7 @@ div.hr hr {
 }
 
 .read h3 {
-    color: rgba(164, 193, 108, 0.9);
+    color: rgba(164, 193, 108, 0.7);
     font-weight: bold;
     font-size: 30px;
     font-family: "Lustria", serif;
@@ -306,7 +323,7 @@ div.hr hr {
     min-width: 100%%; 
     min-height: 100%;
     background-size: cover; 
-    z-index: 2;
+    z-index: 100;
 }
 
 @media screen and (max-width: 460px) {
