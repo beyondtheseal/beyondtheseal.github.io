@@ -26,49 +26,6 @@
 
         <title>Farmer face slideshow</title>
 
-        <script language="JavaScript">
-          var interval= 2000;
-          var random_display= 0;
-          var imageDir= "img/faces/";
-          
-          var imageNum = 0;
-          imageArray = new Array();
-          imageArray[imageNum++] = new imageItem(imageDir + "jimena.png");
-          imageArray[imageNum++] = new imageItem(imageDir + "anibal.png");
-          imageArray[imageNum++] = new imageItem(imageDir + "siguerto.png");
-          imageArray[imageNum++] = new imageItem(imageDir + "jorge.png");
-          imageArray[imageNum++] = new imageItem(imageDir + "javier.png");
-          imageArray[imageNum++] = new imageItem(imageDir + "ramon.png");
-          var totalImages = imageArray.length;
-
-          function imageItem(image_location) {
-
-          this.image_item = new Image();
-          this.image_item.src = image_location;
-          }
-
-          function get_ImageItemLocation(imageObj) {
-          return(imageObj.image_item.src)
-          }
-          function getNextImage() {
-          if (random_display) {
-          imageNum = randNum(0, totalImages-1);
-          }
-          else {
-          imageNum = (imageNum+1) % totalImages;
-          }
-          var new_image = get_ImageItemLocation(imageArray[imageNum]);
-          return(new_image);
-          }
-
-          function switchImage(place) {
-          var new_image = getNextImage();
-          document[place].src = new_image;
-          var recur_call = "switchImage('"+place+"')";
-          timerID = setTimeout(recur_call, interval);
-          }
-        </script>
-
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -122,10 +79,14 @@
                 <p>by KATHERINE NAGASAWA and LEAH VARJACQUES</p>
               </div>
             </div>
-            <body onLoad="switchImage('slideImg')">
-            <img name="slideImg" src="img/faces/jimena.png" class="fgimg"/>
-            <img name="slideImg" src="img/faces/anibal.png" class="fgimg"/>
-            </body>
+
+            <div id="slideshow">
+              <img src="img/faces/jimena.png" class="active" />
+              <img src="img/faces/siguerto.png" />
+              <img src="img/faces/javier.png" />
+              <img src="img/faces/ramon.png" />
+            </div>
+
           </div><!-- swiper-slide -->
 
 
@@ -418,4 +379,60 @@
         <script type="text/javascript" src="js/vendor/underscore-min.js"></script>
         <script src="js/main.js"></script>
     </body>
+
+    <script type="text/javascript">
+      function slideSwitch() {
+          var $active = $('#slideshow img.active');
+
+          if ( $active.length == 0 ) $active = $('#slideshow img:last');
+
+          // use this to pull the images in the order they appear in the markup
+          var $next =  $active.next().length ? $active.next()
+              : $('#slideshow img:first');
+
+          $active.addClass('last-active');
+
+          $active.animate({opacity: 0.0}, 1500);
+
+          $next.css({opacity: 0.0})
+              .addClass('active')
+              .animate({opacity: 1.0}, 1500, function() {
+                  $active.removeClass('active last-active');
+              });
+      }
+
+      $(function() {
+          setInterval( "slideSwitch()", 3000 );
+      });
+    </script>
+
+
+    <style type="text/css">
+
+      #slideshow {
+          position:absolute;
+          height:720px;
+          bottom:0;
+          left:0;
+      }
+
+      #slideshow img {
+          position:absolute;
+          top:0;
+          left:0;
+          z-index:8;
+          opacity:0.0;
+      }
+
+      #slideshow img.active {
+          z-index:10;
+          opacity:1.0;
+      }
+
+      #slideshow img.last-active {
+          z-index:9;
+      }
+
+    </style>
+
 </html>
