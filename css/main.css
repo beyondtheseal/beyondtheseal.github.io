@@ -153,7 +153,7 @@ div.hr hr {
 }
 .chapter-nav {
     border-bottom: 1px solid #999;
-    padding: 10px 5px;
+    padding: 9px 4px;
 }
 .chapter-nav p {
     color: #999;
@@ -241,8 +241,18 @@ div.hr hr {
     font-weight: bold;
     font-size: 30px;
     font-family: "Lustria", serif;
-    line-height: 40px;
+    line-height: 25px;
 }
+
+.read h4 {
+    color: rgba(164, 193, 108, 0.7);
+    font-weight: bold;
+    font-size: 44px;
+    font-family: "Lustria", serif;
+    line-height: 0px;
+
+}
+
 .read p,
 .read ul {
     color: rgba(232, 232, 232, 0.7);
@@ -324,6 +334,7 @@ div.hr hr {
     min-height: 100%;
     background-size: cover; 
     z-index: 100;
+
 }
 
 @media screen and (max-width: 460px) {
