@@ -36,19 +36,6 @@ h3 {
     color: #fff;
 }
 
-h4 {
-    font-weight: 400;
-    color: rgba(232, 232, 232, 0.8);
-    font-size: 20px;
-    line-height: 0px;
-}
-
-h5 {
-    font-weight: 300;
-    color: rgba(232, 232, 232, 0.8);
-    font-size: 17px;
-    line-height: 5px; 
-}
 
 p {
     font-size: 19px;
@@ -251,6 +238,20 @@ div.hr hr {
     font-family: "Lustria", serif;
     line-height: 0px;
 
+}
+
+.read h5 {
+    font-weight: 300;
+    color: rgba(232, 232, 232, 0.8);
+    font-size: 17px;
+    line-height: 0px; 
+}
+
+.read h6 {
+    font-weight: 400;
+    color: rgba(232, 232, 232, 0.8);
+    font-size: 20px;
+    line-height: 0px;
 }
 
 .read p,
