@@ -1,4 +1,4 @@
- var mySwiper;
+var mySwiper;
 var viewportHeight;
 var viewportWidth;
 var fullScreenVids = [];
@@ -37,9 +37,29 @@ $(document).ready(function () {
       })
     }
 
-  function turnActiveSlideOnTurnPrevOff(swiper){
+  // Things to do when moving to a new slide
+  function turnActiveSlideOnTurnPrevOff(swiper) {
+
     var curr = swiper.previousIndex;
     var next = swiper.activeIndex;
+
+    //Audio fade in/fade out;
+    var currBgAudio = $(swiper.slides[curr]).attr("data-bg-audio");
+    var nextBgAudio = $(swiper.slides[next]).attr("data-bg-audio");
+    if (typeof currBgAudio != "undefined")
+    {
+      var sound = new Howl({
+        urls: [currBgAudio],
+      }).fade(1, 0, 1000);
+    }
+
+    if (typeof nextBgAudio != "undefined")
+    {
+      var sound = new Howl({
+        urls: [nextBgAudio],
+        loop: true
+      }).fade(0, 1, 1000);
+    }
 
     // Content opacity: Fade in/fade out
     // If initial load
@@ -50,7 +70,6 @@ $(document).ready(function () {
       $(swiper.slides[curr]).animate({opacity: 0}, 1500);
       $(swiper.slides[next]).animate({opacity: 1}, 1500);
     }
-
 
     // Background audio: Fade in/fade out
     var currBgVideo = $(swiper.slides[curr]).find("video.bgvid").get(0);
