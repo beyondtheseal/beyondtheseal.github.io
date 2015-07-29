@@ -241,17 +241,23 @@ div.hr hr {
 }
 
 .read h5 {
+    margin: 0px;
+    padding: 10px;
+    line-height: 15px;
+    color: rgba(208, 208, 208, 0.8);
     font-weight: 300;
-    color: rgba(232, 232, 232, 0.8);
-    font-size: 17px;
-    line-height: 0px; 
+    font-size: 19px;
+
 }
 
 .read h6 {
     font-weight: 400;
-    color: rgba(232, 232, 232, 0.8);
+    margin: 4px;
+    padding: 7px;
+    line-height: 5px;
+    color: rgba(208, 208, 208, 0.8);
     font-size: 20px;
-    line-height: 0px;
+
 }
 
 .read p,
@@ -289,6 +295,17 @@ div.hr hr {
 
 }
 
+.shortline {
+    border-top: solid 1px; 
+    display: inline-block;
+    border-bottom: solid 1px; 
+    text-align: center;
+    color: rgba(232, 232, 232, 0.7);
+    margin-left: 50px;
+    width: 80%;
+
+}
+
 .nameline {
     border-top: solid 1px, rgba(232, 232, 232, 0.8);
     display: inline-block;
@@ -296,7 +313,7 @@ div.hr hr {
 }
 
 .names {
-    margin-top: 30px;
+    margin-top: 40px;
 }
 
 @media screen(max-width: 760px) {
