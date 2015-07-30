@@ -52,11 +52,11 @@
          $(document).ready(function() {
 
             $("#hide").click(function(){
-               $(".target").hide( "control-wrapper", { direction: "right"  }, 2000 );
+               $(".target").hide menu( "control-wrapper", { direction: "right"  }, 2000 );
             });
 
             $("#show").click(function(){
-               $(".target").show( "control-wrapper", {direction: "left" }, 2000 );
+               $(".target").show menu( "control-wrapper", {direction: "left" }, 2000 );
             });
          });
       </script>
@@ -69,6 +69,13 @@
         <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
     <div id="control-wrapper">
+
+    <p id="hide-menu"> &raquo; Hide menu </p>
+    <p id="show-menu"> &laquo;Show menu</p> 
+  
+    <div class="target">
+    </div>
+
      <div class="chapter-nav" data-target="1">
           <p class="ch">Introduction</p>
           <p></p>
@@ -100,14 +107,9 @@
         <div id="retreat"><img src="img/prev.png" alt="Back" /></div>
          <div id="proceed"><img src="img/next.png" alt="Next" /></div>
       </div>
+
     </div>
 
-
-    <button id="hide-menu"> Hide menu </button>
-      <button id="show-menu"> Show menu</button> 
-  
-      <div class="target">
-      </div>
 
 
     <div id="slides" class="swiper-container swiper-container-vertical">
@@ -607,7 +609,6 @@
         <script type="text/javascript" src="js/vendor/howler.js"></script>
         <script src="js/main.js"></script>
 
-        <script type="text/javascript" src="js/vendor/howler.js"></script>
 
     </body>
 
