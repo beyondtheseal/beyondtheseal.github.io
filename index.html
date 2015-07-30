@@ -40,6 +40,29 @@
 
         <style>a:link {color: #BDB76B}</style>
 
+
+
+      <title>Collapsible Menu</title>
+      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+    
+      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+    
+      <script type="text/javascript" language="javascript">
+   
+         $(document).ready(function() {
+
+            $("#hide").click(function(){
+               $(".target").hide( "control-wrapper", { direction: "right"  }, 2000 );
+            });
+
+            $("#show").click(function(){
+               $(".target").show( "control-wrapper", {direction: "left" }, 2000 );
+            });
+         });
+      </script>
+
+
+
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -79,6 +102,14 @@
       </div>
     </div>
 
+
+    <button id="hide-menu"> Hide menu </button>
+      <button id="show-menu"> Show menu</button> 
+  
+      <div class="target">
+      </div>
+
+
     <div id="slides" class="swiper-container swiper-container-vertical">
       <div class="swiper-wrapper">
         <div class="swiper-slide" data-hash="intro">
@@ -110,7 +141,7 @@
             <div class="gradient"></div>
             <div class="inner">
               <div class="read">
-                <h3>How much do you know about your bananas?</h3><p>If you're like us, everything you know comes from your stickers. But besides brand and country name, it's hard to know much about a banana's life beyond the grocery store shelves. When we ventured into the fields, though, we found that the story we get from our banana stickers isn't so simple. In Ecuador and throughout Latin America, bananas define the lives of countless workers who sacrifice a lot to bring spotless yellow bananas to our kitchen tables year-round for half the price of apples. 
+                <h3>How much do you know about your bananas?</h3><p>If you’re like us, most of what you know comes from a colorful sticker. But brand logo and country name only give us a glimpse into a banana’s life before the supermarket. When we ventured to Ecuador to learn more, we discovered that the story we get from our banana stickers isn’t so simple.  There, and throughout Latin America, bananas define the lives of countless people who bring spotless yellow bananas to our kitchen tables year-round for half the price of apples. 
                 </p>
                 <div class="hairline">
                 <p style="font-size: 24px; text-align: center">This is the story of the small farmers striving to change the way American consumers view and eat bananas.</p>
@@ -150,11 +181,11 @@
                 <span class="firstcharacter">A</span>
               </div>
               <div class="read">
-                <p>long South America's northwest coast lies Ecuador, the banana capital of the world. Each year, around 5 million tons of bananas pass through its ports. In September, Ecuador hosts the annual International Banana Festival, where local farmers compete for the largest banana stalk while women from banana-producing Latin American countries compete for the title of Reina del Banano, or Banana Queen.</p> 
+                <p>long South America's northwest coast lies Ecuador, the banana capital of the world. Each year, around 5 million tons of bananas pass through its ports. Every September, Ecuador hosts the annual International Banana Festival, where local farmers compete for the largest banana stalk while women from banana-producing Latin American countries compete for the title of Reina del Banano, or Banana Queen.</p> 
                 <div class="shortline">
                 <p style="font-size: 24px; text-align: center;">Ecuador is the banana capital of the world.</p>
                 </div>
-                <p>On a drive through the countryside, banana plants blanket all land in sight.  Massive leaves and blue protective bags blur together in endless fields lining the roadways. Beneath the trees, day laborers whack at banana stalks, catching and carrying them on their shoulders across irrigation ditches to a cable system that pulls them to a packing station deep in the plantation. There, other workers rapidly cut bananas into bunches, wash and adorn them with a sticker, and pack them away by the truckload.</p>
+                <p>On a drive through the countryside, banana plants blanket all land in sight.  Massive leaves and blue protective bags blur together in endless fields lining the roadways. Beneath the trees, day laborers whack at banana stalks, catching and carrying them on their shoulders across irrigation ditches to a cable system that pulls them to a packing station deep in the plantation. There, other workers rapidly cut bananas into bunches, wash and adorn them with stickers, and pack them away by the truckload.</p>
               </div>
             </div>
           <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/ecuador.jpg" class="lazy bgimg"/>
@@ -166,7 +197,7 @@
           <div class="gradient"></div>
           <div class="inner">
             <div class="read">
-              <p>Jorge Acosta knows this scene well—a trained pilot, he spent 17 years fumigating banana plantations in Ecuador.  One day after feeling sick from his plane’s fumes, Acosta researched the chemical he had been handling for so many years. Its name was Mancozeb, a known carcinogen banned in the U.S. and Europe but commonly used as a pesticide throughout Latin America.</p>
+              <p>Above the fields, the air is quiet until a plane rumbles into view, descending over the rows in tight arcs. Jorge Acosta knows this scene well—a trained pilot, he spent 17 years fumigating similar banana plantations throughout Ecuador.  One day after feeling sick from his plane’s fumes, Acosta looked into the chemical he had been handling for so many years. Its name was Mancozeb, a known carcinogen banned in the U.S. and Europe but commonly used as a pesticide throughout Latin America.</p>
               <p>Enraged, Acosta abandoned the comfortable life of a pilot and turned to defend the workers in the fields below.  Today he organizes communities to fight violations like below-minimum pay, impediments to unionizing and lack of protective equipment.</p>
             </div>
           </div>

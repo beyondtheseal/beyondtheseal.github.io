@@ -85,14 +85,15 @@ pre {
 	top:0;
 	left:0;
 	z-index: 2;
-    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+1,000000+100&amp;1+28,0.65+54,0.06+96,0.06+99,0.06+100,0+100 */
-    background: -moz-linear-gradient(left,  rgba(0,0,0,1) 1%, rgba(0,0,0,1) 28%, rgba(0,0,0,0.65) 54%, rgba(0,0,0,0.06) 96%, rgba(0,0,0,0.06) 99%, rgba(0,0,0,0) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, right top, color-stop(1%,rgba(0,0,0,1)), color-stop(28%,rgba(0,0,0,1)), color-stop(54%,rgba(0,0,0,0.65)), color-stop(96%,rgba(0,0,0,0.06)), color-stop(99%,rgba(0,0,0,0.06)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(left,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(left,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(left,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* IE10+ */
-    background: linear-gradient(to right,  rgba(0,0,0,1) 1%,rgba(0,0,0,1) 28%,rgba(0,0,0,0.65) 54%,rgba(0,0,0,0.06) 96%,rgba(0,0,0,0.06) 99%,rgba(0,0,0,0) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+    /* Permalink - use to edit and share this gradient: http://colorzilla.com/gradient-editor/#000000+1,000000+100&amp;0.9+1,0.65+51,0+100 */
+    background: -moz-linear-gradient(left,  rgba(0,0,0,1) 1%, rgba(0,0,0,0.65) 51%, rgba(0,0,0,0) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, right top, color-stop(1%,rgba(0,0,0,0.9)), color-stop(51%,rgba(0,0,0,0.65)), color-stop(100%,rgba(0,0,0,0))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(left,  rgba(0,0,0,1) 1%,rgba(0,0,0,0.65) 51%,rgba(0,0,0,0) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(left,  rgba(0,0,0,1) 1%,rgba(0,0,0,0.65) 51%,rgba(0,0,0,0) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(left,  rgba(0,0,0,1) 1%,rgba(0,0,0,0.65) 51%,rgba(0,0,0,0) 100%); /* IE10+ */
+    background: linear-gradient(to right,  rgba(0,0,0,1) 1%,rgba(0,0,0,0.65) 51%,rgba(0,0,0,0) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e6000000', endColorstr='#00000000',GradientType=1 ); /* IE6-9 */
+
 }
 
 video.bgvid {
@@ -138,9 +139,27 @@ div.hr hr {
     background: rgba(0,0,0,0.7);
     padding: 0 5px;
 }
+
+#hide-menu {
+    font-family: "Lato";
+    background-color: #999;
+    color: rgba(232, 232, 232, 0.7);
+
+}
+
+#show-menu {
+    font-family: "Lato";
+    background-color: #999;
+    color: rgba(232, 232, 232, 0.7);
+
+
+
+}
+
 .chapter-nav {
     border-bottom: 1px solid #999;
     padding: 9px 4px;
+    cursor: pointer;
 }
 .chapter-nav p {
     color: #999;
@@ -216,7 +235,7 @@ div.hr hr {
 }
 
 .inner {
-    padding-top: 80px;
+    padding-top: 70px;
     margin-left: 70px;
     width: 45%;
     position:relative;
