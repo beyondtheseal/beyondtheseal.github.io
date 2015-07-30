@@ -140,19 +140,16 @@ div.hr hr {
     padding: 0 5px;
 }
 
-#hide-menu {
+#toggle-menu {
     font-family: "Lato";
+    font-weight: 400;
+    font-size: 16px;
     color: rgba(164, 193, 108, 0.6);
+    margin-bottom: 0px;
+    cursor: pointer;
 
 }
 
-#show-menu {
-    font-family: "Lato";
-    color: rgba(164, 193, 108, 0.6);
-
-
-
-}
 
 .chapter-nav {
     border-bottom: 1px solid #999;
@@ -164,7 +161,7 @@ div.hr hr {
     text-align: left;
     font-size: 14px;
     font-style: italic;
-    margin: 5px 0 5px;
+    margin: 4px 0 5px;
 }
 .chapter-nav p.ch {
     font-style: normal;
@@ -176,7 +173,8 @@ div.hr hr {
 }
 #controls {
     width: 80px;
-    margin: 30px auto 10px;
+    margin: 20px auto 10px;
+    position: ;
 }
 
 #retreat.swiper-button-disabled,

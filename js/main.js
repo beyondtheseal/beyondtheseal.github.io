@@ -3,7 +3,13 @@ var viewportHeight;
 var viewportWidth;
 var fullScreenVids = [];
 
-$(document).ready(function () {
+$(document).ready(function() {
+   $("#toggle-menu").click(function(){
+      $(".chapter-nav").toggle("slow");
+      $("#controls").toggle("slow");
+      $("#toggle-menu").html("&laquo Show");
+    });
+
 
   var Chapters = buildChapterNav();
 
@@ -211,6 +217,11 @@ $(document).ready(function () {
         leisurelyLoad([$('.swiper-slide-prev'), $('.swiper-slide-active'), $('.swiper-slide-next')]);
         highlightCurrentChapter(swiper.activeIndex, Chapters);
       }
+
+
+
+
+
   });
 
   resizeListener();

@@ -42,27 +42,6 @@
 
 
 
-      <title>Collapsible Menu</title>
-      <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-    
-      <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
-    
-      <script type="text/javascript" language="javascript">
-   
-         $(document).ready(function() {
-
-            $("#hide").click(function(){
-               $(".target").hide menu( "control-wrapper", { direction: "right"  }, 2000 );
-            });
-
-            $("#show").click(function(){
-               $(".target").show menu( "control-wrapper", {direction: "left" }, 2000 );
-            });
-         });
-      </script>
-
-
-
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -70,11 +49,8 @@
     <![endif]-->
     <div id="control-wrapper">
 
-    <p id="hide-menu"> &raquo; Hide menu </p>
-    <p id="show-menu"> &laquo;Show menu</p> 
+    <p id="toggle-menu"> &raquo; Hide</p>
   
-    <div class="target">
-    </div>
 
      <div class="chapter-nav" data-target="1">
           <p class="ch">Introduction</p>
@@ -84,11 +60,11 @@
           <p class="ch">Chapter 1</p>
           <p>Setting the Scene</p>
       </div>
-      <div class="chapter-nav" data-target="11">
+      <div class="chapter-nav" data-target="10">
           <p class="ch">Chapter 2</p>
           <p>Small farmers, big change</p>
       </div>
-      <div class="chapter-nav" data-target="19">
+      <div class="chapter-nav" data-target="17">
           <p class="ch">Chapter 3</p>
           <p>Business unusual</p>
       </div>
@@ -101,7 +77,7 @@
           <p>Consumer Power</p>
       </div>
       <div class="chapter-nav" data-target="X">
-          <p>Credits and Resources</p>
+          <p>Credits</p>
       </div>
       <div id="controls">
         <div id="retreat"><img src="img/prev.png" alt="Back" /></div>
@@ -143,7 +119,7 @@
             <div class="gradient"></div>
             <div class="inner">
               <div class="read">
-                <h3>How much do you know about your bananas?</h3><p>If you’re like us, most of what you know comes from a colorful sticker. But brand logo and country name only give us a glimpse into a banana’s life before the supermarket. When we ventured to Ecuador to learn more, we discovered that the story we get from our banana stickers isn’t so simple.  There, and throughout Latin America, bananas define the lives of countless people who bring spotless yellow bananas to our kitchen tables year-round for half the price of apples. 
+                <h3>How much do you know about your bananas?</h3><p>If you’re like us, most of what you know comes from a colorful sticker. But brand logo and country name only give us a glimpse into a banana’s life before the supermarket. We ventured to Ecuador to learn more and discovered that the story we get from our banana stickers isn’t so simple.  There, and throughout Latin America, bananas define the lives of countless people who bring spotless yellow bananas to our kitchen tables year-round for half the price of apples. 
                 </p>
                 <div class="hairline">
                 <p style="font-size: 24px; text-align: center">This is the story of the small farmers striving to change the way American consumers view and eat bananas.</p>
@@ -195,7 +171,7 @@
 
 
 
-        <div class="swiper-slide" data-hash="8">
+        <div class="swiper-slide" data-hash="5">
           <div class="gradient"></div>
           <div class="inner">
             <div class="read">
@@ -208,7 +184,7 @@
         </div>
 
 
-        <div class="swiper-slide" data-hash="9">
+        <div class="swiper-slide" data-hash="6">
           <div class="gradient"></div>
           <div class="inner">
             <div class="read">
@@ -221,12 +197,12 @@
         </div>
 
 
-        <div class="swiper-slide" data-hash="10">
+        <div class="swiper-slide" data-hash="7">
              <video id="full-vid-worker-plight" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/worker-plight.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": false, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
         </div>
 
 
-        <div class="swiper-slide" data-hash="12">
+        <div class="swiper-slide" data-hash="8">
           <div class="gradient"></div>
           <div class="inner">
             <div class="firstcharacter">
@@ -244,12 +220,12 @@
           <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p5.jpg" class="lazy bgimg"/>
         </div>
 
-        <div class="swiper-slide" data-hash="13">
+        <div class="swiper-slide" data-hash="9">
              <video id="full-vid-jimena" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/jimena.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
         </div>
 
 
-        <div class="swiper-slide" data-hash="11">
+        <div class="swiper-slide" data-hash="10">
           <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" data-src="video/chapter/2.mp4" type="video/mp4"></video>
 
           <div class="inner">
@@ -265,7 +241,7 @@
         </div>
 
 
-        <div class="swiper-slide" data-hash="5">
+        <div class="swiper-slide" data-hash="11">
             <div class="gradient"></div>
             <div class="inner">
               <div class="read">
@@ -281,7 +257,7 @@
 
 
 
-        <div class="swiper-slide" data-hash="14">
+        <div class="swiper-slide" data-hash="12">
           <div class="gradient"></div>
           <div class="inner">
             <div class="read">
@@ -297,7 +273,7 @@
         </div>
 
 
-        <div class="swiper-slide" data-hash="15">
+        <div class="swiper-slide" data-hash="13">
           <div class="gradient"></div>
           <div class="inner">
             <div class="read">
@@ -310,12 +286,12 @@
       </div>
 
 
-        <div class="swiper-slide" data-hash="16">
+        <div class="swiper-slide" data-hash="14">
             <video id="full-vid-anibal" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/anibal.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
         </div>
 
 
-      <div class="swiper-slide" data-hash="17">
+      <div class="swiper-slide" data-hash="15">
         <div class="gradient"></div>
         <div class="inner">
             <div class="read">
@@ -327,12 +303,12 @@
           <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/vicente.jpg" class="lazy bgimg"/>
       </div>
 
-      <div class="swiper-slide" data-hash="18">
+      <div class="swiper-slide" data-hash="16">
             <video id="full-vid-social-projects" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/social-projects.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
       </div>
 
 
-      <div class="swiper-slide" data-hash="19">
+      <div class="swiper-slide" data-hash="17">
         <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" data-src="video/chapter/3.mp4" type="video/mp4"></video>
         <div class="inner">
           <div class="read">
@@ -346,7 +322,7 @@
       </div>
 
 
-      <div class="swiper-slide" data-hash="6">
+      <div class="swiper-slide" data-hash="18">
           <img src="img/bg-small/stats.png" class="fgimg"/>
           <div class="gradient"></div>
           <div class="inner">
@@ -365,7 +341,7 @@
         </div>
 
 
-        <div class="swiper-slide" data-hash="7">
+        <div class="swiper-slide" data-hash="19">
           <iframe src='//cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1S1JFW9MIXy_T0HtftEkj62yuCMA_jOSUBBoCOuJlr-U&font=Lustria-Lato&lang=en&height=100%' width='88%' height='100%' frameborder='0'></iframe>
         </div>
 
