@@ -43,13 +43,7 @@ p {
     line-height: 24.9999996185303px;
     color: rgba(232, 232, 232, 0.8);
 }
-blockquote {
-    font-size: 24px;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: 100;
-    line-height: 33.5999984741211px;
-}
+
 pre {
     font-size: 11px;
     font-style: normal;
@@ -226,7 +220,7 @@ div.hr hr {
     font-weight: bold;
     font-size: 45px;
     font-family: "Lustria", serif;
-    line-height: 20px;
+    line-height: 40px;
     text-shadow: 2px 1px 2px rgba(0, 0, 0, 0.3);
 }
 
@@ -243,7 +237,7 @@ div.hr hr {
     font-weight: bold;
     font-size: 30px;
     font-family: "Lustria", serif;
-    line-height: 25px;
+    line-height: 30px;
 }
 
 .read h4 {
