@@ -161,7 +161,7 @@ div.hr hr {
     text-align: left;
     font-size: 14px;
     font-style: italic;
-    margin: 4px 0 5px;
+    margin: 0;
 }
 .chapter-nav p.ch {
     font-style: normal;
@@ -229,6 +229,10 @@ div.hr hr {
     /* line height should never be less than font size for legibility */
     line-height: 1.2;
     text-shadow: 2px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.read h2.ch-heading {
+    margin-top: 35%;
 }
 
 .inner {

@@ -40,8 +40,6 @@
 
         <style>a:link {color: #BDB76B}</style>
 
-
-
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -50,7 +48,6 @@
     <div id="control-wrapper">
 
     <p id="toggle-menu"> &raquo; Hide</p>
-  
 
      <div class="chapter-nav" data-target="1">
           <p class="ch">Introduction</p>
@@ -92,7 +89,11 @@
       <div class="swiper-wrapper">
         <div class="swiper-slide" data-hash="intro">
           <div class="gradient"></div>
-            <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" src="video/bg/bg-intro.mp4" type="video/mp4"></video>
+            <!-- Leave this video as-is, since most people will enter on this first slide -->
+            <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid">
+              <source src="video/bg/bg-intro.mp4" type="video/mp4" />
+              <source src="video/bg/bg-intro.webm" type="video/webm" />
+            </video>
             <div class="inner">
               <p>&nbsp;</p>
               <p>&nbsp;</p>
@@ -119,34 +120,34 @@
             <div class="gradient"></div>
             <div class="inner">
               <div class="read">
-                <h3>How much do you know about your bananas?</h3><p>If you’re like us, most of what you know comes from a colorful sticker. But brand logo and country name only give us a glimpse into a banana’s life before the supermarket. We ventured to Ecuador to learn more and discovered that the story we get from our banana stickers isn’t so simple.  There, and throughout Latin America, bananas define the lives of countless people who bring spotless yellow bananas to our kitchen tables year-round for half the price of apples. 
+                <h3>How much do you know about your bananas?</h3><p>If you’re like us, most of what you know comes from a colorful sticker. But brand logo and country name only give us a glimpse into a banana’s life before the supermarket. We ventured to Ecuador to learn more and discovered that the story we get from our banana stickers isn’t so simple.  There, and throughout Latin America, bananas define the lives of countless people who bring spotless yellow bananas to our kitchen tables year-round for half the price of apples.
                 </p>
                 <div class="hairline">
                 <p style="font-size: 24px; text-align: center">This is the story of the small farmers striving to change the way American consumers view and eat bananas.</p>
                 </div>
-                <p>This is the story of a group of small farmers—and the activists and visionaries behind them—striving to change the banana industry as we know it. Through a model of business called Fair Trade, these producers are building a more just supply chain, one that prioritizes their health, their families and their community.</p> 
+                <p>This is the story of a group of small farmers—and the activists and visionaries behind them—striving to change the banana industry as we know it. Through a model of business called Fair Trade, these producers are building a more just supply chain, one that prioritizes their health, their families and their community.</p>
                 <img src="img/headphones.png" style="display: inline; padding-top: 10px; padding-right: 5px;"/>
               <p style="display: inline">Put on your headphones.</p>
               </div>
             </div>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p0.jpg" class="lazy bgimg"/>
+            <!-- For each background image, change the data-src attribute to be contained by single quotes, square brackets, double quotes. The double quotes MUST be inside the square brackets! The src attribute itself MUST point to the lazyload-placeholder image, or lazyloading will not take effect. -->
+            <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p0.jpg"]' class="lazy bgimg"/>
           </div>
 
 
           <div class="swiper-slide" data-hash="2">
-            <video id="full-vid-intro" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/intro.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": false, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'/>
+            <!-- For each full-screen video, you must remove the video element from the HTML and copy the format shown below. Provide an array (a comma-separated list within square brackets) of desired video sources. Each source must be double quoted. The array must have single quotes around it. -->
+            <div class="videoplayer" id="full-vid-intro" data-src='["video/full/intro.mp4", "//webm.html5.org/test.webm"]'></div>
           </div>
 
 
         <div class="swiper-slide" data-hash="3" data-bg-audio="audio/bg/audio-p3.mp4">
-          <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" data-src="video/chapter/1.mp4" type="video/mp4"></video>
+          <!-- For each background video, you must add a unique ID to the div. -->
+          <div class="videoplayer bgvid" id="ch1-bgvid" data-src='["video/chapter/1.mp4", "video/chapter/1.webm"]'></div>
           <div class="inner">
             <div class="read">
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <h2>Chapter 1: Setting the Scene</h2>
+              <!-- Remove p tags used for spacing since HTML should never be used for styling. Add class .ch-heading to h2s instead. Top margin can be adjusted in main.css line 235. -->
+              <h2 class="ch-heading">Chapter 1: Setting the Scene</h2>
             </div>
           </div>
         </div>
@@ -166,7 +167,7 @@
                 <p>On a drive through the countryside, banana plants blanket all land in sight.  Massive leaves and blue protective bags blur together in endless fields lining the roadways. Beneath the trees, day laborers whack at banana stalks, catching and carrying them on their shoulders across irrigation ditches to a cable system that pulls them to a packing station deep in the plantation. There, other workers rapidly cut bananas into bunches, wash and adorn them with stickers, and pack them away by the truckload.</p>
               </div>
             </div>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/ecuador.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/ecuador.jpg"]' class="lazy bgimg"/>
         </div>
 
 
@@ -180,7 +181,7 @@
             </div>
           </div>
           <img src="img/facesnames/jorgename.png" class="fgimg"/>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p45.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p45.jpg"]' class="lazy bgimg"/>
         </div>
 
 
@@ -193,12 +194,12 @@
             </div>
           </div>
           <img src="img/facesnames/javiername.png" class="fgimg"/>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p13.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p13.jpg"]' class="lazy bgimg"/>
         </div>
 
 
         <div class="swiper-slide" data-hash="7">
-             <video id="full-vid-worker-plight" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/worker-plight.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": false, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
+           <div class="videoplayer" id="full-vid-worker-plight" data-src='["video/full/worker-plight.mp4", "something.webm"]'></div>
         </div>
 
 
@@ -217,25 +218,20 @@
             </div>
           </div>
           <img src="img/facesnames/jimenaname.png" class="fgimg"/>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p5.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p5.jpg"]' class="lazy bgimg"/>
         </div>
 
         <div class="swiper-slide" data-hash="9">
-             <video id="full-vid-jimena" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/jimena.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
+             <div class="videoplayer" id="full-vid-jimena" data-src='["video/full/jimena.mp4", "something.webm"]'></div>
         </div>
 
 
         <div class="swiper-slide" data-hash="10">
-          <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" data-src="video/chapter/2.mp4" type="video/mp4"></video>
+          <div class="videoplayer bgvid" id="ch2-bgvid" data-src='["video/chapter/2.mp4", "something.webm"]'></div>
 
           <div class="inner">
             <div class="read">
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <h2>Chapter 2:</h2>
-              <h2>Small farmers, big change</h2>
+              <h2 class="ch-heading">Chapter 2: <br/>Small farmers, big change</h2>
             </div>
           </div>
         </div>
@@ -252,7 +248,7 @@
                 <p>This concrete oasis breaking the leafy horizon is home to the world’s first Fair Trade banana organization.  Through the Association of Small Producers of El Guabo (Asoguabo), 135 organized small farmers harvest and ship ten tons of Fair Trade bananas every week to the U.S. and Europe. They are living out the vision of 14 Ecuadorian farmers from the late 1990s to build a fairer market and carve a place for small producers within the global banana industry.</p>
               </div>
             </div>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p1.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p1.jpg"]' class="lazy bgimg"/>
         </div>
 
 
@@ -269,7 +265,7 @@
               <p>The concept of Fair Trade gained ground in the American food industry primarily with coffee. The 1970s and 1980s saw a surge in the creation of economic and political Fair Trade Organizations in response to the exploitation and US-instigated civil wars raging in Latin America nations. In 1986, Boston-based worker cooperative Equal Exchange became the first U.S. Fair Trade coffee company.</p>
             </div>
           </div>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p6.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p6.jpg"]' class="lazy bgimg"/>
         </div>
 
 
@@ -282,12 +278,12 @@
             </div>
           </div>
           <img src="img/facesnames/anibalname.png" class="fgimg"/>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p7.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p7.jpg"]' class="lazy bgimg"/>
       </div>
 
 
         <div class="swiper-slide" data-hash="14">
-            <video id="full-vid-anibal" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/anibal.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
+            <div class="videoplayer" id="full-vid-anibal" data-src='["video/full/anibal.mp4", "something.webm"]'></div>
         </div>
 
 
@@ -300,23 +296,19 @@
               <p>“That money is a development fund, really," explains Nicole Vitello, CEO of Equal Exchange’s banana company Oké. “This is our way of paying more for this fruit so that the coop can democratically decide how to spend. How else is this going to happen except through a loan or charity?”</p>
             </div>
           </div>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/vicente.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/vicente.jpg"]' class="lazy bgimg"/>
       </div>
 
       <div class="swiper-slide" data-hash="16">
-            <video id="full-vid-social-projects" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/social-projects.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
+            <div class="videoplayer" id="full-vid-social-projects" data-src='["video/full/social-projects.mp4", "something.webm"]'></div>
       </div>
 
 
       <div class="swiper-slide" data-hash="17">
-        <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" data-src="video/chapter/3.mp4" type="video/mp4"></video>
+        <div class="videoplayer bgvid" id="ch3-bgvid" data-src='["video/chapter/3.mp4", "something.webm"]'></div>
         <div class="inner">
           <div class="read">
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <p>&nbsp;</p>
-            <h2>Chapter 3: Business Unusual</h2>
+            <h2 class="ch-heading">Chapter 3: Business Unusual</h2>
           </div>
         </div>
       </div>
@@ -337,7 +329,7 @@
               <p>Beyond unstable economies, banana republics suffered rampant labor, human and environmental rights violations to workers on large plantations. Dan Koeppel, author of <em>Bananas: The Fate of the Fruit That Changed the World</em>, calls these farms “Cavendish factories” since every commercial banana is a near perfect clone of a single variety called the Cavendish.</p>
           </div>
         </div>
-        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p3.jpg" class="lazy bgimg"/>
+        <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p3.jpg"]' class="lazy bgimg"/>
         </div>
 
 
@@ -361,7 +353,7 @@
               <p>Founded by three food co-operative workers in Boston, Equal Exchange has grown into a business whose sales exceed $60 million every year. The company is 100 percent employee owned and governed on a one-person/one-share/one-vote basis, and up to 10 percent of its net profit is donated to non-profit organizations and small-farmer co-ops. Their goal is to show that a radically different model of trade can be fair and profitable to all players in a supply chain.</p>
             </div>
           </div>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p21.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p21.jpg"]' class="lazy bgimg"/>
       </div>
 
       <div class="swiper-slide" data-hash="22">
@@ -375,25 +367,21 @@
               <p>Fair Trade bananas have been around in Europe since the late 1990s and make up nearly one third of the total banana business there.  Fair Trade roots in Europe make it much more of an easy market, in addition to the general culture around food in Europe; smaller scale agriculture, banned GMOs, and greater organic practices. Asoguabo exported its first container of bananas to the U.S. in 2005. Ten years later, Fair Trade bananas still only make up less than one percent of the total bananas consumed in the U.S. In spite of this, Equal Exchange is determined to bring bananas to American consumers.</p>
             </div>
           </div>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p22.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p22.jpg"]' class="lazy bgimg"/>
       </div>
 
 
       <div class="swiper-slide" data-hash="23">
-            <video id="full-vid-equal-exchange" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/equal-exchange.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
+            <div class="videoplayer" id="full-vid-equal-exchange" data-src='["video/full/equal-exchange.mp4", "something.webm"]'></div>
       </div>
 
 
 
 
       <div class="swiper-slide" data-hash="23">
-          <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" data-src="video/chapter/4.mp4" type="video/mp4"></video>
+          <div class="videoplayer bgvid" id="ch4-bgvid" data-src='["video/chapter/4.mp4", "something.webm"]'></div>
           <div class="inner">
             <div class="read">
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
               <h2>Chapter 4: Challenges Ahead</h2>
             </div>
           </div>
@@ -410,11 +398,11 @@
             </div>
         </div>
         <img src="img/facesnames/ramonname.png" class="fgimg"/>
-        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p25.jpg" class="lazy bgimg"/>
+        <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p25.jpg"]' class="lazy bgimg"/>
       </div>
 
       <div class="swiper-slide" data-hash="25">
-            <video id="full-vid-organic" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/organic.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
+            <div class="videoplayer" id="full-vid-organic" data-src='["video/full/organic.mp4", "something.webm"]'></div>
       </div>
 
 
@@ -430,7 +418,7 @@
              <p>While multinational Fair Trade can serve as a gateway for consumers to dig deeper into what it means, Equal Exchange and Asoguabo see Fair Trade plantations and multinationals as threats to the integrity of the alternative industry and to the survival of small-scale farmer cooperatives. Since certifier <a href="http://fairtradeusa.org/">Fair Trade USA</a> proposed to accept plantations within Fair Trade international standards in 2003, Equal Exchange has since decried the certification.</p>
             </div>
         </div>
-        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p24.jpg" class="lazy bgimg"/>
+        <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p24.jpg"]' class="lazy bgimg"/>
       </div>  
 
 
@@ -446,30 +434,22 @@
              <p>“The question is, is it going to come to Latin America? And the answer is yes,” says Koeppel who has been tracking the march of Panama Disease across the world since the 1990s. “It could be tomorrow, it could be five years. This fungus will wipe out the Cavendish eventually, and it will take 20, 30 or 50 years to do it. So the real answer is to stop relying on a Cavendish monoculture, to stop putting all your bananas in one basket.” For Asoguabo and small producers, how to respond to this looming threat is all but unclear.</p>
             </div>
         </div>
-        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p28.jpg" class="lazy bgimg"/>
-      </div>    
+        <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p28.jpg"]' class="lazy bgimg"/>
+      </div>
 
 
      <div class="swiper-slide" data-hash="28">
-            <video id="full-vid-panama-disease" class="video-js vjs-default-skin vjs-big-play-centered full-screen" data-src="video/full/panama-disease.mp4" data-widths="[640, 900, 1438]" data-setup='{"controls":true, "autoplay": false, "loop": true, "preload": "auto", "width": 1438, "height": 809}' type='video/mp4'></video>
+        <div class="videoplayer" id="full-vid-panama-disease" data-src='["video/full/panama-disease.mp4", "something.webm"]'></div>
     </div>
 
-
-
     <div class="swiper-slide" data-hash="29">
-          <video data-setup='{"controls:false, "autoplay":true, "loop":true, "preload": "auto"}' class="bgvid" data-src="video/chapter/4.mp4" type="video/mp4"></video>
+          <div class="videoplayer bgvid" id="ch5-bgvid" data-src='["video/chapter/4.mp4", "something.webm"]'></div>
           <div class="inner">
             <div class="read">
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <p>&nbsp;</p>
-              <h2>Chapter 5: Consumer Power</h2>
+              <h2 class="ch-heading">Chapter 5: Consumer Power</h2>
             </div>
           </div>
         </div>
-
-
 
     <div class="swiper-slide" data-hash="30">
          <div class="gradient"></div>
@@ -482,9 +462,8 @@
              </p>
             </div>
         </div>
-        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/rink.jpg" class="lazy bgimg"/>
-      </div>    
-
+        <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/rink.jpg"]' class="lazy bgimg"/>
+      </div>
 
       <div class="swiper-slide" data-hash="31">
          <div class="gradient"></div>
@@ -497,7 +476,7 @@
              </p>
             </div>
         </div>
-        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/lianne.jpg" class="lazy bgimg"/>
+        <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/lianne.jpg"]' class="lazy bgimg"/>
       </div> 
 
 
@@ -512,7 +491,7 @@
              </p>
             </div>
         </div>
-        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/cheryl.jpg" class="lazy bgimg"/>
+        <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/cheryl.jpg"]' class="lazy bgimg"/>
       </div> 
 
 
@@ -527,7 +506,7 @@
              </p>
             </div>
         </div>
-        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/anibal.jpg" class="lazy bgimg"/>
+        <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/anibal.jpg"]' class="lazy bgimg"/>
       </div> 
 
 
@@ -557,7 +536,7 @@
              <h5>Asoguabo Coop</h5>
             </div>
           </div>
-          <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p10.jpg" class="lazy bgimg"/>
+          <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p10.jpg"]' class="lazy bgimg"/>
         </div>
 
 
@@ -570,7 +549,7 @@
              </p>
             </div>
         </div>
-        <img src="img/lazyload-placeholder.gif" data-src="img/bg-small/bg-p27.jpg" class="lazy bgimg"/>
+        <img src="img/lazyload-placeholder.gif" data-src='["img/bg-small/bg-p27.jpg"]' class="lazy bgimg"/>
       </div> 
      </div><!-- swiper-wrapper? -->
         <div class="swiper-pagination"></div>
@@ -587,6 +566,13 @@
 
 
     </body>
+
+    <script type="text/template" id="videotemplate">
+        <video id="<%= video_id %>" class="<%= classes %>">
+          <source src="<%= first_src %>" type='video/<%= first_type %>' />
+          <source src="<%= second_src %>" type='video/<%= second_type %>' />
+        </video>
+    </script>
 
     <script type="text/javascript">
       function slideSwitch() {

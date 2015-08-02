@@ -114,15 +114,77 @@ $(document).ready(function() {
       document.getElementById(nextFullVideo).addEventListener('ended', Handler, false);
     }
   }
+  function renderVideo(targetMedium, videoId){
+    function getCodec(video){
+      var bits = video.split(".");
+      return bits[bits.length - 1]
+    }
+    var videoTemplate = _.template($("#videotemplate").html());
+    var firstVideo = targetMedium.data("src")[0];
+    var secondVideo = targetMedium.data("src")[1];
+    var classes = "video-js vjs-default-skin vjs-big-play-centered full-screen";
+    if (targetMedium.hasClass("bgvid")){
+      classes = "bgvid";
+    }
+    // Render the video player in the parent element, overwriting the div that held the video info
+    $("#" + videoId).parent().html(videoTemplate({
+        video_id: videoId,
+        first_src: firstVideo,
+        first_type: getCodec(firstVideo),
+        second_src: secondVideo,
+        second_type: getCodec(secondVideo),
+        classes: classes
+    }));
+  }
 
   function leisurelyLoad(slidesToCheck){
-    var media = ["video", "img.lazy"];
+    var media = ["div.videoplayer", "img.lazy"];
     // Check to see if any of the targeted elements exist on adjacent slides
     for (i in slidesToCheck){
       for (index in media){
-        var hasMedia = slidesToCheck[i].find(media[index]);
-        if (hasMedia.length && (hasMedia.attr("src") != hasMedia.data("src"))){
-            hasMedia.attr("src", hasMedia.data("src"));
+        var targetMedium = slidesToCheck[i].find(media[index]);
+        if (targetMedium.length && (targetMedium.attr("src") != targetMedium.data("src"))){
+          //if it's an image
+          if (index == 1) {
+            targetMedium.attr("src", targetMedium.data("src")[0]);
+          }
+
+          //if it's a video
+          if (index == 0){
+            var videoId = targetMedium.attr("id");
+            var videoControls = {
+              "controls": true,
+              "autoplay": false,
+              "loop": false,
+              "preload": "auto",
+              "width": 1438,
+              "height": 809
+            }
+
+            if (targetMedium.hasClass("bgvid")) {
+              videoControls["controls"] = false;
+              videoControls["autoplay"] = true;
+              videoControls["loop"] = true;
+
+              // Handle the other content that lives in background video divs
+              var extraContent = $("#" + videoId).siblings(".inner")[0].outerHTML;
+            }
+
+            renderVideo(targetMedium, videoId);
+            if (extraContent) {
+              $("#" + videoId).parent().append($(extraContent));
+            }
+            setTimeout(function(){
+              // video element ID, setup options, callback
+              videojs(videoId, videoControls , function(){
+                if (extraContent){
+                  $("#" + videoId).addClass("bgvid");
+                  console.log($("#" + videoId));
+                }
+                console.log("loaded video: ", videoId);
+              });
+            }, 0);
+          }
         }
       }
     }
