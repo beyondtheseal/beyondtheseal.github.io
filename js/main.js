@@ -3,12 +3,21 @@ var viewportHeight;
 var viewportWidth;
 var fullScreenVids = [];
 
+var toggleMenu = function(){
+      if ($("#controls").is(":visible")) {
+        $("#toggle-menu").html("&laquo Menu");
+      } else {
+        $("#toggle-menu").html("&raquo Hide Menu");
+      }
+      $("#hiding-menu").toggle({
+        duration: 500,
+        easing: "swing"
+      });
+    };
+
 $(document).ready(function() {
-   $("#toggle-menu").click(function(){
-      $(".chapter-nav").toggle("slow");
-      $("#controls").toggle("slow");
-      $("#toggle-menu").html("&laquo Show");
-    });
+   toggleMenu(); // take this out to have menu visible on load
+   $("#toggle-menu").click(toggleMenu);
 
 
   var Chapters = buildChapterNav();
