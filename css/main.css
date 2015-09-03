@@ -226,13 +226,13 @@ div.hr hr {
 }
 
 .read h2 {
-    color: rgba(164, 193, 108, 0.9);
+    color: rgba(164, 193, 108, 1);
     font-weight: bold;
     font-size: 45px;
     font-family: "Lustria", serif;
     /* line height should never be less than font size for legibility */
     line-height: 1.2;
-    text-shadow: 2px 1px 2px rgba(0, 0, 0, 0.3);
+    text-shadow: 2px 1px 2px rgba(0, 0, 0, 0.7);
 }
 
 .read h2.ch-heading {
