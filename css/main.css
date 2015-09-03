@@ -36,6 +36,16 @@ h3 {
     color: #fff;
 }
 
+h4 {
+    font-size: 15px;
+    font-weight: 300;
+    padding-top: 30px;
+    width: 300%;
+    color: rgba(232, 232, 232, 0.8);
+    text-align: center;
+
+}
+
 
 p {
     font-size: 19px;
@@ -93,7 +103,7 @@ pre {
 video.bgvid {
     position: absolute; 
     right: 0; bottom: 0;
-    min-width: 100%; 
+    min-width: 100%;
     min-height: 100%;
     background-size: cover;
     z-index: 1; 
@@ -295,6 +305,8 @@ div.hr hr {
     line-height: 1.2;
 
 }
+
+
 .vjs-fade-in,.vjs-fade-out {
     visibility: visible !important;
     opacity: 1 !important;
@@ -348,7 +360,7 @@ div.hr hr {
 }
 
 /* Landscape */
-@media (min-aspect-ratio: 16/9){
+@media (min-aspect-ratio: 16/10){
     video.bgvid {
         width: 1px; height: auto; 
     }

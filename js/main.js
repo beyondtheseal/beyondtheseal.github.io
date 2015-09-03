@@ -173,7 +173,7 @@ $(document).ready(function() {
             if (targetMedium.hasClass("bgvid")) {
               videoControls["controls"] = false;
               videoControls["autoplay"] = true;
-              videoControls["loop"] = true;
+              videoControls["loop"] = false;
 
               // Handle the other content that lives in background video divs
               var extraContent = $("#" + videoId).siblings(".inner")[0].outerHTML;
