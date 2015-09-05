@@ -363,6 +363,7 @@ div.hr hr {
 @media (min-aspect-ratio: 16/10){
     video.bgvid {
         width: 1px; height: auto; 
+
     }
 }
 
@@ -380,7 +381,7 @@ div.hr hr {
 @media only screen and (min-width: 1439px) {
 
 .bgimg {
-    background-size: 100%;
+    background-width: 2560px;
     background-repeat: no-repeat;
     }
 
