@@ -365,11 +365,25 @@ div.hr hr {
         width: 1px; height: auto; 
     }
 }
+
+/* for width smaller than 1439px: */ 
+
 .bgimg {
     position: absolute;
     z-index: -1;
     top: 0;
     right: 0;
+}
+
+/* for width 1438 and larger: */
+
+@media only screen and (min-width: 1439px) {
+
+.bgimg {
+    background-size: 100%;
+    background-repeat: no-repeat;
+    }
+
 }
 
 .fgimg {
