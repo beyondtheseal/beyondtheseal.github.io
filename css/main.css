@@ -381,7 +381,7 @@ div.hr hr {
 @media only screen and (min-width: 1439px) {
 
 .bgimg {
-    background-width: 2560px;
+    width: 100%;
     background-repeat: no-repeat;
     }
 
