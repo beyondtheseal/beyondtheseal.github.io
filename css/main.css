@@ -396,6 +396,17 @@ div.hr hr {
 
 }
 
+/* for width 1438 and larger: */
+
+@media only screen and (min-width: 1439px) {
+
+.fgimg {
+    background-size: 100%;
+    background-repeat: no-repeat;
+    }
+
+}
+
 @media screen and (max-width: 460px) {
     #control-wrapper { background-color: rgba(0,0,0,0); height: auto; bottom: 0; }
     .chapter-nav { display: none; }
