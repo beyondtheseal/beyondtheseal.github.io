@@ -166,7 +166,7 @@ $(document).ready(function() {
               "autoplay": false,
               "loop": false,
               "preload": "auto",
-              "width": 1436,
+              "width": 1433,
               "height": 756,
             }
 
