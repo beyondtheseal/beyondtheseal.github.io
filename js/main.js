@@ -166,8 +166,8 @@ $(document).ready(function() {
               "autoplay": false,
               "loop": false,
               "preload": "auto",
-              "width": 100%,
-              "height": 100%,
+              "width": 1436,
+              "height": 756,
             }
 
             if (targetMedium.hasClass("bgvid")) {
