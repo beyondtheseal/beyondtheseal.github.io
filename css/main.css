@@ -420,14 +420,6 @@ div.hr hr {
 
 }
 
-@media only screen and (min-width: 1439px) {
-
-.active {
-    width: 100%;
-    background-repeat: no-repeat;
-    }
-
-}
 
 @media screen and (max-width: 460px) {
     #control-wrapper { background-color: rgba(0,0,0,0); height: auto; bottom: 0; }
