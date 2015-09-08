@@ -161,13 +161,14 @@ $(document).ready(function() {
           //if it's a video
           if (index == 0){
             var videoId = targetMedium.attr("id");
+            var width= window.innerWidth, height= window.innerWidth/1.9;
             var videoControls = {
               "controls": true,
               "autoplay": false,
               "loop": false,
               "preload": "auto",
-              "width": 1433,
-              "height": 756,
+              "width": width,
+              "height": height,
             }
 
             if (targetMedium.hasClass("bgvid")) {
