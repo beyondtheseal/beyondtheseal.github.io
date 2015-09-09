@@ -16,7 +16,6 @@ var toggleMenu = function(){
     };
 
 $(document).ready(function() {
-   toggleMenu(); // take this out to have menu visible on load
    $("#toggle-menu").click(toggleMenu);
 
 
@@ -172,14 +171,9 @@ $(document).ready(function() {
             }
 
             if (targetMedium.hasClass("bgvid")) {
-              var width= window.innerWidth, height= window.innerWidth/1.9;
-              var videoControls = {
-                "controls": false,
-                "autoplay": true,
-                "loop": false,
-                "preload": "auto",
-                "width": width,
-                "height": height,
+              videoControls["controls"]=false;
+              videoControls["autoplayl"]=true;
+              videoControls["loop"]=true;
               }
 
               // Handle the other content that lives in background video divs
