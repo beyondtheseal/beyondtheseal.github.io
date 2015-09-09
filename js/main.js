@@ -174,7 +174,7 @@ $(document).ready(function() {
               videoControls["controls"]=false;
               videoControls["autoplayl"]=true;
               videoControls["loop"]=true;
-              }
+              
 
               // Handle the other content that lives in background video divs
               var extraContent = $("#" + videoId).siblings(".inner")[0].outerHTML;
