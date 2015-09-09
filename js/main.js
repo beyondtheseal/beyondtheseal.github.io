@@ -175,7 +175,7 @@ $(document).ready(function() {
               var width= window.innerWidth, height= window.innerWidth/1.9;
               var videoControls = {
                 "controls": false,
-                "autoplay": false,
+                "autoplay": true,
                 "loop": false,
                 "preload": "auto",
                 "width": width,
