@@ -298,4 +298,26 @@ $(document).ready(function() {
 
   resizeListener();
   setUpTimeline();
+
+		var scroll_timer;
+		window.addEventListener("mousewheel", onMouseWheelEvent);
+
+		function onMouseWheelEvent(e) {
+			var scroll_direction = e.wheelDelta < 0 ? 'down' : 'up';
+			//console.log(scroll_direction);
+			clearTimeout(scroll_timer);
+			scroll_timer = setTimeout(function(){ 
+				onScroll(scroll_direction)
+			}, 500);
+		};
+
+		function onScroll(scroll_direction) {
+			// DO SOMETHING
+			if(scroll_direction == "down") {
+				mySwiper.slideNext();
+			} else {
+				mySwiper.slidePrev();
+			}
+			console.log(scroll_direction);
+		}
 });
