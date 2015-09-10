@@ -172,7 +172,7 @@ $(document).ready(function() {
 
             if (targetMedium.hasClass("bgvid")) {
               videoControls["controls"]=false;
-              videoControls["autoplayl"]=true;
+              videoControls["autoplay"]=true;
               videoControls["loop"]=true;
               
 
@@ -308,7 +308,7 @@ $(document).ready(function() {
 			clearTimeout(scroll_timer);
 			scroll_timer = setTimeout(function(){ 
 				onScroll(scroll_direction)
-			}, 500);
+			}, 100);
 		};
 
 		function onScroll(scroll_direction) {
