@@ -279,8 +279,9 @@ div.hr hr {
 
 .read h5 {
     margin: 0px;
-    padding: 10px;
-    line-height: 1.2;;
+    padding top: 5px;
+    padding-left: 10px;
+    line-height: 1.5;
     color: rgba(208, 208, 208, 0.8);
     font-weight: 300;
     font-size: 19px;
@@ -291,7 +292,7 @@ div.hr hr {
     font-weight: 400;
     margin: 4px;
     padding: 7px;
-    line-height: 1.2;
+    line-height: 1;
     color: rgba(208, 208, 208, 0.8);
     font-size: 20px;
 
