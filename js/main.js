@@ -122,7 +122,7 @@ $(document).ready(function() {
           swiper.slideNext();
       }
       // On end, move to next slide
-      document.getElementById(nextFullVideo).addEventListener('ended', Handler, false);
+      //document.getElementById(nextFullVideo).addEventListener('ended', Handler, false);
     }
   }
   function renderVideo(targetMedium, videoId){
@@ -292,11 +292,6 @@ $(document).ready(function() {
         leisurelyLoad([$('.swiper-slide-prev'), $('.swiper-slide-active'), $('.swiper-slide-next')]);
         highlightCurrentChapter(swiper.activeIndex, Chapters);
       }
-
-
-
-
-
   });
 
   resizeListener();
