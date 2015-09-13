@@ -380,8 +380,6 @@ div.hr hr {
     }
 }
 
-/* for width smaller than 1439px: */ 
-
 .bgimg {
     position: absolute;
     z-index: -1;
@@ -389,36 +387,30 @@ div.hr hr {
     right: 0;
 }
 
-/* for width 1438 and larger: */
-
-@media only screen and (min-width: 1439px) {
-
-.bgimg {
-    width: 100%;
-    background-repeat: no-repeat;
-    }
-
-}
-
 .fgimg {
     position: absolute;
-    right: -600; bottom: 0;
-    min-width: 100%%; 
-    min-height: 100%;
-    background-size: cover; 
+    right: -600; 
+    bottom: 0;
     z-index: 100;
-
 }
 
-/* for width 1438 and larger: */
 
-@media only screen and (min-width: 1439px) {
+@media only screen and (max-width: 1824px) {
+}
 
-.fgimg {
-    background-size: 100%;
-    background-repeat: no-repeat;
+@media only screen and (max-width: 1224px) {
+    .fgimg {
+        display: none;
     }
+    .inner {
+        width: 60%;
+    }
+}
 
+@media only screen and (max-width: 768px) {
+    .inner {
+        width: 75%;
+    }
 }
 
 
