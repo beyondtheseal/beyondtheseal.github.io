@@ -517,9 +517,7 @@
       </div>
 
       <div class="swiper-slide" data-hash="32">
-        <div id="timeline-embed">
-          <div id="timeline"></div>
-        </div>
+        <iframe src='//cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1rypbTa9uQr1-RljYlvCnsTY28duH5z-9EzAe_VuwqE4&font=Lustria-Lato&lang=en&initial_zoom=2&height=100%&timenav_height_percentage=0&timenav_height_min=0' width='95.5%' height='100%' frameborder='0'></iframe>
       </div> 
 
 
@@ -559,78 +557,7 @@
         <script type="text/javascript" src="js/vendor/howler.js"></script>
         <script src="js/main.js"></script>
     </body>
-    <script>
-    $(document).ready(function(){
-        var json = 
-          {
-              "scale": "human",
-              "title": {
-                  "media": {
-                    "caption": "",
-                    "credit": "",
-                    "url": "",
-                    "thumbnail": ""
-                  },
-                  "text": {
-                    "headline": "The Republican Run-Up",
-                    "text": "Follow the presidential caucuses and primaries as members of the Republican Party race to become the GOP's next presidential nominee."
-                  }
-                },
-              "events": [
-                {
-                  "media": {
-                    "caption": "Rick Santorum at the Iowa State Fair before the Ages Straw Poll.",
-                    "credit": "<a href=\"http://www.flickr.com/photos/gageskidmore/6057989217/\">Gage Skidmore</a>/Flickr",
-                    "url": "https://farm7.staticflickr.com/6200/6057989217_3bd755477b.jpg",
-                    "thumbnail": ""
-                  },
-                  "text": {
-                    "headline": "Iowa",
-                    "text": "At the first caucus of the season, former Penn. senator Rick Santorum gained an early lead, beating out Mass. Gov. Mitt Romney in Iowa after <a href=\"http://www.foxnews.com/politics/2012/01/21/iowa-republican-party-reaffirms-santorum-as-winner-caucuses/\">much debate</a> about the results. Santorum, Romney and Texas Rep. Ron Paul emerged as pack leaders moving forward into the New Hampshire primaries."
-                  },
-                  "start_date": {
-                    "month": "1",
-                    "day": "3",
-                    "year": "2012"
-                  }
-                },
-                {
-                  "media": {
-                    "caption": "From Romney's victory speech, directed at Newt Gingrich, former House speaker",
-                    "credit": "Romney Wins In New Hampshire Republican Primary/New York Times",
-                    "url": "<blockquote>â€œIn the last few days, we have seen some desperate Republicans join forces with him,â€ Romney said. â€œThis is such a mistake for our party and for our nation. This country already has a leader who divides us with the bitter politics of envy.â€</blockquote>",
-                    "thumbnail": ""
-                  },
-                  "text": {
-                    "headline": "New Hampshire",
-                    "text": "Romney <a href=\"http://www.nytimes.com/2012/01/11/us/politics/mitt-romney-wins-in-new-hampshire-republican-primary.html?_r=1\" target=\"new\">swept New Hampshire</a> from the other candidates, winning by a double-digit margin over Santorum and former Utah governor Jon M. Huntsman Jr."
-                  },
-                  "start_date": {
-                    "month": "1",
-                    "day": "10",
-                    "year": "2012"
-                  }
-                }
-              ]
-          };
-        var options = 
-          { 
-            hash_bookmark:              false,
-            language:                   "en",
-            timenav_height_percentage:  0,
-            timenav_height_min:         0      
-          };
-        var embed = document.getElementById('timeline-embed');
-        embed.style.height = getComputedStyle(document.body).height;
-        window.timeline = new TL.Timeline('timeline-embed', json, options);
-        window.addEventListener('resize', function() {
-          var embed = document.getElementById('timeline-embed');
-          embed.style.height = getComputedStyle(document.body).height;
-          timeline.updateDisplay();
-        });
-      });
-  </script>
-
+    
     <script type="text/template" id="videotemplate">
         <video id="<%= video_id %>" class="<%= classes %>">
           <source src="<%= first_src %>" type='video/<%= first_type %>' />
