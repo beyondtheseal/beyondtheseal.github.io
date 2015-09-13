@@ -60,8 +60,10 @@ $(document).ready(function() {
     //Audio fade in/fade out;
     var currBgAudio = $(swiper.slides[curr]).attr("data-bg-audio");
     var nextBgAudio = $(swiper.slides[next]).attr("data-bg-audio");
+
     if (typeof currBgAudio != "undefined")
     {
+      console.log("Fading out " + currBgAudio);
       var sound = new Howl({
         urls: [currBgAudio],
       }).fade(1, 0, 1000);
@@ -69,6 +71,7 @@ $(document).ready(function() {
 
     if (typeof nextBgAudio != "undefined")
     {
+      console.log("Fade in " + nextBgAudio);
       var sound = new Howl({
         urls: [nextBgAudio],
         loop: true
