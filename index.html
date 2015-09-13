@@ -567,23 +567,18 @@
         </div><!-- swiper-wrapper? -->
         <div class="swiper-pagination"></div>
     </div>
-
-
-
+        <script src="js/vendor/timeline.js"></script>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/3.0.8/js/swiper.jquery.min.js"></script>
         <script type="text/javascript" src="js/vendor/underscore-min.js"></script>
         <script type="text/javascript" src="js/vendor/howler.js"></script>
         <script src="js/main.js"></script>
-
-        <script src="js/vendor/timeline.js"></script>
-
     </body>
     <script>
     $(document).ready(function(){
         var embed = document.getElementById('timeline-embed');
         embed.style.height = getComputedStyle(document.body).height;
+        console.log(embed.style.height);
         window.timeline = new TL.Timeline('timeline-embed', 'timeline.json', { hash_bookmark: false});
         window.addEventListener('resize', function() {
           var embed = document.getElementById('timeline-embed');
