@@ -62,6 +62,16 @@
         }
         </style>
 
+        <script type="text/javascript">
+          var timeline_config = {
+              type:   'timeline',
+              width:    '100%',
+              height:   '100%',
+              source:   'https://docs.google.com/spreadsheet/pub?key=1LuGcd4dnV4NFm7OSaJ7gOUJR0HZywBxh3geX0ltBNx0&amp;output=html',
+              embed_id: 'timeline-embed'
+          }
+        </script>
+
     </head>
     <body>
     <!--[if lt IE 8]>
@@ -522,7 +532,9 @@
       </div>
 
       <div class="swiper-slide" data-hash="32">
-        <div id="second_timeline"></div>
+        <div id="timeline-embed">
+          <div id="timeline"></div>
+        </div>
       </div> 
 
 
@@ -568,19 +580,18 @@
         <script src="js/vendor/timeline.js"></script>
 
     </body>
-
     <script>
     $(document).ready(function(){
-        var embed = document.getElementById('second_timeline');
+        var embed = document.getElementById('timeline-embed');
         embed.style.height = getComputedStyle(document.body).height;
-        window.timeline = new TL.Timeline('second_timeline', 'timeline.json', {hash_bookmark: false});
+        window.timeline = new TL.Timeline('timeline-embed', 'timeline.json', { hash_bookmark: false});
         window.addEventListener('resize', function() {
-          var embed = document.getElementById('second_timeline');
+          var embed = document.getElementById('timeline-embed');
           embed.style.height = getComputedStyle(document.body).height;
           timeline.updateDisplay();
         })
       });
-    </script>
+  </script>
 
     <script type="text/template" id="videotemplate">
         <video id="<%= video_id %>" class="<%= classes %>">
