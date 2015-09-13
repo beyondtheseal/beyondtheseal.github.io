@@ -1,12 +1,15 @@
-
 <html lang="en">
     <head>
-      <div></div>
         <meta charset="utf-8">
         <meta http-equiv="x-ua-compatible" content="ie=edge">
         <title></title>
         <meta name="description" content="">
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+
+        <!-- Timeline JS3 -->
+        <link rel="stylesheet" href="css/timeline.css">
+        <link rel="stylesheet" href="css/timeline.dark.css">
 
         <!-- Place favicon.ico in the root directory -->
         <link rel="apple-touch-icon" href="apple-touch-icon.png">
@@ -519,7 +522,7 @@
       </div>
 
       <div class="swiper-slide" data-hash="32">
-          <iframe src='//cdn.knightlab.com/libs/timeline3/latest/embed/index.html?source=1rypbTa9uQr1-RljYlvCnsTY28duH5z-9EzAe_VuwqE4&font=Lustria-Lato&lang=en&initial_zoom=2&height=100%' width='95.5%' height='100%' frameborder='0'></iframe>
+        <div id="second_timeline"></div>
       </div> 
 
 
@@ -562,8 +565,22 @@
         <script type="text/javascript" src="js/vendor/howler.js"></script>
         <script src="js/main.js"></script>
 
+        <script src="js/vendor/timeline.js"></script>
 
     </body>
+
+    <script>
+    $(document).ready(function(){
+        var embed = document.getElementById('second_timeline');
+        embed.style.height = getComputedStyle(document.body).height;
+        window.timeline = new TL.Timeline('second_timeline', 'timeline.json', {hash_bookmark: false});
+        window.addEventListener('resize', function() {
+          var embed = document.getElementById('second_timeline');
+          embed.style.height = getComputedStyle(document.body).height;
+          timeline.updateDisplay();
+        })
+      });
+    </script>
 
     <script type="text/template" id="videotemplate">
         <video id="<%= video_id %>" class="<%= classes %>">

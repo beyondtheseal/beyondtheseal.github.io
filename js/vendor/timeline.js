@@ -1,24 +1,24 @@
 /*!
-	VCO
+	TL
 */
 
 (function (root) {
-	root.VCO = {
+	root.TL = {
 		VERSION: '0.1',
-		_originalL: root.VCO
+		_originalL: root.TL
 	};
 }(this));
 
-/*	VCO.Debug
+/*	TL.Debug
 	Debug mode
 ================================================== */
-VCO.debug = true;
+TL.debug = true;
 
 
 
-/*	VCO.Bind
+/*	TL.Bind
 ================================================== */
-VCO.Bind = function (/*Function*/ fn, /*Object*/ obj) /*-> Object*/ {
+TL.Bind = function (/*Function*/ fn, /*Object*/ obj) /*-> Object*/ {
 	return function () {
 		return fn.apply(obj, arguments);
 	};
@@ -29,7 +29,7 @@ VCO.Bind = function (/*Function*/ fn, /*Object*/ obj) /*-> Object*/ {
 /* Trace (console.log)
 ================================================== */
 trace = function( msg ) {
-	if (VCO.debug) {
+	if (TL.debug) {
 		if (window.console) {
 			console.log(msg);
 		} else if ( typeof( jsTrace ) != 'undefined' ) {
@@ -40,48 +40,47 @@ trace = function( msg ) {
 	}
 }
 
-/*	VCO.Util
+/*	TL.Util
 	Class of utilities
 ================================================== */
 
-VCO.Util = {
-	
+TL.Util = {
+	mergeData: function(data_main, data_to_merge) {
+		var x;
+		for (x in data_to_merge) {
+			if (Object.prototype.hasOwnProperty.call(data_to_merge, x)) {
+				data_main[x] = data_to_merge[x];
+			}
+		}
+		return data_main;
+	},
+
+	// like TL.Util.mergeData but takes an arbitrarily long list of sources to merge.
 	extend: function (/*Object*/ dest) /*-> Object*/ {	// merge src properties into dest
 		var sources = Array.prototype.slice.call(arguments, 1);
 		for (var j = 0, len = sources.length, src; j < len; j++) {
 			src = sources[j] || {};
-			for (var i in src) {
-				if (src.hasOwnProperty(i)) {
-					dest[i] = src[i];
-				}
-			}
+			TL.Util.mergeData(dest, src);
 		}
 		return dest;
 	},
-	
-	setOptions: function (obj, options) {
-		obj.options = VCO.Util.extend({}, obj.options, options);
-		if (obj.options.uniqueid === "") {
-			obj.options.uniqueid = VCO.Util.unique_ID(6);
-		}
-	},
-	
+
 	isEven: function(n) {
 	  return n == parseFloat(n)? !(n%2) : void 0;
 	},
-	
+
 	findArrayNumberByUniqueID: function(id, array, prop, defaultVal) {
 		var _n = defaultVal || 0;
-		
+
 		for (var i = 0; i < array.length; i++) {
 			if (array[i].data[prop] == id) {
 				_n = i;
 			}
 		};
-		
+
 		return _n;
 	},
-	
+
 	convertUnixTime: function(str) {
 		var _date, _months, _year, _month, _day, _time, _date_array = [],
 			_date_str = {
@@ -91,13 +90,13 @@ VCO.Util = {
 				date_array:[],
 				full_array:[]
 			};
-			
+
 		_date_str.ymd = str.split(" ")[0];
 		_date_str.time = str.split(" ")[1];
 		_date_str.date_array = _date_str.ymd.split("-");
 		_date_str.time_array = _date_str.time.split(":");
 		_date_str.full_array = _date_str.date_array.concat(_date_str.time_array)
-		
+
 		for(var i = 0; i < _date_str.full_array.length; i++) {
 			_date_array.push( parseInt(_date_str.full_array[i]) )
 		}
@@ -108,59 +107,49 @@ VCO.Util = {
 		_month = _months[_date.getMonth()];
 		_day = _date.getDate();
 		_time = _month + ', ' + _day + ' ' + _year;
-		
+
 		return _time;
 	},
-	
+
 	setData: function (obj, data) {
-		obj.data = VCO.Util.extend({}, obj.data, data);
-		if (obj.data.uniqueid === "") {
-			obj.data.uniqueid = VCO.Util.unique_ID(6);
+		obj.data = TL.Util.extend({}, obj.data, data);
+		if (obj.data.unique_id === "") {
+			obj.data.unique_id = TL.Util.unique_ID(6);
 		}
 	},
-	
-	mergeData: function(data_main, data_to_merge) {
-		var x;
-		for (x in data_to_merge) {
-			if (Object.prototype.hasOwnProperty.call(data_to_merge, x)) {
-				data_main[x] = data_to_merge[x];
-			}
-		}
-		return data_main;
-	},
-	
+
 	stamp: (function () {
-		var lastId = 0, key = '_vco_id';
-		
+		var lastId = 0, key = '_tl_id';
+
 
 		return function (/*Object*/ obj) {
 			obj[key] = obj[key] || ++lastId;
 			return obj[key];
 		};
 	}()),
-	
+
 	isArray: (function () {
 	    // Use compiler's own isArray when available
 	    if (Array.isArray) {
 	        return Array.isArray;
 	    }
- 
+
 	    // Retain references to variables for performance
 	    // optimization
 	    var objectToStringFn = Object.prototype.toString,
 	        arrayToStringResult = objectToStringFn.call([]);
- 
+
 	    return function (subject) {
 	        return objectToStringFn.call(subject) === arrayToStringResult;
 	    };
 	}()),
-	
+
     getRandomNumber: function(range) {
    		return Math.floor(Math.random() * range);
    	},
-		
+
 	unique_ID: function(size, prefix) {
-		
+
 		var getRandomNumber = function(range) {
 			return Math.floor(Math.random() * range);
 		};
@@ -177,28 +166,51 @@ VCO.Util = {
 			}
 			return str;
 		};
-		
+
 		if (prefix) {
 			return prefix + "-" + randomID(size);
 		} else {
-			return "vco-" + randomID(size);
+			return "tl-" + randomID(size);
 		}
 	},
-	
+
+	ensureUniqueKey: function(obj, candidate) {
+		if (!candidate) { candidate = TL.Util.unique_ID(6); }
+
+		if (!(candidate in obj)) { return candidate; }
+
+		var root = candidate.match(/^(.+)(-\d+)?$/)[1];
+		var similar_ids = [];
+		// get an alternative
+		for (key in obj) {
+			if (key.match(/^(.+?)(-\d+)?$/)[1] == root) {
+				similar_ids.push(key);
+			}
+		}
+		candidate = root + "-" + (similar_ids.length + 1);
+
+		for (var counter = similar_ids.length; similar_ids.indexOf(candidate) != -1; counter++) {
+			candidate = root + '-' + counter;
+		}
+
+		return candidate;
+	},
+
+
 	htmlify: function(str) {
 		//if (str.match(/<\s*p[^>]*>([^<]*)<\s*\/\s*p\s*>/)) {
 		if (str.match(/<p>[\s\S]*?<\/p>/)) {
-			
+
 			return str;
 		} else {
 			return "<p>" + str + "</p>";
 		}
 	},
-	
+
 	/*	* Turns plain text links into real links
 	================================================== */
 	linkify: function(text,targets,is_touch) {
-		
+
         var make_link = function(url, link_text, prefix) {
             if (!prefix) {
                 prefix = "";
@@ -207,7 +219,7 @@ VCO.Util = {
             if (link_text && link_text.length > MAX_LINK_TEXT_LENGTH) {
                 link_text = link_text.substring(0,MAX_LINK_TEXT_LENGTH) + "\u2026"; // unicode ellipsis
             }
-            return prefix + "<a class='vco-makelink' target='_blank' href='" + url + "' onclick='void(0)'>" + link_text + "</a>";
+            return prefix + "<a class='tl-makelink' target='_blank' href='" + url + "' onclick='void(0)'>" + link_text + "</a>";
         }
 		// http://, https://, ftp://
 		var urlPattern = /\b(?:https?|ftp):\/\/([a-z0-9-+&@#\/%?=~_|!:,.;]*[a-z0-9-+&@#\/%=~_|])/gim;
@@ -217,10 +229,18 @@ VCO.Util = {
 
 		// Email addresses
 		var emailAddressPattern = /([a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+)/gim;
-		
+
 
 		return text
 			.replace(urlPattern, function(match, url_sans_protocol, offset, string) {
+                // Javascript doesn't support negative lookbehind assertions, so
+                // we need to handle risk of matching URLs in legit hrefs
+                if (offset > 0) {
+                    var prechar = string[offset-1];
+                    if (prechar == '"' || prechar == "'" || prechar == "=") {
+                        return match;
+                    }
+                }
                 return make_link(match, url_sans_protocol);
             })
 			.replace(pseudoUrlPattern, function(match, beforePseudo, pseudoUrl, offset, string) {
@@ -230,14 +250,14 @@ VCO.Util = {
                 return make_link('mailto:' + email, email);
             });
 	},
-	
+
 	unlinkify: function(text) {
 		if(!text) return text;
 		text = text.replace(/<a\b[^>]*>/i,"");
 		text = text.replace(/<\/a>/i, "");
 		return text;
 	},
-	
+
 	getParamString: function (obj) {
 		var params = [];
 		for (var i in obj) {
@@ -247,16 +267,16 @@ VCO.Util = {
 		}
 		return '?' + params.join('&');
 	},
-	
+
 	formatNum: function (num, digits) {
 		var pow = Math.pow(10, digits || 5);
 		return Math.round(num * pow) / pow;
 	},
-	
+
 	falseFn: function () {
 		return false;
 	},
-	
+
 	requestAnimFrame: (function () {
 		function timeoutDefer(callback) {
 			window.setTimeout(callback, 1000 / 60);
@@ -270,7 +290,7 @@ VCO.Util = {
 			timeoutDefer;
 
 		return function (callback, context, immediate, contextEl) {
-			callback = context ? VCO.Util.bind(callback, context) : callback;
+			callback = context ? TL.Util.bind(callback, context) : callback;
 			if (immediate && requestFn === timeoutDefer) {
 				callback();
 			} else {
@@ -278,13 +298,13 @@ VCO.Util = {
 			}
 		};
 	}()),
-	
+
 	bind: function (/*Function*/ fn, /*Object*/ obj) /*-> Object*/ {
 		return function () {
 			return fn.apply(obj, arguments);
 		};
 	},
-	
+
 	template: function (str, data) {
 		return str.replace(/\{ *([\w_]+) *\}/g, function (str, key) {
 			var value = data[key];
@@ -294,11 +314,11 @@ VCO.Util = {
 			return value;
 		});
 	},
-	
+
 	hexToRgb: function(hex) {
 	    // Expand shorthand form (e.g. "03F") to full form (e.g. "0033FF")
-        if (VCO.Util.css_named_colors[hex.toLowerCase()]) {
-            hex = VCO.Util.css_named_colors[hex.toLowerCase()];
+        if (TL.Util.css_named_colors[hex.toLowerCase()]) {
+            hex = TL.Util.css_named_colors[hex.toLowerCase()];
         }
 	    var shorthandRegex = /^#?([a-f\d])([a-f\d])([a-f\d])$/i;
 	    hex = hex.replace(shorthandRegex, function(m, r, g, b) {
@@ -311,6 +331,30 @@ VCO.Util = {
 	        g: parseInt(result[2], 16),
 	        b: parseInt(result[3], 16)
 	    } : null;
+	},
+	// given an object with r, g, and b keys, or a string of the form 'rgb(mm,nn,ll)', return a CSS hex string including the leading '#' character
+	rgbToHex: function(rgb) {
+		var r,g,b;
+		if (typeof(rgb) == 'object') {
+			r = rgb.r;
+			g = rgb.g;
+			b = rgb.b;
+		} else if (typeof(rgb.match) == 'function'){
+			var parts = rgb.match(/^rgb\((\d+),(\d+),(\d+)\)$/);
+			if (parts) {
+				r = parts[1];
+				g = parts[2];
+				b = parts[3];
+			}
+		}
+		if (!r || !b || !g) {
+			//throw "Invalid RGB argument";
+		}
+		return "#" + parseInt(r,10).toString(16) + parseInt(g,10).toString(16) + parseInt(b,10).toString(16);
+	},
+	colorObjToHex: function(o) {
+		var parts = [o.r, o.g, o.b];
+		return TL.Util.rgbToHex("rgb(" + parts.join(',') + ")")
 	},
     css_named_colors: {
         "aliceblue": "#f0f8ff",
@@ -470,7 +514,7 @@ VCO.Util = {
 			}
 			return s;
 		},
-		
+
 		r16_9: function(size) {
 			if (size.w !== null && size.w !== "") {
 				return Math.round((size.w / 16) * 9);
@@ -501,43 +545,50 @@ VCO.Util = {
 		} else {
 			return "";
 		}
-		
+
 	},
 	getUrlVars: function(string) {
 		var str,
 			vars = [],
 			hash,
 			hashes;
-		
+
 		str = string.toString();
-		
-		if (str.match('&#038;')) { 
+
+		if (str.match('&#038;')) {
 			str = str.replace("&#038;", "&");
 		} else if (str.match('&#38;')) {
 			str = str.replace("&#38;", "&");
 		} else if (str.match('&amp;')) {
 			str = str.replace("&amp;", "&");
 		}
-		
+
 		hashes = str.slice(str.indexOf('?') + 1).split('&');
-		
+
 		for(var i = 0; i < hashes.length; i++) {
 			hash = hashes[i].split('=');
 			vars.push(hash[0]);
 			vars[hash[0]] = hash[1];
 		}
-		
-		
+
+
 		return vars;
 	},
-
+    /**
+     * Remove any leading or trailing whitespace from the given string.
+     * If `str` is undefined or does not have a `replace` function, return
+     * an empty string.
+     */
 	trim: function(str) {
-		return str.replace(/^\s+|\s+$/g, '');
+        if (str && typeof(str.replace) == 'function') {
+            return str.replace(/^\s+|\s+$/g, '');
+        }
+        return "";
 	},
 
 	slugify: function(str) {
 		// borrowed from http://stackoverflow.com/a/5782563/102476
-		str = VCO.Util.trim(str);
+		str = TL.Util.trim(str);
 		str = str.toLowerCase();
 
 		// remove accents, swap ñ for n, etc
@@ -592,8 +643,8 @@ VCO.Util = {
 	},
 
     findNextGreater: function(list, current, default_value) {
-        // given a sorted list and a current value which *might* be in the list, 
-        // return the next greatest value if the current value is >= the last item in the list, return default, 
+        // given a sorted list and a current value which *might* be in the list,
+        // return the next greatest value if the current value is >= the last item in the list, return default,
         // or if default is undefined, return input value
         for (var i = 0; i < list.length; i++) {
             if (current < list[i]) {
@@ -605,8 +656,8 @@ VCO.Util = {
     },
 
     findNextLesser: function(list, current, default_value) {
-        // given a sorted list and a current value which *might* be in the list, 
-        // return the next lesser value if the current value is <= the last item in the list, return default, 
+        // given a sorted list and a current value which *might* be in the list,
+        // return the next lesser value if the current value is <= the last item in the list, return default,
         // or if default is undefined, return input value
         for (var i = list.length - 1; i >= 0; i--) {
             if (current > list[i]) {
@@ -615,13 +666,51 @@ VCO.Util = {
         }
 
         return (default_value) ? default_value : current;
+    },
+
+	isEmptyObject: function(o) {
+		var properties = []
+		if (Object.keys) {
+			properties = Object.keys(o);
+		} else { // all this to support IE 8
+		    for (var p in o) if (Object.prototype.hasOwnProperty.call(o,p)) properties.push(p);
     }
+		for (var i = 0; i < properties.length; i++) {
+			var k = properties[i];
+			if (o[k] != null && typeof o[k] != "string") return false;
+			if (TL.Util.trim(o[k]).length != 0) return false;
+		}
+		return true;
+	},
+	parseYouTubeTime: function(s) {
+	    // given a YouTube start time string in a reasonable format, reduce it to a number of seconds as an integer.
+		if (typeof(s) == 'string') {
+			parts = s.match(/^\s*(\d+h)?(\d+m)?(\d+s)?\s*/i);
+			if (parts) {
+				var hours = parseInt(parts[1]) || 0;
+				var minutes = parseInt(parts[2]) || 0;
+				var seconds = parseInt(parts[3]) || 0;
+				return seconds + (minutes * 60) + (hours * 60 * 60);
+			}
+		} else if (typeof(s) == 'number') {
+			return s;
+		}
+		return 0;
+	},
+	/**
+	 * Try to make seamless the process of interpreting a URL to a web page which embeds an image for sharing purposes
+	 * as a direct image link. Some services have predictable transformations we can use rather than explain to people
+	 * this subtlety.
+	 */
+	transformImageURL: function(url) {
+		return url.replace(/(.*)www.dropbox.com\/(.*)/, '$1dl.dropboxusercontent.com/$2')
+	}
 };
 
 
-// Expects VCO to be visible in scope
+// Expects TL to be visible in scope
 
-;(function(VCO){
+;(function(TL){
     /* Zepto v1.1.2-15-g59d3fe5 - zepto event ajax form ie - zeptojs.com/license */
 
     var Zepto = (function() {
@@ -2174,9 +2263,9 @@ VCO.Util = {
     })(Zepto)
 
 
-  VCO.getJSON = Zepto.getJSON;
-	VCO.ajax = Zepto.ajax;
-})(VCO)
+  TL.getJSON = Zepto.getJSON;
+	TL.ajax = Zepto.ajax;
+})(TL)
 
 //     Based on https://github.com/madrobby/zepto/blob/5585fe00f1828711c04208372265a5d71e3238d1/src/ajax.js
 //     Zepto.js
@@ -2206,12 +2295,12 @@ SOFTWARE.
 */
 
 
-/*	VCO.Class
+/*	TL.Class
 	Class powers the OOP facilities of the library.
 ================================================== */
-VCO.Class = function () {};
+TL.Class = function () {};
 
-VCO.Class.extend = function (/*Object*/ props) /*-> Class*/ {
+TL.Class.extend = function (/*Object*/ props) /*-> Class*/ {
  
 	// extended class with the new prototype
 	var NewClass = function () {
@@ -2243,42 +2332,42 @@ VCO.Class.extend = function (/*Object*/ props) /*-> Class*/ {
 
 	// mix static properties into the class
 	if (props.statics) {
-		VCO.Util.extend(NewClass, props.statics);
+		TL.Util.extend(NewClass, props.statics);
 		delete props.statics;
 	}
 
 	// mix includes into the prototype
 	if (props.includes) {
-		VCO.Util.extend.apply(null, [proto].concat(props.includes));
+		TL.Util.extend.apply(null, [proto].concat(props.includes));
 		delete props.includes;
 	}
 
 	// merge options
 	if (props.options && proto.options) {
-		props.options = VCO.Util.extend({}, proto.options, props.options);
+		props.options = TL.Util.extend({}, proto.options, props.options);
 	}
 
 	// mix given properties into the prototype
-	VCO.Util.extend(proto, props);
+	TL.Util.extend(proto, props);
 
 	// allow inheriting further
-	NewClass.extend = VCO.Class.extend;
+	NewClass.extend = TL.Class.extend;
 
 	// method for adding properties to prototype
 	NewClass.include = function (props) {
-		VCO.Util.extend(this.prototype, props);
+		TL.Util.extend(this.prototype, props);
 	};
 
 	return NewClass;
 };
 
 
-/*	VCO.Events
-	adds custom events functionality to VCO classes
+/*	TL.Events
+	adds custom events functionality to TL classes
 ================================================== */
-VCO.Events = {
+TL.Events = {
 	addEventListener: function (/*String*/ type, /*Function*/ fn, /*(optional) Object*/ context) {
-		var events = this._vco_events = this._vco_events || {};
+		var events = this._tl_events = this._tl_events || {};
 		events[type] = events[type] || [];
 		events[type].push({
 			action: fn,
@@ -2288,7 +2377,7 @@ VCO.Events = {
 	},
 
 	hasEventListeners: function (/*String*/ type) /*-> Boolean*/ {
-		var k = '_vco_events';
+		var k = '_tl_events';
 		return (k in this) && (type in this[k]) && (this[k][type].length > 0);
 	},
 
@@ -2297,7 +2386,7 @@ VCO.Events = {
 			return this;
 		}
 
-		for (var i = 0, events = this._vco_events, len = events[type].length; i < len; i++) {
+		for (var i = 0, events = this._tl_events, len = events[type].length; i < len; i++) {
 			if (
 				(events[type][i].action === fn) &&
 				(!context || (events[type][i].context === context))
@@ -2314,12 +2403,12 @@ VCO.Events = {
 			return this;
 		}
 
-		var event = VCO.Util.extend({
+		var event = TL.Util.mergeData({
 			type: type,
 			target: this
 		}, data);
 
-		var listeners = this._vco_events[type].slice();
+		var listeners = this._tl_events[type].slice();
 
 		for (var i = 0, len = listeners.length; i < len; i++) {
 			listeners[i].action.call(listeners[i].context || this, event);
@@ -2329,13 +2418,14 @@ VCO.Events = {
 	}
 };
 
-VCO.Events.on	= VCO.Events.addEventListener;
-VCO.Events.off	= VCO.Events.removeEventListener;
-VCO.Events.fire = VCO.Events.fireEvent;
+TL.Events.on	= TL.Events.addEventListener;
+TL.Events.off	= TL.Events.removeEventListener;
+TL.Events.fire = TL.Events.fireEvent;
+
 
 /*
 	Based on Leaflet Browser
-	VCO.Browser handles different browser and feature detections for internal  use.
+	TL.Browser handles different browser and feature detections for internal  use.
 */
 
 
@@ -2370,7 +2460,7 @@ VCO.Events.fire = VCO.Events.fireEvent;
 
 	var touch = !window.L_NO_TOUCH && !phantomjs && (pointer || 'ontouchstart' in window || (window.DocumentTouch && document instanceof window.DocumentTouch));
 
-	VCO.Browser = {
+	TL.Browser = {
 		ie: ie,
 		ielt9: ie && !document.addEventListener,
 		webkit: webkit,
@@ -2414,11 +2504,11 @@ VCO.Events.fire = VCO.Events.fireEvent;
 
 }()); 
 
-/*	VCO.Load
+/*	TL.Load
 	Loads External Javascript and CSS
 ================================================== */
 
-VCO.Load = (function (doc) {
+TL.Load = (function (doc) {
 	var loaded	= [];
 	
 	function isLoaded(url) {
@@ -2445,7 +2535,7 @@ VCO.Load = (function (doc) {
 		
 		css: function (urls, callback, obj, context) {
 			if (!isLoaded(urls)) {
-				VCO.LoadIt.css(urls, callback, obj, context);
+				TL.LoadIt.css(urls, callback, obj, context);
 			} else {
 				callback();
 			}
@@ -2453,7 +2543,7 @@ VCO.Load = (function (doc) {
 
 		js: function (urls, callback, obj, context) {
 			if (!isLoaded(urls)) {
-				VCO.LoadIt.js(urls, callback, obj, context);
+				TL.LoadIt.js(urls, callback, obj, context);
 			} else {
 				callback();
 			}
@@ -2502,7 +2592,7 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 @version 2.0.3 (git)
 */
 
-VCO.LoadIt = (function (doc) {
+TL.LoadIt = (function (doc) {
   // -- Private Variables ------------------------------------------------------
 
   // User agent and feature test information.
@@ -2856,204 +2946,257 @@ VCO.LoadIt = (function (doc) {
 })(this.document);
 
 
-/*  VCO.TimelineConfig
-separate the configuration from the display (VCO.Timeline)
+/*  TL.TimelineConfig
+separate the configuration from the display (TL.Timeline)
 to make testing easier
 ================================================== */
-VCO.TimelineConfig = VCO.Class.extend({
-	
-	includes: [VCO.Events],
-	VALID_PROPERTIES: ['scale', 'title', 'events'], // we'll only pull things in from this
+TL.TimelineConfig = TL.Class.extend({
 
-	initialize: function (data, callback) {
+	includes: [],
+	initialize: function (data) {
+		this.title = '';
+		this.scale = '';
+		this.events = [];
+		this.event_dict = {}; // despite name, all slides (events + title) indexed by slide.unique_id
+		this.messages = {
+			errors: [],
+			warnings: []
+		};
+
 		// Initialize the data
-		if (typeof data === 'string') {
-			var self = this;
-            
-			VCO.ajax({
-				type: 'GET',
-				url: data,
-				dataType: 'json', //json data type
-				success: function(d){
-					if (d && d.events) {
-						self._importProperties(d);
-					} else {
-						this.fire("load_error", {message:"data must have an events property"});
-						throw("data must have an events property");
-					}
-					self._cleanData();
-					if (callback) {
-						callback(self);
-					}
-				},
-				error:function(xhr, type){
-					trace(xhr);
-					trace(type);
-					this.fire("load_error", {message:"Configuration could not be loaded: " + type});
-					throw("Configuration could not be loaded: " + type);
-					
+		if (typeof data === 'object' && data.events) {
+			this.scale = data.scale;
+			this.events = [];
+			this._ensureValidScale(data.events);
+
+			if (data.title) {
+				var title_id = this._assignID(data.title);
+				this._tidyFields(data.title);
+				this.title = data.title;
+				this.event_dict[title_id] = this.title;
+			}
+			for (var i = 0; i < data.events.length; i++) {
+				try {
+					this.addEvent(data.events[i], true);
+				} catch (e) {
+					this.logError("Event " + i + ": " + e);
 				}
-			});
-		} else if (typeof data === 'object') {
-			if (data.events) {
-				this._importProperties(data);
-				this._cleanData();
-			} else {
-				this.fire("load_error", {message:"data must have an events property"});
-				throw("data must have a events property");
 			}
-			if (callback) {
-				callback(this);
-			}
+			TL.DateUtil.sortByDate(this.events);
+
+
+		}
+	},
+	logError: function(msg) {
+		trace(msg);
+		this.messages.errors.push(msg);
+	},
+	/*
+	 * Return any accumulated error messages. If `sep` is passed, it should be a string which will be used to join all messages, resulting in a string return value. Otherwise,
+	 * errors will be returned as an array.
+	 */
+	getErrors: function(sep) {
+		if (sep) {
+			return this.messages.errors.join(sep);
 		} else {
-			this.fire("load_error", {message:"Invalid Argument"});
-			throw("Invalid Argument");
+			return this.messages.errors;
 		}
 	},
-
-	/* Add an event and return the unique id 
+	/*
+	 * Perform any sanity checks we can before trying to use this to make a timeline. Returns nothing, but errors will be logged
+	 * such that after this is called, one can test `this.isValid()` to see if everything is OK.
+	 */
+	validate: function() {
+		if (typeof(this.events) == "undefined" || typeof(this.events.length) == "undefined" || this.events.length == 0) {
+			this.logError("Timeline configuration has no events.")
+		}
+	},
+	isValid: function() {
+		return this.messages.errors.length == 0;
+	},
+	/* Add an event (including cleaning/validation) and return the unique id.
+	* All event data validation should happen in here.
+	* Throws: string errors for any validation problems.
 	*/
-	addEvent: function(data) {
-		var _id = (this.title) ? this.title.uniqueid : '';
+	addEvent: function(data, defer_sort) {
+		var event_id = this._assignID(data);
+
+		if (typeof(data.start_date) == 'undefined') {
+			throw(event_id + " is missing a start_date");
+		} else {
+			this._processDates(data);
+			this._tidyFields(data);
+		}
+
 		this.events.push(data);
-		this._makeUniqueIdentifiers(_id, this.events); 
-		this._processDates(this.events);    
-        
-		var uniqueid = this.events[this.events.length - 1].uniqueid;             
-		VCO.DateUtil.sortByDate(this.events);
-		return uniqueid;
+		this.event_dict[event_id] = data;
+
+		if (!defer_sort) {
+			TL.DateUtil.sortByDate(this.events);
+		}
+		return event_id;
 	},
 
-	_cleanData: function() {
-		var _id = (this.title) ? this.title.uniqueid : '';
-		this._makeUniqueIdentifiers(_id, this.events); 
-		this._processDates(this.events);          
-		VCO.DateUtil.sortByDate(this.events);
-	},
-    
-	_importProperties: function(d) {
-		for (var i = 0; i < this.VALID_PROPERTIES.length; i++) {
-			k = this.VALID_PROPERTIES[i];
-			this[k] = d[k];
+	/**
+	 * Given a slide, verify that its ID is unique, or assign it one which is.
+	 * The assignment happens in this function, and the assigned ID is also
+	 * the return value. Not thread-safe, because ids are not reserved
+	 * when assigned here.
+	 */
+	_assignID: function(slide) {
+		var slide_id = slide.unique_id;
+		if (!TL.Util.trim(slide_id)) {
+			// give it an ID if it doesn't have one
+			slide_id = (slide.text) ? TL.Util.slugify(slide.text.headline) : null;
 		}
-        
-		// Make sure title slide has unique id
-		if(this.title && !('uniqueid' in this.title)) {
-			this.title.uniqueid = '';
-		}
+		// make sure it's unique and add it.
+		slide.unique_id = TL.Util.ensureUniqueKey(this.event_dict,slide_id);
+		return slide.unique_id
 	},
 
+	/**
+	 * Given an array of slide configs (the events), ensure that each one has a distinct unique_id. The id of the title
+	 * is also passed in because in most ways it functions as an event slide, and the event IDs must also all be unique
+	 * from the title ID.
+	 */
 	_makeUniqueIdentifiers: function(title_id, array) {
 		var used = [title_id];
+
+		// establish which IDs are assigned and if any appear twice, clear out successors.
 		for (var i = 0; i < array.length; i++) {
-			if (array[i].uniqueid && array[i].uniqueid.replace(/\s+/,'').length > 0) {
-				array[i].uniqueid = VCO.Util.slugify(array[i].uniqueid); // enforce valid
-				if (used.indexOf(array[i].uniqueid) != -1) {
-					array[i].uniqueid = '';
-				} else {
-					used.push(array[i].uniqueid);
+			if (TL.Util.trim(array[i].unique_id)) {
+				array[i].unique_id = TL.Util.slugify(array[i].unique_id); // enforce valid
+				if (used.indexOf(array[i].unique_id) == -1) {
+					used.push(array[i].unique_id);
+				} else { // it was already used, wipe it out
+					array[i].unique_id = '';
 				}
 			}
 		};
+
 		if (used.length != (array.length + 1)) {
+			// at least some are yet to be assigned
 			for (var i = 0; i < array.length; i++) {
-				if (!array[i].uniqueid) {
-					var slug = (array[i].text) ? VCO.Util.slugify(array[i].text.headline) : null;
+				if (!array[i].unique_id) {
+					// use the headline for the unique ID if it's available
+					var slug = (array[i].text) ? TL.Util.slugify(array[i].text.headline) : null;
 					if (!slug) {
-						slug = VCO.Util.unique_ID(6);
+						slug = TL.Util.unique_ID(6); // or generate a random ID
 					}
 					if (used.indexOf(slug) != -1) {
-						slug = slug + '-' + i;
+						slug = slug + '-' + i; // use the index to get a unique ID.
 					}
 					used.push(slug);
-					array[i].uniqueid = slug;
+					array[i].unique_id = slug;
 				}
 			}
 		}
 	},
-
-	_processDates: function(array) {
-		var dateCls = null;
-        
+	_ensureValidScale: function(events) {
 		if(!this.scale) {
 			trace("Determining scale dynamically");
-            
-			this.scale = "javascript"; // default
-            
-			for (var i = 0; i < array.length; i++) {
-				if (typeof(array[i].start_date) == 'undefined') {
-					this.fire("load_error", {message:"item " + i + " is missing a start_date"});
-					throw("item " + i + " is missing a start_date");
-				}
-                
-				var d = new VCO.BigDate(array[i].start_date);
-				var year = d.data.date_obj.year;               
-				if(year < -271820 || year >  275759) {
-					this.scale = "cosmological";
+			this.scale = "human"; // default to human unless there's a slide which is explicitly 'cosmological' or one which has a cosmological year
+
+			for (var i = 0; i < events.length; i++) {
+				if (events[i].scale == 'cosmological') {
+					this.scale = 'cosmological';
 					break;
 				}
-			}
-		}
-        
-		if(this.scale == 'javascript') {
-			dateCls = VCO.Date;
-			trace('using VCO.Date');
-		} else if(this.scale == 'cosmological') {
-			dateCls = VCO.BigDate;
-			trace('using VCO.BigDate');
-		} else {
-			this.fire("load_error", {message:"Don't know how to process dates on scale "+this.scale});
-			throw ("Don't know how to process dates on scale "+this.scale);
-		}
-            
-		for (var i = 0; i < array.length; i++) {
-			if (typeof(array[i].start_date) == 'undefined') {
-				this.fire("load_error", {message:"item " + i + " is missing a start_date"});
-				throw("item " + i + " is missing a start_date");
-				
-			}
-			if(!(array[i].start_date instanceof dateCls)) {
-				var start_date = array[i].start_date;
-				array[i].start_date = new dateCls(start_date);
-
-				// eliminate redundant end dates.
-				if (typeof(array[i].end_date) != 'undefined' && !(array[i].end_date instanceof dateCls)) {
-					var end_date = array[i].end_date;
-					var equal = true;
-					for (property in start_date) {
-						equal = equal && (start_date[property] == end_date[property]);
+				if (events[i].start_date && typeof(events[i].start_date.year) != "undefined") {
+					var d = new TL.BigDate(events[i].start_date);
+					var year = d.data.date_obj.year;
+					if(year < -271820 || year >  275759) {
+						this.scale = "cosmological";
+						break;
 					}
-					if (equal) {
-						trace("End date same as start date is redundant; dropping end date");
-						delete array[i].end_date;
-					} else {
-						array[i].end_date = new dateCls(end_date);
-					}
-
 				}
 			}
 		}
+		var dateCls = TL.DateUtil.SCALE_DATE_CLASSES[this.scale];
+		if (!dateCls) { this.logError("Don't know how to process dates on scale "+this.scale); }
+	},
+	_processDates: function(slide) {
+		var dateCls = TL.DateUtil.SCALE_DATE_CLASSES[this.scale];
+		if(!(slide.start_date instanceof dateCls)) {
+			var start_date = slide.start_date;
+			slide.start_date = new dateCls(start_date);
+
+			// eliminate redundant end dates.
+			if (typeof(slide.end_date) != 'undefined' && !(slide.end_date instanceof dateCls)) {
+				var end_date = slide.end_date;
+				var equal = true;
+				for (property in start_date) {
+					equal = equal && (start_date[property] == end_date[property]);
+				}
+				if (equal) {
+					trace("End date same as start date is redundant; dropping end date");
+					delete slide.end_date;
+				} else {
+					slide.end_date = new dateCls(end_date);
+				}
+
+			}
+		}
+
+	},
+
+	_tidyFields: function(slide) {
+
+		function fillIn(obj,key,default_value) {
+			if (!default_value) default_value = '';
+			if (!obj.hasOwnProperty(key)) { obj[key] = default_value }
+		}
+
+		if (slide.group) {
+			slide.group = TL.Util.trim(slide.group);
+		}
+
+		if (!slide.text) {
+			slide.text = {};
+		}
+		fillIn(slide.text,'text');
+		fillIn(slide.text,'headline');
 	}
 });
 
 
-/* VCO.ConfigFactory.js
+/* TL.ConfigFactory.js
  * Build TimelineConfig objects from other data sources
  */
-;(function(VCO){
-    function extractSpreadsheetKey(url) {
+;(function(TL){
+    /*
+     * Convert a URL to a Google Spreadsheet (typically a /pubhtml version but somewhat flexible) into an object with the spreadsheet key (ID) and worksheet ID.
+
+     If `url` is actually a string which is only letters, numbers, '-' and '_', then it's assumed to be an ID already. If we had a more precise way of testing to see if the input argument was a valid key, we might apply it, but I don't know where that's documented.
+
+     If we're pretty sure this isn't a bare key or a url that could be used to find a Google spreadsheet then return null.
+     */
+    function parseGoogleSpreadsheetURL(url) {
+        parts = {
+            key: null,
+            worksheet: 0 // not really sure how to use this to get the feed for that sheet, so this is not ready except for first sheet right now
+        }
+        // key as url parameter (old-fashioned)
         var pat = /\bkey=([-_A-Za-z0-9]+)&?/i;
         if (url.match(pat)) {
-            return url.match(pat)[1];
-        }
-        var key = null;
-        if (url.match("docs.google.com/spreadsheets/d/")) {
+            parts.key = url.match(pat)[1];
+            // can we get a worksheet from this form?
+        } else if (url.match("docs.google.com/spreadsheets/d/")) {
             var pos = url.indexOf("docs.google.com/spreadsheets/d/") + "docs.google.com/spreadsheets/d/".length;
             var tail = url.substr(pos);
-            key = tail.split('/')[0]
+            parts.key = tail.split('/')[0]
+            if (url.match(/\?gid=(\d+)/)) {
+                parts.worksheet = url.match(/\?gid=(\d+)/)[1];
+            }
+        } else if (url.match(/^\b[-_A-Za-z0-9]+$/)) {
+            parts.key = url;
         }
-        if (!key) { key = url}
-        return key;
+
+        if (parts.key) {
+            return parts;
+        } else {
+            return null;
+        }
     }
 
     function extractGoogleEntryData_V1(item) {
@@ -3063,56 +3206,67 @@ VCO.TimelineConfig = VCO.Class.extend({
                 item_data[k.substr(4)] = item[k].$t;
             }
         }
-        if (!item_data.startdate) {
-            throw("All items must have a start date column.")
-        }
+        if (TL.Util.isEmptyObject(item_data)) return null;
         var d = {
             media: {
                 caption: item_data.mediacaption || '',
                 credit: item_data.mediacredit || '',
                 url: item_data.media || '',
-                thumb: ''
+                thumbnail: item_data.mediathumbnail || ''
             },
             text: {
                 headline: item_data.headline || '',
                 text: item_data.text || ''
-            }
+            },
+            group: item_data.tag || '',
+            type: item_data.type || ''
         }
-        d['start_date'] = VCO.Date.parseDate(item_data.startdate);
-        if (item.enddate) {
-            d['end_date'] = VCO.Date.parseDate(item.enddate);
+        if (item_data.startdate) {
+            d['start_date'] = TL.Date.parseDate(item_data.startdate);
         }
+        if (item_data.enddate) {
+            d['end_date'] = TL.Date.parseDate(item_data.enddate);
+        }
+
+
         return d;
     }
 
     function extractGoogleEntryData_V3(item) {
 
+        function clean_integer(s) {
+            if (s) {
+                return s.replace(/[\s,]+/g,''); // doesn't handle '.' as comma separator, but how to distinguish that from decimal separator?
+            }
+        }
+
         var item_data = {}
         for (k in item) {
             if (k.indexOf('gsx$') == 0) {
-                item_data[k.substr(4)] = item[k].$t;
+                item_data[k.substr(4)] = TL.Util.trim(item[k].$t);
             }
         }
+        if (TL.Util.isEmptyObject(item_data)) return null;
         var d = {
             media: {
                 caption: item_data.mediacaption || '',
                 credit: item_data.mediacredit || '',
                 url: item_data.media || '',
-                thumb: item_data.mediathumbnail || ''
+                thumbnail: item_data.mediathumbnail || ''
             },
             text: {
                 headline: item_data.headline || '',
                 text: item_data.text || ''
             },
             start_date: {
-                year: item_data.year,
-                month: item_data.month || '',
-                day: item_data.day || ''
+                year: clean_integer(item_data.year),
+                month: clean_integer(item_data.month) || '',
+                day: clean_integer(item_data.day) || ''
             },
             end_date: {
-                year: item_data.endyear || '',
-                month: item_data.endmonth || '',
-                day: item_data.endday || ''
+                year: clean_integer(item_data.endyear) || '',
+                month: clean_integer(item_data.endmonth) || '',
+                day: clean_integer(item_data.endday) || ''
             },
             display_date: item_data.displaydate || '',
 
@@ -3120,11 +3274,11 @@ VCO.TimelineConfig = VCO.Class.extend({
         }
 
         if (item_data.time) {
-            VCO.Util.extend(d.start_date,VCO.DateUtil.parseTime(item_data.time));
+            TL.Util.mergeData(d.start_date,TL.DateUtil.parseTime(item_data.time));
         }
 
         if (item_data.endtime) {
-            VCO.Util.extend(d.end_date,VCO.DateUtil.parseTime(item_data.endtime));
+            TL.Util.mergeData(d.end_date,TL.DateUtil.parseTime(item_data.endtime));
         }
 
 
@@ -3154,7 +3308,7 @@ VCO.TimelineConfig = VCO.Class.extend({
     }
 
     var getGoogleItemExtractor = function(data) {
-        if (typeof data.feed.entry === 'undefined' 
+        if (typeof data.feed.entry === 'undefined'
                 || data.feed.entry.length == 0) {
             throw('No data entries found.');
         }
@@ -3168,78 +3322,127 @@ VCO.TimelineConfig = VCO.Class.extend({
         }
     }
 
-    VCO.ConfigFactory = {
+    var buildGoogleFeedURL = function(parts) {
+        return "https://spreadsheets.google.com/feeds/list/" + parts.key + "/1/public/values?alt=json";
 
-        extractSpreadsheetKey: extractSpreadsheetKey,
+    }
 
-        fromGoogle: function(url) {
-            var key = extractSpreadsheetKey(url);
-            // TODO: maybe get specific worksheets?
-            var worksheet = '1';
-            url = "https://spreadsheets.google.com/feeds/list/" + key + "/" + worksheet + "/public/values?alt=json";
-            return this.fromFeed(url);
-        },
-
-        fromFeed: function(url) {
+    var jsonFromGoogleURL = function(url) {
+        var url = buildGoogleFeedURL(parseGoogleSpreadsheetURL(url));
             var timeline_config = { 'events': [] };
-            var data = VCO.ajax({
-                url: url, 
+            var data = TL.ajax({
+                url: url,
                 async: false
             });
             data = JSON.parse(data.responseText);
-            window.google_data = data;
-            var extract = getGoogleItemExtractor(data);
-            for (var i = 0; i < data.feed.entry.length; i++) {
+            return googleFeedJSONtoTimelineJSON(data);
+        }
+
+    var googleFeedJSONtoTimelineJSON = function(data) {
+        var timeline_config = { 'events': [], 'errors': [] }
+        var extract = getGoogleItemExtractor(data);
+        for (var i = 0; i < data.feed.entry.length; i++) {
+            try {
                 var event = extract(data.feed.entry[i]);
-                var row_type = 'event';
-                if (typeof(event.type) != 'undefined') {
-                    row_type = event.type;
-                    delete event.type;
+                if (event) { // blank rows return null
+                  var row_type = 'event';
+                  if (typeof(event.type) != 'undefined') {
+                      row_type = event.type;
+                      delete event.type;
+                  }
+                  if (row_type == 'title') {
+                      timeline_config.title = event;
+                  } else {
+                      timeline_config.events.push(event);
+                  }
                 }
-                if (row_type == 'title') {
-                    timeline_config.title = event;
-                } else {
-                    timeline_config.events.push(event);
+            } catch(e) {
+                if (e.message) {
+                    e = e.message;
                 }
-            };
-            return timeline_config;
+                timeline_config.errors.push(e + " ["+ i +"]");
+            }
+        };
+        return timeline_config;
+
+    }
+
+    var makeConfig = function(url, callback) {
+        var key = parseGoogleSpreadsheetURL(url);
+
+        if (key) {
+            var json = jsonFromGoogleURL(url);
+            var tc = new TL.TimelineConfig(json);
+            if (json.errors) {
+                for (var i = 0; i < json.errors.length; i++) {
+                    tc.logError(json.errors[i]);
+                };
+            }
+            callback(tc);
+        } else {
+            TL.getJSON(url, function(data){
+                callback(new TL.TimelineConfig(data));
+
+            });
         }
     }
-})(VCO)
+
+    TL.ConfigFactory = {
+        // export for unit testing and use by authoring tool
+        parseGoogleSpreadsheetURL: parseGoogleSpreadsheetURL,
+        // export for unit testing
+        googleFeedJSONtoTimelineJSON: googleFeedJSONtoTimelineJSON,
 
 
-VCO.Language = function(options) {
+        fromGoogle: function(url) {
+            console.log("TL.ConfigFactory.fromGoogle is deprecated and will be removed soon. Use TL.ConfigFactory.makeConfig(url,callback)")
+            return jsonFromGoogleURL(url);
+
+        },
+
+        /*
+         * Given a URL to a Timeline data source, read the data, create a TimelineConfig
+         * object, and call the given `callback` function passing the created config as
+         * the only argument. This should be the main public interface to getting configs
+         * from any kind of URL, Google or direct JSON.
+         */
+        makeConfig: makeConfig,
+    }
+})(TL)
+
+
+TL.Language = function(options) {
 	// borrowed from http://stackoverflow.com/a/14446414/102476
-	for (k in VCO.Language.languages.en) {
-		this[k] = VCO.Language.languages.en[k];
+	for (k in TL.Language.languages.en) {
+		this[k] = TL.Language.languages.en[k];
 	}
 	if (options && options.language && typeof(options.language) == 'string' && options.language != 'en') {
 		var code = options.language;
-		if (!(code in VCO.Language.languages)) {
+		if (!(code in TL.Language.languages)) {
 			if (/\.json$/.test(code)) {
 				var url = code;
 			} else {
 				var fragment = "/locale/" + code + ".json";
-				var script_path = options.script_path || VCO.Timeline.source_path;
+				var script_path = options.script_path || TL.Timeline.source_path;
 				if (/\/$/.test(script_path)) { fragment = fragment.substr(1)}
 				var url = script_path + fragment;
 			}
 			var self = this;
-			var xhr = VCO.ajax({ 
+			var xhr = TL.ajax({ 
 				url: url, async: false
 			});
 			if (xhr.status == 200) {
-				VCO.Language.languages[code] = JSON.parse(xhr.responseText);
+				TL.Language.languages[code] = JSON.parse(xhr.responseText);
 			} else {
 				throw "Could not load language [" + code + "]: " + xhr.statusText;
 			}
 		}
-		VCO.Util.mergeData(this,VCO.Language.languages[code]);
+		TL.Util.mergeData(this,TL.Language.languages[code]);
 
 	}
 }
 
-VCO.Language.formatNumber = function(val,mask) {
+TL.Language.formatNumber = function(val,mask) {
 		if (mask.match(/%(\.(\d+))?f/)) {
 			var match = mask.match(/%(\.(\d+))?f/);
 			var token = match[0];
@@ -3254,14 +3457,14 @@ VCO.Language.formatNumber = function(val,mask) {
 
 
 
-/* VCO.Util.mergeData is shallow, we have nested dicts. 
+/* TL.Util.mergeData is shallow, we have nested dicts. 
    This is a simplistic handling but should work.
  */
-VCO.Language.prototype.mergeData = function(lang_json) {
-	for (k in VCO.Language.languages.en) {
+TL.Language.prototype.mergeData = function(lang_json) {
+	for (k in TL.Language.languages.en) {
 		if (lang_json[k]) {
 			if (typeof(this[k]) == 'object') {
-				VCO.Util.mergeData(lang_json[k], this[k]);
+				TL.Util.mergeData(lang_json[k], this[k]);
 			} else {
 				this[k] = lang_json[k]; // strings, mostly
 			}
@@ -3269,20 +3472,20 @@ VCO.Language.prototype.mergeData = function(lang_json) {
 	}
 }
 
-VCO.Language.fallback = { messages: {} }; // placeholder to satisfy IE8 early compilation
-VCO.Language.prototype.getMessage = function(k) {
-	return this.messages[k] || VCO.Language.fallback.messages[k] || k;
+TL.Language.fallback = { messages: {} }; // placeholder to satisfy IE8 early compilation
+TL.Language.prototype.getMessage = function(k) {
+	return this.messages[k] || TL.Language.fallback.messages[k] || k;
 }
 
-VCO.Language.prototype._ = VCO.Language.prototype.getMessage; // keep it concise
+TL.Language.prototype._ = TL.Language.prototype.getMessage; // keep it concise
 
-VCO.Language.prototype.formatDate = function(date, format_name) {
+TL.Language.prototype.formatDate = function(date, format_name) {
 
 	if (date.constructor == Date) {
 		return this.formatJSDate(date, format_name);
 	}
 
-	if (date.constructor == VCO.BigYear) {
+	if (date.constructor == TL.BigYear) {
 		return this.formatBigYear(date, format_name);
 	}
 
@@ -3294,7 +3497,7 @@ VCO.Language.prototype.formatDate = function(date, format_name) {
 	return date.toString();
 }
 
-VCO.Language.prototype.formatBigYear = function(bigyear, format_name) {
+TL.Language.prototype.formatBigYear = function(bigyear, format_name) {
 	var the_year = bigyear.year;
 	var format_list = this.bigdateformats[format_name] || this.bigdateformats['fallback'];
 
@@ -3303,7 +3506,7 @@ VCO.Language.prototype.formatBigYear = function(bigyear, format_name) {
 			var tuple = format_list[i];
 			if (Math.abs(the_year / tuple[0]) > 1) {
 				// will we ever deal with distant future dates?
-				return VCO.Language.formatNumber(Math.abs(the_year / tuple[0]),tuple[1])
+				return TL.Language.formatNumber(Math.abs(the_year / tuple[0]),tuple[1])
 			}
 		};
 
@@ -3311,12 +3514,12 @@ VCO.Language.prototype.formatBigYear = function(bigyear, format_name) {
 
 	} else {	
 	    trace("Language file dateformats missing cosmological. Falling back.");
-	    return VCO.Language.formatNumber(the_year,format_name);
+	    return TL.Language.formatNumber(the_year,format_name);
 	}
 }
 
-VCO.Language.prototype.formatJSDate = function(js_date, format_name) {
-	// ultimately we probably want this to work with VCO.Date instead of (in addition to?) JS Date
+TL.Language.prototype.formatJSDate = function(js_date, format_name) {
+	// ultimately we probably want this to work with TL.Date instead of (in addition to?) JS Date
 	// utc, timezone and timezoneClip are carry over from Steven Levithan implementation. We probably aren't going to use them.
 	var self = this;
 	var formatPeriod = function(fmt, value) {
@@ -3324,7 +3527,7 @@ VCO.Language.prototype.formatJSDate = function(js_date, format_name) {
 		if (formats) {
 			var fmt = (value < 12) ? formats[0] : formats[1];
 		}
-		return "<span class='vco-timeaxis-timesuffix'>" + fmt + "</span>"; 
+		return "<span class='tl-timeaxis-timesuffix'>" + fmt + "</span>"; 
 	}
 
 	var utc = false, 
@@ -3336,7 +3539,7 @@ VCO.Language.prototype.formatJSDate = function(js_date, format_name) {
 		format_name = 'full'; 
 	}
 
-	var mask = this.dateformats[format_name] || VCO.Language.fallback.dateformats[format_name];
+	var mask = this.dateformats[format_name] || TL.Language.fallback.dateformats[format_name];
 	if (!mask) {
 		mask = format_name; // allow custom format strings
 	}
@@ -3355,47 +3558,47 @@ VCO.Language.prototype.formatJSDate = function(js_date, format_name) {
 		year = "",
 		flags = {
 			d:    d,
-			dd:   VCO.Util.pad(d),
+			dd:   TL.Util.pad(d),
 			ddd:  this.date.day_abbr[D],
 			dddd: this.date.day[D],
 			m:    m + 1,
-			mm:   VCO.Util.pad(m + 1),
+			mm:   TL.Util.pad(m + 1),
 			mmm:  this.date.month_abbr[m],
 			mmmm: this.date.month[m],
 			yy:   String(y).slice(2),
 			yyyy: (y < 0 && this.has_negative_year_modifier()) ? Math.abs(y) : y,
 			h:    H % 12 || 12,
-			hh:   VCO.Util.pad(H % 12 || 12),
+			hh:   TL.Util.pad(H % 12 || 12),
 			H:    H,
-			HH:   VCO.Util.pad(H),
+			HH:   TL.Util.pad(H),
 			M:    M,
-			MM:   VCO.Util.pad(M),
+			MM:   TL.Util.pad(M),
 			s:    s,
-			ss:   VCO.Util.pad(s),
-			l:    VCO.Util.pad(L, 3),
-			L:    VCO.Util.pad(L > 99 ? Math.round(L / 10) : L),
+			ss:   TL.Util.pad(s),
+			l:    TL.Util.pad(L, 3),
+			L:    TL.Util.pad(L > 99 ? Math.round(L / 10) : L),
 			t:    formatPeriod('t',H),
 			tt:   formatPeriod('tt',H),
 			T:    formatPeriod('T',H),
 			TT:   formatPeriod('TT',H),
 			Z:    utc ? "UTC" : (String(js_date).match(timezone) || [""]).pop().replace(timezoneClip, ""),
-			o:    (o > 0 ? "-" : "+") + VCO.Util.pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
+			o:    (o > 0 ? "-" : "+") + TL.Util.pad(Math.floor(Math.abs(o) / 60) * 100 + Math.abs(o) % 60, 4),
 			S:    ["th", "st", "nd", "rd"][d % 10 > 3 ? 0 : (d % 100 - d % 10 != 10) * d % 10]
 		};
 
-		var formatted = mask.replace(VCO.Language.DATE_FORMAT_TOKENS, function ($0) {
+		var formatted = mask.replace(TL.Language.DATE_FORMAT_TOKENS, function ($0) {
 			return $0 in flags ? flags[$0] : $0.slice(1, $0.length - 1);
 		});
 
 		return this._applyEra(formatted, y);
 }
 
-VCO.Language.prototype.has_negative_year_modifier = function() {
+TL.Language.prototype.has_negative_year_modifier = function() {
 	return Boolean(this.era_labels.negative_year.prefix || this.era_labels.negative_year.suffix);
 }
 
 
-VCO.Language.prototype._applyEra = function(formatted_date, original_year) {
+TL.Language.prototype._applyEra = function(formatted_date, original_year) {
 	// trusts that the formatted_date was property created with a non-negative year if there are 
 	// negative affixes to be applied
 	var labels = (original_year < 0) ? this.era_labels.negative_year : this.era_labels.positive_year;
@@ -3407,15 +3610,22 @@ VCO.Language.prototype._applyEra = function(formatted_date, original_year) {
 }
 
 
-VCO.Language.DATE_FORMAT_TOKENS = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g;
+TL.Language.DATE_FORMAT_TOKENS = /d{1,4}|m{1,4}|yy(?:yy)?|([HhMsTt])\1?|[LloSZ]|"[^"]*"|'[^']*'/g;
 
-VCO.Language.languages = {
+TL.Language.languages = { 
+/*
+	This represents the canonical list of message keys which translation files should handle. The existence of the 'en.json' file should not mislead you.
+	It is provided more as a starting point for someone who wants to provide a 
+	new translation since the form for non-default languages (JSON not JS) is slightly different from what appears below. Also, those files have some message keys grandfathered in from TimelineJS2 which we'd rather not have to
+	get "re-translated" if we use them.
+*/
 	en: {
 		name: 					"English",
 		lang: 					"en",
 		messages: {
 			loading: 			"Loading",
-			wikipedia: 			"From Wikipedia, the free encyclopedia"
+			wikipedia: 			"From Wikipedia, the free encyclopedia",
+			error: 				"Error"
 		},
 		date: {
 			month: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
@@ -3477,19 +3687,19 @@ VCO.Language.languages = {
 	}
 }
 
-VCO.Language.fallback = new VCO.Language();
+TL.Language.fallback = new TL.Language();
 
 
-/*  VCO.I18NMixins
-    assumes that its class has an options object with a VCO.Language instance    
+/*  TL.I18NMixins
+    assumes that its class has an options object with a TL.Language instance    
 ================================================== */
-VCO.I18NMixins = {
+TL.I18NMixins = {
     getLanguage: function() {
         if (this.options && this.options.language) {
             return this.options.language;
         }
         trace("Expected a language option");
-        return VCO.Language.fallback;
+        return TL.Language.fallback;
     },
 
     _: function(msg) {
@@ -3536,7 +3746,7 @@ VCO.I18NMixins = {
  * spline.get(x) => returns the easing value | x must be in [0, 1] range
  */
 
-VCO.Easings = {
+TL.Easings = {
     ease:        [0.25, 0.1, 0.25, 1.0], 
     linear:      [0.00, 0.0, 1.00, 1.0],
     easein:     [0.42, 0.0, 1.00, 1.0],
@@ -3544,7 +3754,7 @@ VCO.Easings = {
     easeinout: [0.42, 0.0, 0.58, 1.0]
 };
 
-VCO.Ease = {
+TL.Ease = {
 	KeySpline: function(a) {
 	//KeySpline: function(mX1, mY1, mX2, mY2) {
 		this.get = function(aX) {
@@ -3590,12 +3800,12 @@ VCO.Ease = {
 	},
 	
 	easeInSpline: function(t) {
-		var spline = new VCO.Ease.KeySpline(VCO.Easings.easein);
+		var spline = new TL.Ease.KeySpline(TL.Easings.easein);
 		return spline.get(t);
 	},
 	
 	easeInOutExpo: function(t) {
-		var spline = new VCO.Ease.KeySpline(VCO.Easings.easein);
+		var spline = new TL.Ease.KeySpline(TL.Easings.easein);
 		return spline.get(t);
 	},
 	
@@ -3740,12 +3950,12 @@ Math.easeInOutExpo = function (t, b, c, d) {
 };
 */
 
-/*	VCO.Animate
+/*	TL.Animate
 	Basic animation
 ================================================== */
 
-VCO.Animate = function(el, options) {
-	var animation = new vcoanimate(el, options),
+TL.Animate = function(el, options) {
+	var animation = new tlanimate(el, options),
 		webkit_timeout;
 		/*
 		// POSSIBLE ISSUE WITH WEBKIT FUTURE BUILDS
@@ -3753,7 +3963,7 @@ VCO.Animate = function(el, options) {
 
 		animation.stop(true);
 	}
-	if (VCO.Browser.webkit) {
+	if (TL.Browser.webkit) {
 		webkit_timeout = setTimeout(function(){onWebKitTimeout()}, options.duration);
 	}
 	*/
@@ -3765,7 +3975,7 @@ VCO.Animate = function(el, options) {
 	https://github.com/ded/morpheus - (c) Dustin Diaz 2011
 	License MIT
 ================================================== */
-window.vcoanimate = (function() {
+window.tlanimate = (function() {
 
 	var doc = document,
 		win = window,
@@ -4172,17 +4382,17 @@ window.vcoanimate = (function() {
 })();
 
 
-/*	VCO.Point
+/*	TL.Point
 	Inspired by Leaflet
-	VCO.Point represents a point with x and y coordinates.
+	TL.Point represents a point with x and y coordinates.
 ================================================== */
 
-VCO.Point = function (/*Number*/ x, /*Number*/ y, /*Boolean*/ round) {
+TL.Point = function (/*Number*/ x, /*Number*/ y, /*Boolean*/ round) {
 	this.x = (round ? Math.round(x) : x);
 	this.y = (round ? Math.round(y) : y);
 };
 
-VCO.Point.prototype = {
+TL.Point.prototype = {
 	add: function (point) {
 		return this.clone()._add(point);
 	},
@@ -4205,11 +4415,11 @@ VCO.Point.prototype = {
 	},
 
 	divideBy: function (num, round) {
-		return new VCO.Point(this.x / num, this.y / num, round);
+		return new TL.Point(this.x / num, this.y / num, round);
 	},
 
 	multiplyBy: function (num) {
-		return new VCO.Point(this.x * num, this.y * num);
+		return new TL.Point(this.x * num, this.y * num);
 	},
 
 	distanceTo: function (point) {
@@ -4230,28 +4440,28 @@ VCO.Point.prototype = {
 	},
 
 	clone: function () {
-		return new VCO.Point(this.x, this.y);
+		return new TL.Point(this.x, this.y);
 	},
 
 	toString: function () {
 		return 'Point(' +
-				VCO.Util.formatNum(this.x) + ', ' +
-				VCO.Util.formatNum(this.y) + ')';
+				TL.Util.formatNum(this.x) + ', ' +
+				TL.Util.formatNum(this.y) + ')';
 	}
 };
 
-/*	VCO.DomMixins
+/*	TL.DomMixins
 	DOM methods used regularly
 	Assumes there is a _el.container and animator
 ================================================== */
-VCO.DomMixins = {
+TL.DomMixins = {
 	
 	/*	Adding, Hiding, Showing etc
 	================================================== */
 	show: function(animate) {
 		if (animate) {
 			/*
-			this.animator = VCO.Animate(this._el.container, {
+			this.animator = TL.Animate(this._el.container, {
 				left: 		-(this._el.container.offsetWidth * n) + "px",
 				duration: 	this.options.duration,
 				easing: 	this.options.ease
@@ -4292,7 +4502,7 @@ VCO.DomMixins = {
 		if (this.animator) {
 			this.animator.stop();
 		}
-		this.animator = VCO.Animate(el, ani);
+		this.animator = TL.Animate(el, ani);
 	},
 	
 	/*	Events
@@ -4325,17 +4535,17 @@ VCO.DomMixins = {
 	},
 	
 	getPosition: function() {
-		return VCO.Dom.getPosition(this._el.container);
+		return TL.Dom.getPosition(this._el.container);
 	}
 	
 };
 
 
-/*	VCO.Dom
+/*	TL.Dom
 	Utilities for working with the DOM
 ================================================== */
 
-VCO.Dom = {
+TL.Dom = {
 
 	get: function(id) {
 		return (typeof id === 'string' ? document.getElementById(id) : id);
@@ -4365,17 +4575,17 @@ VCO.Dom = {
 	},
 	
 	getTranslateString: function (point) {
-		return VCO.Dom.TRANSLATE_OPEN +
+		return TL.Dom.TRANSLATE_OPEN +
 				point.x + 'px,' + point.y + 'px' +
-				VCO.Dom.TRANSLATE_CLOSE;
+				TL.Dom.TRANSLATE_CLOSE;
 	},
 	
 	setPosition: function (el, point) {
-		el._vco_pos = point;
-		if (VCO.Browser.webkit3d) {
-			el.style[VCO.Dom.TRANSFORM] =  VCO.Dom.getTranslateString(point);
+		el._tl_pos = point;
+		if (TL.Browser.webkit3d) {
+			el.style[TL.Dom.TRANSFORM] =  TL.Dom.getTranslateString(point);
 
-			if (VCO.Browser.android) {
+			if (TL.Browser.android) {
 				el.style['-webkit-perspective'] = '1000';
 				el.style['-webkit-backface-visibility'] = 'hidden';
 			}
@@ -4411,22 +4621,22 @@ VCO.Dom = {
 	
 };
 
-VCO.Util.extend(VCO.Dom, {
-	TRANSITION: VCO.Dom.testProp(['transition', 'webkitTransition', 'OTransition', 'MozTransition', 'msTransition']),
-	TRANSFORM: VCO.Dom.testProp(['transformProperty', 'WebkitTransform', 'OTransform', 'MozTransform', 'msTransform']),
+TL.Util.extend(TL.Dom, {
+	TRANSITION: TL.Dom.testProp(['transition', 'webkitTransition', 'OTransition', 'MozTransition', 'msTransition']),
+	TRANSFORM: TL.Dom.testProp(['transformProperty', 'WebkitTransform', 'OTransform', 'MozTransform', 'msTransform']),
 
-	TRANSLATE_OPEN: 'translate' + (VCO.Browser.webkit3d ? '3d(' : '('),
-	TRANSLATE_CLOSE: VCO.Browser.webkit3d ? ',0)' : ')'
+	TRANSLATE_OPEN: 'translate' + (TL.Browser.webkit3d ? '3d(' : '('),
+	TRANSLATE_CLOSE: TL.Browser.webkit3d ? ',0)' : ')'
 });
 
 
-/*	VCO.DomUtil
+/*	TL.DomUtil
 	Inspired by Leaflet
-	VCO.DomUtil contains various utility functions for working with DOM
+	TL.DomUtil contains various utility functions for working with DOM
 ================================================== */
 
 
-VCO.DomUtil = {
+TL.DomUtil = {
 	get: function (id) {
 		return (typeof id === 'string' ? document.getElementById(id) : id);
 	},
@@ -4454,7 +4664,7 @@ VCO.DomUtil = {
 			left += el.offsetLeft || 0;
 
 			if (el.offsetParent === docBody &&
-					VCO.DomUtil.getStyle(el, 'position') === 'absolute') {
+					TL.DomUtil.getStyle(el, 'position') === 'absolute') {
 				break;
 			}
 			el = el.offsetParent;
@@ -4473,7 +4683,7 @@ VCO.DomUtil = {
 			el = el.parentNode;
 		} while (el);
 
-		return new VCO.Point(left, top);
+		return new TL.Point(left, top);
 	},
 
 	create: function (tagName, className, container) {
@@ -4491,7 +4701,7 @@ VCO.DomUtil = {
 		}
 		if (!this._onselectstart) {
 			this._onselectstart = document.onselectstart;
-			document.onselectstart = VCO.Util.falseFn;
+			document.onselectstart = TL.Util.falseFn;
 		}
 	},
 
@@ -4506,7 +4716,7 @@ VCO.DomUtil = {
 	},
 
 	addClass: function (el, name) {
-		if (!VCO.DomUtil.hasClass(el, name)) {
+		if (!TL.DomUtil.hasClass(el, name)) {
 			el.className += (el.className ? ' ' : '') + name;
 		}
 	},
@@ -4521,7 +4731,7 @@ VCO.DomUtil = {
 	},
 
 	setOpacity: function (el, value) {
-		if (VCO.Browser.ie) {
+		if (TL.Browser.ie) {
 			el.style.filter = 'alpha(opacity=' + Math.round(value * 100) + ')';
 		} else {
 			el.style.opacity = value;
@@ -4542,25 +4752,25 @@ VCO.DomUtil = {
 
 	getTranslateString: function (point) {
 
-		return VCO.DomUtil.TRANSLATE_OPEN +
+		return TL.DomUtil.TRANSLATE_OPEN +
 				point.x + 'px,' + point.y + 'px' +
-				VCO.DomUtil.TRANSLATE_CLOSE;
+				TL.DomUtil.TRANSLATE_CLOSE;
 	},
 
 	getScaleString: function (scale, origin) {
-		var preTranslateStr = VCO.DomUtil.getTranslateString(origin),
+		var preTranslateStr = TL.DomUtil.getTranslateString(origin),
 			scaleStr = ' scale(' + scale + ') ',
-			postTranslateStr = VCO.DomUtil.getTranslateString(origin.multiplyBy(-1));
+			postTranslateStr = TL.DomUtil.getTranslateString(origin.multiplyBy(-1));
 
 		return preTranslateStr + scaleStr + postTranslateStr;
 	},
 
 	setPosition: function (el, point) {
-		el._vco_pos = point;
-		if (VCO.Browser.webkit3d) {
-			el.style[VCO.DomUtil.TRANSFORM] =  VCO.DomUtil.getTranslateString(point);
+		el._tl_pos = point;
+		if (TL.Browser.webkit3d) {
+			el.style[TL.DomUtil.TRANSFORM] =  TL.DomUtil.getTranslateString(point);
 
-			if (VCO.Browser.android) {
+			if (TL.Browser.android) {
 				el.style['-webkit-perspective'] = '1000';
 				el.style['-webkit-backface-visibility'] = 'hidden';
 			}
@@ -4571,31 +4781,31 @@ VCO.DomUtil = {
 	},
 
 	getPosition: function (el) {
-		return el._vco_pos;
+		return el._tl_pos;
 	}
 };
 
-/*	VCO.DomEvent
+/*	TL.DomEvent
 	Inspired by Leaflet 
 	DomEvent contains functions for working with DOM events.
 ================================================== */
 // TODO stamp
 
-VCO.DomEvent = {
+TL.DomEvent = {
 	/* inpired by John Resig, Dean Edwards and YUI addEvent implementations */
 	addListener: function (/*HTMLElement*/ obj, /*String*/ type, /*Function*/ fn, /*Object*/ context) {
-		var id = VCO.Util.stamp(fn),
-			key = '_vco_' + type + id;
+		var id = TL.Util.stamp(fn),
+			key = '_tl_' + type + id;
 
 		if (obj[key]) {
 			return;
 		}
 
 		var handler = function (e) {
-			return fn.call(context || obj, e || VCO.DomEvent._getEvent());
+			return fn.call(context || obj, e || TL.DomEvent._getEvent());
 		};
 
-		if (VCO.Browser.touch && (type === 'dblclick') && this.addDoubleTapListener) {
+		if (TL.Browser.touch && (type === 'dblclick') && this.addDoubleTapListener) {
 			this.addDoubleTapListener(obj, handler, id);
 		} else if ('addEventListener' in obj) {
 			if (type === 'mousewheel') {
@@ -4605,7 +4815,7 @@ VCO.DomEvent = {
 				var originalHandler = handler,
 					newType = (type === 'mouseenter' ? 'mouseover' : 'mouseout');
 				handler = function (e) {
-					if (!VCO.DomEvent._checkMouse(obj, e)) {
+					if (!TL.DomEvent._checkMouse(obj, e)) {
 						return;
 					}
 					return originalHandler(e);
@@ -4622,15 +4832,15 @@ VCO.DomEvent = {
 	},
 
 	removeListener: function (/*HTMLElement*/ obj, /*String*/ type, /*Function*/ fn) {
-		var id = VCO.Util.stamp(fn),
-			key = '_vco_' + type + id,
+		var id = TL.Util.stamp(fn),
+			key = '_tl_' + type + id,
 			handler = obj[key];
 
 		if (!handler) {
 			return;
 		}
 
-		if (VCO.Browser.touch && (type === 'dblclick') && this.removeDoubleTapListener) {
+		if (TL.Browser.touch && (type === 'dblclick') && this.removeDoubleTapListener) {
 			this.removeDoubleTapListener(obj, id);
 		} else if ('removeEventListener' in obj) {
 			if (type === 'mousewheel') {
@@ -4690,11 +4900,11 @@ VCO.DomEvent = {
 		}
 	},
 	
-	// TODO VCO.Draggable.START
+	// TODO TL.Draggable.START
 	disableClickPropagation: function (/*HTMLElement*/ el) {
-		VCO.DomEvent.addListener(el, VCO.Draggable.START, VCO.DomEvent.stopPropagation);
-		VCO.DomEvent.addListener(el, 'click', VCO.DomEvent.stopPropagation);
-		VCO.DomEvent.addListener(el, 'dblclick', VCO.DomEvent.stopPropagation);
+		TL.DomEvent.addListener(el, TL.Draggable.START, TL.DomEvent.stopPropagation);
+		TL.DomEvent.addListener(el, 'click', TL.DomEvent.stopPropagation);
+		TL.DomEvent.addListener(el, 'dblclick', TL.DomEvent.stopPropagation);
 	},
 
 	preventDefault: function (/*Event*/ e) {
@@ -4706,8 +4916,8 @@ VCO.DomEvent = {
 	},
 
 	stop: function (e) {
-		VCO.DomEvent.preventDefault(e);
-		VCO.DomEvent.stopPropagation(e);
+		TL.DomEvent.preventDefault(e);
+		TL.DomEvent.stopPropagation(e);
 	},
 
 
@@ -4726,13 +4936,13 @@ VCO.DomEvent = {
 
 
 
-/*	VCO.StyleSheet
+/*	TL.StyleSheet
 	Style Sheet Object
 ================================================== */
 
-VCO.StyleSheet = VCO.Class.extend({
+TL.StyleSheet = TL.Class.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	_el: {},
 	
@@ -4777,68 +4987,68 @@ VCO.StyleSheet = VCO.Class.extend({
 	
 });
 
-/*	VCO.Date
+/*	TL.Date
 	Date object
 	MONTHS are 1-BASED, not 0-BASED (different from Javascript date objects)
 ================================================== */
 
 //
-// Class for javascript dates
+// Class for human dates
 //
 
-VCO.Date = VCO.Class.extend({
-     
+TL.Date = TL.Class.extend({
+
     // @data = ms, JS Date object, or JS dictionary with date properties
 	initialize: function (data, format, format_short) {
 	    if (typeof(data) == 'number') {
 			this.data = {
 				format:     "yyyy mmmm",
 				date_obj:   new Date(data)
-			};	        
+			};
 	    } else if(Date == data.constructor) {
 			this.data = {
 				format:     "yyyy mmmm",
 				date_obj:   data
-			};	        
+			};
 	    } else {
 	        this.data = JSON.parse(JSON.stringify(data)); // clone don't use by reference.
-            this._createDateObj();            
+            this._createDateObj();
 	    }
-	    
-		this._setFormat(format, format_short);			
+
+		this._setFormat(format, format_short);
     },
 
 	setDateFormat: function(format) {
 		this.data.format = format;
 	},
-	
+
 	getDisplayDate: function(language, format) {
-	    if (this.data.display_text) {
-	        return this.data.display_text;
-	    }	    
+	    if (this.data.display_date) {
+	        return this.data.display_date;
+	    }
         if (!language) {
-            language = VCO.Language.fallback;
+            language = TL.Language.fallback;
         }
-        if (language.constructor != VCO.Language) {
-            trace("First argument to getDisplayDate must be VCO.Language");
-            language = VCO.Language.fallback;
+        if (language.constructor != TL.Language) {
+            trace("First argument to getDisplayDate must be TL.Language");
+            language = TL.Language.fallback;
         }
 
         var format_key = format || this.data.format;
         return language.formatDate(this.data.date_obj, format_key);
 	},
-	
+
 	getMillisecond: function() {
 		return this.getTime();
 	},
-	
+
 	getTime: function() {
 		return this.data.date_obj.getTime();
 	},
-	
-	isBefore: function(other_date) { 
+
+	isBefore: function(other_date) {
         if (!this.data.date_obj.constructor == other_date.data.date_obj.constructor) {
-            throw("Can't compare VCO.Dates on different scales") // but should be able to compare 'cosmological scale' dates once we get to that...
+            throw("Can't compare TL.Dates on different scales") // but should be able to compare 'cosmological scale' dates once we get to that...
         }
         if ('isBefore' in this.data.date_obj) {
             return this.data.date_obj['isBefore'](other_date.data.date_obj);
@@ -4848,7 +5058,7 @@ VCO.Date = VCO.Class.extend({
 
 	isAfter: function(other_date) {
         if (!this.data.date_obj.constructor == other_date.data.date_obj.constructor) {
-            throw("Can't compare VCO.Dates on different scales") // but should be able to compare 'cosmological scale' dates once we get to that...
+            throw("Can't compare TL.Dates on different scales") // but should be able to compare 'cosmological scale' dates once we get to that...
         }
         if ('isAfter' in this.data.date_obj) {
             return this.data.date_obj['isAfter'](other_date.data.date_obj);
@@ -4856,14 +5066,14 @@ VCO.Date = VCO.Class.extend({
         return this.data.date_obj > other_date.data.date_obj
 	},
 
-    // Return a new VCO.Date which has been 'floored' at the given scale.
-    // @scale = string value from VCO.Date.SCALES    
-    floor: function(scale) { 
+    // Return a new TL.Date which has been 'floored' at the given scale.
+    // @scale = string value from TL.Date.SCALES
+    floor: function(scale) {
         var d = new Date(this.data.date_obj.getTime());
-        for (var i = 0; i < VCO.Date.SCALES.length; i++) {
+        for (var i = 0; i < TL.Date.SCALES.length; i++) {
              // for JS dates, we iteratively apply flooring functions
-            VCO.Date.SCALES[i][2](d);
-            if (VCO.Date.SCALES[i][0] == scale) return new VCO.Date(d);
+            TL.Date.SCALES[i][2](d);
+            if (TL.Date.SCALES[i][0] == scale) return new TL.Date(d);
         };
 
         throw('invalid scale ' + scale);
@@ -4882,69 +5092,95 @@ VCO.Date = VCO.Class.extend({
             second: 		0,
             millisecond: 	0
 		};
-   
+
 		// Merge data
-		VCO.Util.mergeData(_date, this.data);
- 
+		TL.Util.mergeData(_date, this.data);
+
  		// Make strings into numbers
-		var DATE_PARTS = VCO.Date.DATE_PARTS;
- 
- 		for (var ix in DATE_PARTS) {	
+		var DATE_PARTS = TL.Date.DATE_PARTS;
+
+ 		for (var ix in DATE_PARTS) {
 			var parsed = parseInt(_date[DATE_PARTS[ix]]);
 			if (isNaN(parsed)) {
                 parsed = (ix == 4 || ix == 5) ? 1 : 0; // month and day have diff baselines
             }
 			_date[DATE_PARTS[ix]] = parsed;
 		}
-		
+
 		if (_date.month > 0 && _date.month <= 12) { // adjust for JS's weirdness
 			_date.month = _date.month - 1;
 		}
-		
+
 		return _date;
     },
 
 	_createDateObj: function() {
-	    var _date = this._getDateData();          
+	    var _date = this._getDateData();
         this.data.date_obj = new Date(_date.year, _date.month, _date.day, _date.hour, _date.minute, _date.second, _date.millisecond);
+        if (this.data.date_obj.getFullYear() != _date.year) {
+            // Javascript has stupid defaults for two-digit years
+            this.data.date_obj.setFullYear(_date.year);
+        }
 	},
 
+    /*  Find Best Format
+     * this may not work with 'cosmologic' dates, or with TL.Date if we
+     * support constructing them based on JS Date and time
+    ================================================== */
+    findBestFormat: function(variant) {
+        var eval_array = TL.Date.DATE_PARTS,
+            format = "";
+
+        for (var i = 0; i < eval_array.length; i++) {
+            if ( this.data[eval_array[i]]) {
+                if (variant) {
+                    if (!(variant in TL.Date.BEST_DATEFORMATS)) {
+                        variant = 'short'; // legacy
+                    }
+                } else {
+                    variant = 'base'
+                }
+                return TL.Date.BEST_DATEFORMATS[variant][eval_array[i]];
+            }
+        };
+        return "";
+    },
     _setFormat: function(format, format_short) {
 		if (format) {
 			this.data.format = format;
 		} else if (!this.data.format) {
-			this.data.format = VCO.DateUtil.findBestFormat(this.data);
+			this.data.format = this.findBestFormat();
 		}
-		
+
 		if (format_short) {
 			this.data.format_short = format_short;
 		} else if (!this.data.format_short) {
-			this.data.format_short = VCO.DateUtil.findBestFormat(this.data, true);
+			this.data.format_short = this.findBestFormat(true);
 		}
     }
 });
 
 // offer something that can figure out the right date class to return
-VCO.Date.makeDate = function(data) {
-    var date = new VCO.Date(data);
+TL.Date.makeDate = function(data) {
+    var date = new TL.Date(data);
     if (!isNaN(date.getTime())) {
         return date;
     }
-    return new VCO.BigDate(data);
+    return new TL.BigDate(data);
 }
 
-VCO.BigYear = VCO.Class.extend({
+TL.BigYear = TL.Class.extend({
     initialize: function (year) {
         this.year = parseInt(year);
         if (isNaN(this.year)) { throw("Invalid year " + year) }
     },
-/* THERE ARE UNUSED ...    
-    getDisplayText: function(vco_language) { 
-        return this.year.toLocaleString(vco_language.lang);
+/* THERE ARE UNUSED ...
+    getDisplayText: function(tl_language) {
+        return this.year.toLocaleString(tl_language.lang);
     },
 
-    getDisplayTextShort: function(vco_language) {
-        return this.year.toLocaleString(vco_language.lang);
+    getDisplayTextShort: function(tl_language) {
+        return this.year.toLocaleString(tl_language.lang);
     },
 */
     isBefore: function(that) {
@@ -4961,8 +5197,7 @@ VCO.BigYear = VCO.Class.extend({
 });
 
 (function(cls){
-    
-    // javascript scales
+    // human scales
     cls.SCALES = [ // ( name, units_per_tick, flooring function )
         ['millisecond',1, function(d) { }],
         ['second',1000, function(d) { d.setMilliseconds(0);}],
@@ -4971,23 +5206,23 @@ VCO.BigYear = VCO.Class.extend({
         ['day',1000 * 60 * 60 * 24, function(d) { d.setHours(0);}],
         ['month',1000 * 60 * 60 * 24 * 30, function(d) { d.setDate(1);}],
         ['year',1000 * 60 * 60 * 24 * 365, function(d) { d.setMonth(0);}],
-        ['decade',1000 * 60 * 60 * 24 * 365 * 10, function(d) { 
+        ['decade',1000 * 60 * 60 * 24 * 365 * 10, function(d) {
             var real_year = d.getFullYear();
-            d.setFullYear( real_year - (real_year % 10)) 
+            d.setFullYear( real_year - (real_year % 10))
         }],
-        ['century',1000 * 60 * 60 * 24 * 365 * 100, function(d) { 
+        ['century',1000 * 60 * 60 * 24 * 365 * 100, function(d) {
             var real_year = d.getFullYear();
-            d.setFullYear( real_year - (real_year % 100)) 
+            d.setFullYear( real_year - (real_year % 100))
         }],
-        ['millennium',1000 * 60 * 60 * 24 * 365 * 1000, function(d) { 
+        ['millennium',1000 * 60 * 60 * 24 * 365 * 1000, function(d) {
             var real_year = d.getFullYear();
-            d.setFullYear( real_year - (real_year % 1000)) 
-        }]     
+            d.setFullYear( real_year - (real_year % 1000))
+        }]
     ];
-            
-    // Date parts from highest to lowest precision    
+
+    // Date parts from highest to lowest precision
     cls.DATE_PARTS = ["millisecond", "second", "minute", "hour", "day", "month", "year"];
-    
+
     var ISO8601_SHORT_PATTERN = /^([\+-]?\d+?)(-\d{2}?)?(-\d{2}?)?$/;
     // regex below from
     // http://www.pelagodesign.com/blog/2009/05/20/iso-8601-date-validation-that-doesnt-suck/
@@ -5015,7 +5250,7 @@ VCO.BigYear = VCO.Class.extend({
 
     cls.parseDate = function(str) {
 
-        if (str.match(ISO8601_SHORT_PATTERN)) { 
+        if (str.match(ISO8601_SHORT_PATTERN)) {
             // parse short specifically to avoid timezone offset confusion
             // most browsers assume short is UTC, not local time.
             var parts = str.match(ISO8601_SHORT_PATTERN).slice(1);
@@ -5036,7 +5271,7 @@ VCO.BigYear = VCO.Class.extend({
         var parsed = {}
         if (str.match(/\d+\/\d+\/\d+/)) { // mm/yy/dddd
             var date = str.match(/\d+\/\d+\/\d+/)[0];
-            str = VCO.Util.trim(str.replace(date,''));
+            str = TL.Util.trim(str.replace(date,''));
             var date_parts = date.split('/');
             parsed.month = date_parts[0];
             parsed.day = date_parts[1];
@@ -5045,7 +5280,7 @@ VCO.BigYear = VCO.Class.extend({
 
         if (str.match(/\d+\/\d+/)) { // mm/yy
             var date = str.match(/\d+\/\d+/)[0];
-            str = VCO.Util.trim(str.replace(date,''));
+            str = TL.Util.trim(str.replace(date,''));
             var date_parts = date.split('/');
             parsed.month = date_parts[0];
             parsed.year = date_parts[1];
@@ -5064,17 +5299,56 @@ VCO.BigYear = VCO.Class.extend({
         return parsed;
     }
 
-})(VCO.Date)
+    cls.BEST_DATEFORMATS = {
+        base: {
+            millisecond: 'time_short',
+            second: 'time',
+            minute: 'time_no_seconds_small_date',
+            hour: 'time_no_seconds_small_date',
+            day: 'full',
+            month: 'month',
+            year: 'year',
+            decade: 'year',
+            century: 'year',
+            millennium: 'year',
+            age: 'fallback',
+            epoch: 'fallback',
+            era: 'fallback',
+            eon: 'fallback',
+            eon2: 'fallback'
+        },
+
+        short: {
+            millisecond: 'time_short',
+            second: 'time_short',
+            minute: 'time_no_seconds_short',
+            hour: 'time_no_minutes_short',
+            day: 'full_short',
+            month: 'month_short',
+            year: 'year',
+            decade: 'year',
+            century: 'year',
+            millennium: 'year',
+            age: 'fallback',
+            epoch: 'fallback',
+            era: 'fallback',
+            eon: 'fallback',
+            eon2: 'fallback'
+        }
+    }
+
+
+})(TL.Date)
 
 
 //
 // Class for cosmological dates
 //
-VCO.BigDate = VCO.Date.extend({
-    
-    // @data = VCO.BigYear object or JS dictionary with date properties
+TL.BigDate = TL.Date.extend({
+
+    // @data = TL.BigYear object or JS dictionary with date properties
     initialize: function(data, format, format_short) {
-        if (VCO.BigYear == data.constructor) {
+        if (TL.BigYear == data.constructor) {
             this.data = {
                 date_obj:   data
             }
@@ -5082,28 +5356,28 @@ VCO.BigDate = VCO.Date.extend({
             this.data = JSON.parse(JSON.stringify(data));
             this._createDateObj();
         }
-        
+
         this._setFormat(format, format_short);
     },
-    
+
     // Create date_obj
     _createDateObj: function() {
-	    var _date = this._getDateData();          
-        this.data.date_obj = new VCO.BigYear(_date.year);        
+	    var _date = this._getDateData();
+        this.data.date_obj = new TL.BigYear(_date.year);
     },
-    
-    // Return a new VCO.BigDate which has been 'floored' at the given scale.
-    // @scale = string value from VCO.BigDate.SCALES    
+
+    // Return a new TL.BigDate which has been 'floored' at the given scale.
+    // @scale = string value from TL.BigDate.SCALES
     floor: function(scale) {
-        for (var i = 0; i < VCO.BigDate.SCALES.length; i++) {
-            if (VCO.BigDate.SCALES[i][0] == scale) {
-                var floored = VCO.BigDate.SCALES[i][2](this.data.date_obj);
-                return new VCO.BigDate(floored);
+        for (var i = 0; i < TL.BigDate.SCALES.length; i++) {
+            if (TL.BigDate.SCALES[i][0] == scale) {
+                var floored = TL.BigDate.SCALES[i][2](this.data.date_obj);
+                return new TL.BigDate(floored);
             }
         };
 
         throw('invalid scale ' + scale);
-    } 
+    }
 });
 
 (function(cls){
@@ -5116,7 +5390,7 @@ VCO.BigDate = VCO.Date.extend({
     var Floorer = function(unit) {
         return function(a_big_year) {
             var year = a_big_year.getTime();
-            return new VCO.BigYear(Math.floor(year/unit) * unit);
+            return new TL.BigYear(Math.floor(year/unit) * unit);
         }
     }
 
@@ -5125,18 +5399,18 @@ VCO.BigDate = VCO.Date.extend({
         ['age',AGE, new Floorer(AGE)],          // 1M years
         ['epoch',EPOCH, new Floorer(EPOCH)],    // 10M years
         ['era',ERA, new Floorer(ERA)],          // 100M years
-        ['eon',EON, new Floorer(EON)]           // 1B years     
+        ['eon',EON, new Floorer(EON)]           // 1B years
     ];
 
-})(VCO.BigDate)
+})(TL.BigDate)
 
 
-/*	VCO.DateUtil
+/*	TL.DateUtil
 	Utilities for parsing time
 ================================================== */
 
 
-VCO.DateUtil = {
+TL.DateUtil = {
 	get: function (id) {
 		return (typeof id === 'string' ? document.getElementById(id) : id);
 	},
@@ -5149,39 +5423,16 @@ VCO.DateUtil = {
 			return 0;
 		});
 	},
-	
-	/*	Find Best Format
-	 * this may not work with 'cosmologic' dates, or with VCO.Date if we 
-	 * support constructing them based on JS Date and time
-	================================================== */
-	findBestFormat: function(data, variant) {
-		var eval_array = VCO.Date.DATE_PARTS,
-			format = "";
-		
-		for (var i = 0; i < eval_array.length; i++) {
-			if ( data[eval_array[i]]) {
-				if (variant) {
-					if (!(variant in VCO.DateUtil.best_dateformats)) {
-						variant = 'short'; // legacy
-					}
-				} else {
-					variant = 'base'
-				}
-				return VCO.DateUtil.best_dateformats[variant][eval_array[i]];		
-			}
-		};
-		return "";
-	},
-	
+
 	parseTime: function(time_str) {
 		var parsed = {
-			hour: null, minute: null, second: null, millisecond: null // conform to keys in VCO.Date
+			hour: null, minute: null, second: null, millisecond: null // conform to keys in TL.Date
 		}
 		var period = null;
 		var match = time_str.match(/(\s*[AaPp]\.?[Mm]\.?\s*)$/);
 		if (match) {
-			period = VCO.Util.trim(match[0]);
-			time_str = VCO.Util.trim(time_str.substring(0,time_str.lastIndexOf(period)));
+			period = TL.Util.trim(match[0]);
+			time_str = TL.Util.trim(time_str.substring(0,time_str.lastIndexOf(period)));
 		}
 
 		var parts = [];
@@ -5199,13 +5450,15 @@ VCO.DateUtil = {
 
 		parsed.hour = parseInt(parts[0]);
 
-		if (period && period.toLowerCase()[0] == 'p') {
+		if (period && period.toLowerCase()[0] == 'p' && parsed.hour != 12) {
 			parsed.hour += 12;
+		} else if (period && period.toLowerCase()[0] == 'a' && parsed.hour == 12) {
+			parsed.hour = 0;
 		}
 
 
 		if (isNaN(parsed.hour) || parsed.hour < 0 || parsed.hour > 23) {
-			throw new Error("Invalid time (hour)");
+			throw new Error("Invalid time (hour) " + parsed.hour);
 		}
 
 		if (parts.length > 1) {
@@ -5228,54 +5481,24 @@ VCO.DateUtil = {
 
 		return parsed;
 	},
-	best_dateformats: {
-		base: {
-			millisecond: 'time_short',
-			second: 'time',
-			minute: 'time_no_seconds_small_date',
-			hour: 'time_no_seconds_small_date',
-			day: 'full',
-			month: 'month',
-			year: 'year',
-			decade: 'year',
-			century: 'year',
-			millennium: 'year',
-			age: 'fallback',
-			epoch: 'fallback',
-			era: 'fallback',
-			eon: 'fallback',
-			eon2: 'fallback'
-		},
-		
-		short: {
-			millisecond: 'time_short',
-			second: 'time_short',
-			minute: 'time_no_seconds_short',
-			hour: 'time_no_minutes_short',
-			day: 'full_short',
-			month: 'month_short',
-			year: 'year',
-			decade: 'year',
-			century: 'year',
-			millennium: 'year',
-			age: 'fallback',
-			epoch: 'fallback',
-			era: 'fallback',
-			eon: 'fallback',
-			eon2: 'fallback'
-		}
+
+	SCALE_DATE_CLASSES: {
+		human: TL.Date,
+		cosmological: TL.BigDate
 	}
-	
+
+
 };
 
-/*	VCO.Draggable
-	VCO.Draggable allows you to add dragging capabilities to any element. Supports mobile devices too.
+
+/*	TL.Draggable
+	TL.Draggable allows you to add dragging capabilities to any element. Supports mobile devices too.
 	TODO Enable constraints
 ================================================== */
 
-VCO.Draggable = VCO.Class.extend({
+TL.Draggable = TL.Class.extend({
 	
-	includes: VCO.Events,
+	includes: TL.Events,
 	
 	_el: {},
 	
@@ -5320,7 +5543,7 @@ VCO.Draggable = VCO.Class.extend({
 			},
 			momentum_multiplier: 	2000,
 			duration: 				1000,
-			ease: 					VCO.Ease.easeInOutQuint
+			ease: 					TL.Ease.easeInOutQuint
 		};
 		
 		
@@ -5330,7 +5553,7 @@ VCO.Draggable = VCO.Class.extend({
 		// Drag Event Type
 		this.dragevent = this.mousedrag;
 		
-		if (VCO.Browser.touch) {
+		if (TL.Browser.touch) {
 			this.dragevent = this.touchdrag;
 		}
 		
@@ -5372,7 +5595,7 @@ VCO.Draggable = VCO.Class.extend({
 		};
 		
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.options, options);
 		
 		
 	},
@@ -5386,8 +5609,8 @@ VCO.Draggable = VCO.Class.extend({
 	},
 	
 	disable: function() {
-		VCO.DomEvent.removeListener(this._el.drag, this.dragevent.down, this._onDragStart, this);
-		VCO.DomEvent.removeListener(this._el.drag, this.dragevent.up, this._onDragEnd, this);
+		TL.DomEvent.removeListener(this._el.drag, this.dragevent.down, this._onDragStart, this);
+		TL.DomEvent.removeListener(this._el.drag, this.dragevent.up, this._onDragEnd, this);
 	},
 	
 	stopMomentum: function() {
@@ -5405,7 +5628,7 @@ VCO.Draggable = VCO.Class.extend({
 	/*	Private Methods
 	================================================== */
 	_onDragStart: function(e) {
-		if (VCO.Browser.touch) {
+		if (TL.Browser.touch) {
 			if (e.originalEvent) {
 				this.data.pagex.start = e.originalEvent.touches[0].screenX;
 				this.data.pagey.start = e.originalEvent.touches[0].screenY;
@@ -5427,18 +5650,18 @@ VCO.Draggable = VCO.Class.extend({
 			this._el.move.style.top = this.data.pagey.start - (this._el.move.offsetHeight / 2) + "px";
 		}
 		
-		this.data.pos.start = VCO.Dom.getPosition(this._el.drag);
+		this.data.pos.start = TL.Dom.getPosition(this._el.drag);
 		this.data.time.start = new Date().getTime();
 		
 		this.fire("dragstart", this.data);
-		VCO.DomEvent.addListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
-		VCO.DomEvent.addListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
+		TL.DomEvent.addListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
+		TL.DomEvent.addListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
 	},
 	
 	_onDragEnd: function(e) {
 		this.data.sliding = false;
-		VCO.DomEvent.removeListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
-		VCO.DomEvent.removeListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
+		TL.DomEvent.removeListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
+		TL.DomEvent.removeListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
 		this.fire("dragend", this.data);
 		
 		//  momentum
@@ -5449,7 +5672,7 @@ VCO.Draggable = VCO.Class.extend({
 		e.preventDefault();
 		this.data.sliding = true;
 		
-		if (VCO.Browser.touch) {
+		if (TL.Browser.touch) {
 			if (e.originalEvent) {
 				this.data.pagex.end = e.originalEvent.touches[0].screenX;
 				this.data.pagey.end = e.originalEvent.touches[0].screenY;
@@ -5463,7 +5686,7 @@ VCO.Draggable = VCO.Class.extend({
 			this.data.pagey.end = e.pageY;
 		}
 		
-		this.data.pos.end = VCO.Dom.getPosition(this._el.drag);
+		this.data.pos.end = TL.Dom.getPosition(this._el.drag);
 		this.data.new_pos.x = -(this.data.pagex.start - this.data.pagex.end - this.data.pos.start.x);
 		this.data.new_pos.y = -(this.data.pagey.start - this.data.pagey.end - this.data.pos.start.y );
 		
@@ -5493,7 +5716,7 @@ VCO.Draggable = VCO.Class.extend({
 			swipe_direction = "";
 		
 		
-		if (VCO.Browser.touch) {
+		if (TL.Browser.touch) {
 			// Treat mobile multiplier differently
 			//this.options.momentum_multiplier = this.options.momentum_multiplier * 2;
 		}
@@ -5557,7 +5780,7 @@ VCO.Draggable = VCO.Class.extend({
 			},
 			animate = {
 				duration: 	this.options.duration,
-				easing: 	VCO.Ease.easeOutStrong
+				easing: 	TL.Ease.easeOutStrong
 			};
 		
 		if (this.options.enable.y) {
@@ -5582,21 +5805,21 @@ VCO.Draggable = VCO.Class.extend({
 			animate.left = Math.floor(pos.x) + "px";
 		}
 		
-		this.animator = VCO.Animate(this._el.move, animate);
+		this.animator = TL.Animate(this._el.move, animate);
 		
 		this.fire("momentum", this.data);
 	}
 });
 
 
-/*	VCO.Swipable
-	VCO.Draggable allows you to add dragging capabilities to any element. Supports mobile devices too.
+/*	TL.Swipable
+	TL.Draggable allows you to add dragging capabilities to any element. Supports mobile devices too.
 	TODO Enable constraints
 ================================================== */
 
-VCO.Swipable = VCO.Class.extend({
+TL.Swipable = TL.Class.extend({
 	
-	includes: VCO.Events,
+	includes: TL.Events,
 	
 	_el: {},
 	
@@ -5642,7 +5865,7 @@ VCO.Swipable = VCO.Class.extend({
 			},
 			momentum_multiplier: 	2000,
 			duration: 				1000,
-			ease: 					VCO.Ease.easeInOutQuint
+			ease: 					TL.Ease.easeInOutQuint
 		};
 		
 		
@@ -5652,7 +5875,7 @@ VCO.Swipable = VCO.Class.extend({
 		// Drag Event Type
 		this.dragevent = this.mousedrag;
 		
-		if (VCO.Browser.touch) {
+		if (TL.Browser.touch) {
 			this.dragevent = this.touchdrag;
 		}
 		
@@ -5694,16 +5917,16 @@ VCO.Swipable = VCO.Class.extend({
 		};
 		
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.options, options);
 		
 		
 	},
 	
 	enable: function(e) {
-		VCO.DomEvent.addListener(this._el.drag, this.dragevent.down, this._onDragStart, this);
-		VCO.DomEvent.addListener(this._el.drag, this.dragevent.up, this._onDragEnd, this);
+		TL.DomEvent.addListener(this._el.drag, this.dragevent.down, this._onDragStart, this);
+		TL.DomEvent.addListener(this._el.drag, this.dragevent.up, this._onDragEnd, this);
 		
-		this.data.pos.start = 0; //VCO.Dom.getPosition(this._el.move);
+		this.data.pos.start = 0; //TL.Dom.getPosition(this._el.move);
 		this._el.move.style.left = this.data.pos.start.x + "px";
 		this._el.move.style.top = this.data.pos.start.y + "px";
 		this._el.move.style.position = "absolute";
@@ -5712,8 +5935,8 @@ VCO.Swipable = VCO.Class.extend({
 	},
 	
 	disable: function() {
-		VCO.DomEvent.removeListener(this._el.drag, this.dragevent.down, this._onDragStart, this);
-		VCO.DomEvent.removeListener(this._el.drag, this.dragevent.up, this._onDragEnd, this);
+		TL.DomEvent.removeListener(this._el.drag, this.dragevent.down, this._onDragStart, this);
+		TL.DomEvent.removeListener(this._el.drag, this.dragevent.up, this._onDragEnd, this);
 	},
 	
 	stopMomentum: function() {
@@ -5738,7 +5961,7 @@ VCO.Swipable = VCO.Class.extend({
 			this.animator.stop();
 		}
 		
-		if (VCO.Browser.touch) {
+		if (TL.Browser.touch) {
 			if (e.originalEvent) {
 				this.data.pagex.start = e.originalEvent.touches[0].screenX;
 				this.data.pagey.start = e.originalEvent.touches[0].screenY;
@@ -5766,14 +5989,14 @@ VCO.Swipable = VCO.Class.extend({
 		this.data.time.start 			= new Date().getTime();
 		
 		this.fire("dragstart", this.data);
-		VCO.DomEvent.addListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
-		VCO.DomEvent.addListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
+		TL.DomEvent.addListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
+		TL.DomEvent.addListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
 	},
 	
 	_onDragEnd: function(e) {
 		this.data.sliding = false;
-		VCO.DomEvent.removeListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
-		VCO.DomEvent.removeListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
+		TL.DomEvent.removeListener(this._el.drag, this.dragevent.move, this._onDragMove, this);
+		TL.DomEvent.removeListener(this._el.drag, this.dragevent.leave, this._onDragEnd, this);
 		this.fire("dragend", this.data);
 		
 		//  momentum
@@ -5788,7 +6011,7 @@ VCO.Swipable = VCO.Class.extend({
 		//e.preventDefault();
 		this.data.sliding = true;
 		
-		if (VCO.Browser.touch) {
+		if (TL.Browser.touch) {
 			if (e.originalEvent) {
 				this.data.pagex.end = e.originalEvent.touches[0].screenX;
 				this.data.pagey.end = e.originalEvent.touches[0].screenY;
@@ -5934,11 +6157,11 @@ VCO.Swipable = VCO.Class.extend({
 		} else if (this.options.snap) {
 			this.animator.stop();
 			
-			this.animator = VCO.Animate(this._el.move, {
+			this.animator = TL.Animate(this._el.move, {
 				top: 		this.data.pos.start.y,
 				left: 		this.data.pos.start.x,
 				duration: 	this.options.duration,
-				easing: 	VCO.Ease.easeOutStrong
+				easing: 	TL.Ease.easeOutStrong
 			});
 		}
 		
@@ -5952,7 +6175,7 @@ VCO.Swipable = VCO.Class.extend({
 			},
 			animate = {
 				duration: 	this.options.duration,
-				easing: 	VCO.Ease.easeOutStrong
+				easing: 	TL.Ease.easeOutStrong
 			};
 		
 		if (this.options.enable.y) {
@@ -5977,20 +6200,20 @@ VCO.Swipable = VCO.Class.extend({
 			animate.left = Math.floor(pos.x) + "px";
 		}
 		
-		this.animator = VCO.Animate(this._el.move, animate);
+		this.animator = TL.Animate(this._el.move, animate);
 		
 		this.fire("momentum", this.data);
 	}
 });
 
 
-/*	VCO.MenuBar
+/*	TL.MenuBar
 	Draggable component to control size
 ================================================== */
  
-VCO.MenuBar = VCO.Class.extend({
+TL.MenuBar = TL.Class.extend({
 	
-	includes: [VCO.Events, VCO.DomMixins],
+	includes: [TL.Events, TL.DomMixins],
 	
 	_el: {},
 	
@@ -6015,7 +6238,7 @@ VCO.MenuBar = VCO.Class.extend({
 		if (typeof elem === 'object') {
 			this._el.container = elem;
 		} else {
-			this._el.container = VCO.Dom.get(elem);
+			this._el.container = TL.Dom.get(elem);
 		}
 		
 		if (parent_elem) {
@@ -6027,7 +6250,7 @@ VCO.MenuBar = VCO.Class.extend({
 			width: 					600,
 			height: 				600,
 			duration: 				1000,
-			ease: 					VCO.Ease.easeInOutQuint,
+			ease: 					TL.Ease.easeInOutQuint,
 			menubar_default_y: 		0
 		};
 		
@@ -6035,7 +6258,7 @@ VCO.MenuBar = VCO.Class.extend({
 		this.animator = {};
 		
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.options, options);
 		
 		this._initLayout();
 		this._initEvents();
@@ -6050,41 +6273,41 @@ VCO.MenuBar = VCO.Class.extend({
 			duration = d;
 		}
 		/*
-		this.animator = VCO.Animate(this._el.container, {
+		this.animator = TL.Animate(this._el.container, {
 			top: 		this.options.menubar_default_y + "px",
 			duration: 	duration,
-			easing: 	VCO.Ease.easeOutStrong
+			easing: 	TL.Ease.easeOutStrong
 		});
 		*/
 	},
 	
 	hide: function(top) {
 		/*
-		this.animator = VCO.Animate(this._el.container, {
+		this.animator = TL.Animate(this._el.container, {
 			top: 		top,
 			duration: 	this.options.duration,
-			easing: 	VCO.Ease.easeOutStrong
+			easing: 	TL.Ease.easeOutStrong
 		});
 		*/
 	},
 		
 	toogleZoomIn: function(show) {
 		if (show) {
-			this._el.button_zoomin.className = "vco-menubar-button";
-			this._el.button_zoomout.className = "vco-menubar-button";
+			this._el.button_zoomin.className = "tl-menubar-button";
+			this._el.button_zoomout.className = "tl-menubar-button";
 		} else {
-			this._el.button_zoomin.className = "vco-menubar-button vco-menubar-button-inactive";
-			this._el.button_zoomout.className = "vco-menubar-button";
+			this._el.button_zoomin.className = "tl-menubar-button tl-menubar-button-inactive";
+			this._el.button_zoomout.className = "tl-menubar-button";
 		}
 	},
 	
 	toogleZoomOut: function(show) {
 		if (show) {
-			this._el.button_zoomout.className = "vco-menubar-button";
-			this._el.button_zoomin.className = "vco-menubar-button";
+			this._el.button_zoomout.className = "tl-menubar-button";
+			this._el.button_zoomin.className = "tl-menubar-button";
 		} else {
-			this._el.button_zoomout.className = "vco-menubar-button vco-menubar-button-inactive";
-			this._el.button_zoomin.className = "vco-menubar-button";
+			this._el.button_zoomout.className = "tl-menubar-button tl-menubar-button-inactive";
+			this._el.button_zoomin.className = "tl-menubar-button";
 		}
 	},
 	
@@ -6096,9 +6319,9 @@ VCO.MenuBar = VCO.Class.extend({
 	================================================== */
 	setColor: function(inverted) {
 		if (inverted) {
-			this._el.container.className = 'vco-menubar vco-menubar-inverted';
+			this._el.container.className = 'tl-menubar tl-menubar-inverted';
 		} else {
-			this._el.container.className = 'vco-menubar';
+			this._el.container.className = 'tl-menubar';
 		}
 	},
 	
@@ -6129,25 +6352,25 @@ VCO.MenuBar = VCO.Class.extend({
 	_initLayout: function () {
 		
 		// Create Layout
-		this._el.button_zoomin 							= VCO.Dom.create('span', 'vco-menubar-button', this._el.container);
-		this._el.button_zoomout 						= VCO.Dom.create('span', 'vco-menubar-button', this._el.container);
-		this._el.button_backtostart 					= VCO.Dom.create('span', 'vco-menubar-button', this._el.container);
+		this._el.button_zoomin 							= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
+		this._el.button_zoomout 						= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
+		this._el.button_backtostart 					= TL.Dom.create('span', 'tl-menubar-button', this._el.container);
 		
-		if (VCO.Browser.mobile) {
+		if (TL.Browser.mobile) {
 			this._el.container.setAttribute("ontouchstart"," ");
 		}
 		
-		this._el.button_backtostart.innerHTML		= "<span class='vco-icon-goback'></span>";
-		this._el.button_zoomin.innerHTML			= "<span class='vco-icon-zoom-in'></span>";
-		this._el.button_zoomout.innerHTML			= "<span class='vco-icon-zoom-out'></span>";
+		this._el.button_backtostart.innerHTML		= "<span class='tl-icon-goback'></span>";
+		this._el.button_zoomin.innerHTML			= "<span class='tl-icon-zoom-in'></span>";
+		this._el.button_zoomout.innerHTML			= "<span class='tl-icon-zoom-out'></span>";
 		
 		
 	},
 	
 	_initEvents: function () {
-		VCO.DomEvent.addListener(this._el.button_backtostart, 'click', this._onButtonBackToStart, this);
-		VCO.DomEvent.addListener(this._el.button_zoomin, 'click', this._onButtonZoomIn, this);
-		VCO.DomEvent.addListener(this._el.button_zoomout, 'click', this._onButtonZoomOut, this);
+		TL.DomEvent.addListener(this._el.button_backtostart, 'click', this._onButtonBackToStart, this);
+		TL.DomEvent.addListener(this._el.button_zoomin, 'click', this._onButtonZoomIn, this);
+		TL.DomEvent.addListener(this._el.button_zoomout, 'click', this._onButtonZoomOut, this);
 	},
 	
 	// Update Display
@@ -6163,13 +6386,13 @@ VCO.MenuBar = VCO.Class.extend({
 	
 });
 
-/*	VCO.Message
+/*	TL.Message
 	
 ================================================== */
  
-VCO.Message = VCO.Class.extend({
+TL.Message = TL.Class.extend({
 	
-	includes: [VCO.Events, VCO.DomMixins],
+	includes: [TL.Events, TL.DomMixins, TL.I18NMixins],
 	
 	_el: {},
 	
@@ -6189,15 +6412,15 @@ VCO.Message = VCO.Class.extend({
 		this.options = {
 			width: 					600,
 			height: 				600,
-			message_class: 			"vco-message",
-			message_icon_class: 	"vco-loading-icon"
+			message_class: 			"tl-message",
+			message_icon_class: 	"tl-loading-icon"
 		};
 		
 		// Merge Data and Options
-		VCO.Util.mergeData(this.data, data);
-		VCO.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.data, data);
+		TL.Util.mergeData(this.options, options);
 		
-		this._el.container = VCO.Dom.create("div", this.options.message_class);
+		this._el.container = TL.Dom.create("div", this.options.message_class);
 		
 		if (add_to_container) {
 			add_to_container.appendChild(this._el.container);
@@ -6228,8 +6451,7 @@ VCO.Message = VCO.Class.extend({
 	
 	_updateMessage: function(t) {
 		if (!t) {
-			var lang = this.options.language || VCO.Language.fallback;
-			this._el.message.innerHTML = lang._('loading');
+			this._el.message.innerHTML = this._('loading');
 		} else {
 			this._el.message.innerHTML = t;
 		}
@@ -6250,16 +6472,16 @@ VCO.Message = VCO.Class.extend({
 	_initLayout: function () {
 		
 		// Create Layout
-		this._el.message_container = VCO.Dom.create("div", "vco-message-container", this._el.container);
-		this._el.loading_icon = VCO.Dom.create("div", this.options.message_icon_class, this._el.message_container);
-		this._el.message = VCO.Dom.create("div", "vco-message-content", this._el.message_container);
+		this._el.message_container = TL.Dom.create("div", "tl-message-container", this._el.container);
+		this._el.loading_icon = TL.Dom.create("div", this.options.message_icon_class, this._el.message_container);
+		this._el.message = TL.Dom.create("div", "tl-message-content", this._el.message_container);
 		
 		this._updateMessage();
 		
 	},
 	
 	_initEvents: function () {
-		VCO.DomEvent.addListener(this._el.container, 'click', this._onMouseClick, this);
+		TL.DomEvent.addListener(this._el.container, 'click', this._onMouseClick, this);
 	},
 	
 	// Update Display
@@ -6269,7 +6491,7 @@ VCO.Message = VCO.Class.extend({
 	
 });
 
-/*	VCO.MediaType
+/*	TL.MediaType
 	Determines the type of media the url string is.
 	returns an object with .type and .id
 	You can add new media types by adding a regex 
@@ -6279,140 +6501,140 @@ VCO.Message = VCO.Class.extend({
 	TODO
 	Allow array so a slideshow can be a mediatype
 ================================================== */
-VCO.MediaType = function(m) {
+TL.MediaType = function(m) {
 	var media = {}, 
 		media_types = 	[
 			{
 				type: 		"youtube",
 				name: 		"YouTube", 
 				match_str: 	"^(https?:)?\/*(www.)?youtube|youtu\.be",
-				cls: 		VCO.Media.YouTube
+				cls: 		TL.Media.YouTube
 			},
 			{
 				type: 		"vimeo",
 				name: 		"Vimeo", 
 				match_str: 	"^(https?:)?\/*(player.)?vimeo\.com",
-				cls: 		VCO.Media.Vimeo
+				cls: 		TL.Media.Vimeo
 			},
 			{
 				type: 		"dailymotion",
 				name: 		"DailyMotion", 
 				match_str: 	"^(https?:)?\/*(www.)?dailymotion\.com",
-				cls: 		VCO.Media.DailyMotion
+				cls: 		TL.Media.DailyMotion
 			},
 			{
 				type: 		"vine",
 				name: 		"Vine", 
 				match_str: 	"^(https?:)?\/*(www.)?vine\.co",
-				cls: 		VCO.Media.Vine
+				cls: 		TL.Media.Vine
 			},
 			{
 				type: 		"soundcloud",
 				name: 		"SoundCloud", 
 				match_str: 	"^(https?:)?\/*(player.)?soundcloud\.com",
-				cls: 		VCO.Media.SoundCloud
+				cls: 		TL.Media.SoundCloud
 			},
 			{
 				type: 		"twitter",
 				name: 		"Twitter", 
 				match_str: 	"^(https?:)?\/*(www.)?twitter\.com",
-				cls: 		VCO.Media.Twitter
+				cls: 		TL.Media.Twitter
 			},
 			{
 				type: 		"twitterembed",
 				name: 		"TwitterEmbed", 
 				match_str: 	"<blockquote class=\"twitter-tweet\"",
-				cls: 		VCO.Media.TwitterEmbed
+				cls: 		TL.Media.TwitterEmbed
 			},
 			{
 				type: 		"googlemaps",
 				name: 		"Google Map", 
 				match_str: 	/google.+?\/maps\/@([-\d.]+),([-\d.]+),((?:[-\d.]+[zmayht],?)*)|google.+?\/maps\/search\/([\w\W]+)\/@([-\d.]+),([-\d.]+),((?:[-\d.]+[zmayht],?)*)|google.+?\/maps\/place\/([\w\W]+)\/@([-\d.]+),([-\d.]+),((?:[-\d.]+[zmayht],?)*)|google.+?\/maps\/dir\/([\w\W]+)\/([\w\W]+)\/@([-\d.]+),([-\d.]+),((?:[-\d.]+[zmayht],?)*)/,
-				cls: 		VCO.Media.GoogleMap
+				cls: 		TL.Media.GoogleMap
 			},
 			{
 				type: 		"googleplus",
 				name: 		"Google+", 
 				match_str: 	"^(https?:)?\/*plus.google",
-				cls: 		VCO.Media.GooglePlus
+				cls: 		TL.Media.GooglePlus
 			},
 			{
 				type: 		"flickr",
 				name: 		"Flickr", 
 				match_str: 	"^(https?:)?\/*(www.)?flickr.com\/photos",
-				cls: 		VCO.Media.Flickr
+				cls: 		TL.Media.Flickr
 			},
 			{
 				type: 		"instagram",
 				name: 		"Instagram", 
 				match_str: 	/^(https?:)?\/*(www.)?(instagr.am|^(https?:)?\/*(www.)?instagram.com)\/p\//,
-				cls: 		VCO.Media.Instagram
+				cls: 		TL.Media.Instagram
 			},
 			{
 				type: 		"profile",
 				name: 		"Profile", 
 				match_str: 	/^(https?:)?\/*(www.)?instagr.am\/[a-zA-Z0-9]{2,}|^(https?:)?\/*(www.)?instagram.com\/[a-zA-Z0-9]{2,}/,
-				cls: 		VCO.Media.Profile
+				cls: 		TL.Media.Profile
 			},
 			{
 			    type:       "documentcloud",
 			    name:       "Document Cloud",
 			    match_str:  /documentcloud.org\//,
-			    cls:        VCO.Media.DocumentCloud
+			    cls:        TL.Media.DocumentCloud
 			},
 			{
 				type: 		"image",
 				name: 		"Image",
 				match_str: 	/(jpg|jpeg|png|gif)(\?.*)?$/i,
-				cls: 		VCO.Media.Image
+				cls: 		TL.Media.Image
 			},
 			{
 				type: 		"googledocs",
 				name: 		"Google Doc",
 				match_str: 	"^(https?:)?\/*[^.]*.google.com\/[^\/]*\/d\/[^\/]*\/[^\/]*\?usp=sharing|^(https?:)?\/*drive.google.com\/open\?id=[^\&]*\&authuser=0|^(https?:)?\/*drive.google.com\/open\?id=[^\&]*|^(https?:)?\/*[^.]*.googledrive.com\/host\/[^\/]*\/",
-				cls: 		VCO.Media.GoogleDoc
+				cls: 		TL.Media.GoogleDoc
 			},
 			{
 				type: 		"wikipedia",
 				name: 		"Wikipedia",
 				match_str: 	"^(https?:)?\/*(www.)?wikipedia\.org|^(https?:)?\/*([a-z][a-z].)?wikipedia\.org",
-				cls: 		VCO.Media.Wikipedia
+				cls: 		TL.Media.Wikipedia
 			},
 			{
 				type: 		"spotify",
 				name: 		"spotify",
 				match_str: 	"spotify",
-				cls: 		VCO.Media.Spotify
+				cls: 		TL.Media.Spotify
 			},
 			{
 				type: 		"iframe",
 				name: 		"iFrame",
 				match_str: 	"iframe",
-				cls: 		VCO.Media.IFrame
+				cls: 		TL.Media.IFrame
 			},
 			{
 				type: 		"storify",
 				name: 		"Storify",
 				match_str: 	"storify",
-				cls: 		VCO.Media.Storify
+				cls: 		TL.Media.Storify
 			},
 			{
 				type: 		"blockquote",
 				name: 		"Quote",
 				match_str: 	"blockquote",
-				cls: 		VCO.Media.Blockquote
+				cls: 		TL.Media.Blockquote
 			},
-			{
-				type: 		"website",
-				name: 		"Website",
-				match_str: 	"http://",
-				cls: 		VCO.Media.Website
-			},
+			// {
+			// 	type: 		"website",
+			// 	name: 		"Website",
+			// 	match_str: 	"https?://",
+			// 	cls: 		TL.Media.Website
+			// },
 			{
 				type: 		"imageblank",
 				name: 		"Imageblank",
 				match_str: 	"",
-				cls: 		VCO.Media.Image
+				cls: 		TL.Media.Image
 			}
 		];
 	
@@ -6420,7 +6642,7 @@ VCO.MediaType = function(m) {
 		if (m instanceof Array) {
 			return media = {
 				type: 		"slider",
-				cls: 		VCO.Media.Slider
+				cls: 		TL.Media.Slider
 			};
 		} else if (m.url.match(media_types[i].match_str)) {
 			media 		= media_types[i];
@@ -6433,18 +6655,18 @@ VCO.MediaType = function(m) {
 }
 
 
-/*	VCO.Media
+/*	TL.Media
 	Main media template for media assets.
 	Takes a data object and populates a dom object
 ================================================== */
 // TODO add link
 
-VCO.Media = VCO.Class.extend({
-	
-	includes: [VCO.Events, VCO.I18NMixins],
-	
+TL.Media = TL.Class.extend({
+
+	includes: [TL.Events, TL.I18NMixins],
+
 	_el: {},
-	
+
 	/*	Constructor
 	================================================== */
 	initialize: function(data, options, add_to_container) {
@@ -6460,30 +6682,30 @@ VCO.Media = VCO.Class.extend({
 			parent: {},
 			link: null
 		};
-		
+
 		// Player (If Needed)
 		this.player = null;
-		
+
 		// Timer (If Needed)
 		this.timer = null;
 		this.load_timer = null;
-		
+
 		// Message
 		this.message = null;
-		
+
 		// Media ID
 		this.media_id = null;
-		
+
 		// State
 		this._state = {
 			loaded: false,
 			show_meta: false,
 			media_loaded: false
 		};
-	
+
 		// Data
 		this.data = {
-			uniqueid: 			null,
+			unique_id: 			null,
 			url: 				null,
 			credit:				null,
 			caption:			null,
@@ -6492,41 +6714,41 @@ VCO.Media = VCO.Class.extend({
 			link: 				null,
 			link_target: 		null
 		};
-	
+
 		//Options
 		this.options = {
 			api_key_flickr: 		"f2cc870b4d233dd0a5bfe73fd0d64ef0",
 			api_key_googlemaps: 	"AIzaSyB9dW8e_iRrATFa8g24qB6BDBGdkrLDZYI",
-			api_key_embedly: 		"ae2da610d1454b66abdf2e6a4c44026d",
+			api_key_embedly: 		"", // ae2da610d1454b66abdf2e6a4c44026d
 			credit_height: 			0,
 			caption_height: 		0
 		};
-	
+
 		this.animator = {};
-		
+
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
-		VCO.Util.mergeData(this.data, data);
-		
-		this._el.container = VCO.Dom.create("div", "vco-media");
-		
-		if (this.data.uniqueid) {
-			this._el.container.id = this.data.uniqueid;
+		TL.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.data, data);
+
+		this._el.container = TL.Dom.create("div", "tl-media");
+
+		if (this.data.unique_id) {
+			this._el.container.id = this.data.unique_id;
 		}
-		
-		
+
+
 		this._initLayout();
-		
+
 		if (add_to_container) {
 			add_to_container.appendChild(this._el.container);
 			this._el.parent = add_to_container;
 		};
-		
+
 	},
-	
+
 	loadMedia: function() {
 		var self = this;
-		
+
 		if (!this._state.loaded) {
 			try {
 				this.load_timer = setTimeout(function() {
@@ -6538,41 +6760,50 @@ VCO.Media = VCO.Class.extend({
 				trace("Error loading media for ", this._media);
 				trace(e);
 			}
-			
+
 			//this._state.loaded = true;
 		}
-		
-		
-		
+
+
+
 	},
-	
+
 	loadingMessage: function() {
 		this.message.updateMessage(this._('loading') + " " + this.options.media_name);
 	},
 
+	errorMessage: function(msg) {
+		if (msg) {
+			msg = this._('error') + ": " + msg;
+		} else {
+			msg = this._('error');
+		}
+		this.message.updateMessage(msg);
+	},
+
 	updateMediaDisplay: function(layout) {
 		if (this._state.loaded) {
-			
-			
-			if (VCO.Browser.mobile) {
+
+
+			if (TL.Browser.mobile) {
 				this._el.content_item.style.maxHeight = (this.options.height/2) + "px";
 			} else {
 				this._el.content_item.style.maxHeight = this.options.height - this.options.credit_height - this.options.caption_height - 30 + "px";
 			}
-			
+
 			//this._el.content_item.style.maxWidth = this.options.width + "px";
 			this._el.container.style.maxWidth = this.options.width + "px";
 			// Fix for max-width issues in Firefox
-			if (VCO.Browser.firefox) {
+			if (TL.Browser.firefox) {
 				if (this._el.content_item.offsetWidth > this._el.content_item.offsetHeight) {
 					//this._el.content_item.style.width = "100%";
 				}
 			}
-			
-			
-			
+
+
+
 			this._updateMediaDisplay(layout);
-			
+
 			if (this._state.media_loaded) {
 				if (this._el.credit) {
 					this._el.credit.style.width		= this._el.content_item.offsetWidth + "px";
@@ -6581,62 +6812,66 @@ VCO.Media = VCO.Class.extend({
 					this._el.caption.style.width		= this._el.content_item.offsetWidth + "px";
 				}
 			}
-			
+
 		}
 	},
-	
+
 	/*	Media Specific
 	================================================== */
 		_loadMedia: function() {
-		
+
 		},
-		
+
 		_updateMediaDisplay: function(l) {
 			//this._el.content_item.style.maxHeight = (this.options.height - this.options.credit_height - this.options.caption_height - 16) + "px";
-			if(VCO.Browser.firefox) {
+			if(TL.Browser.firefox) {
 				this._el.content_item.style.maxWidth = this.options.width + "px";
 				this._el.content_item.style.width = "auto";
 			}
 		},
-		
+
 		_getMeta: function() {
-			
+
 		},
-	
+
 	/*	Public
 	================================================== */
 	show: function() {
-		
+
 	},
-	
+
 	hide: function() {
-		
+
 	},
-	
+
 	addTo: function(container) {
 		container.appendChild(this._el.container);
 		this.onAdd();
 	},
-	
+
 	removeFrom: function(container) {
 		container.removeChild(this._el.container);
 		this.onRemove();
 	},
-	
+
 	// Update Display
 	updateDisplay: function(w, h, l) {
 		this._updateDisplay(w, h, l);
 	},
-	
+
 	stopMedia: function() {
 		this._stopMedia();
 	},
-	
+
 	loadErrorDisplay: function(message) {
-		this._el.content.removeChild(this._el.content_item);
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-loaderror", this._el.content);
-		this._el.content_item.innerHTML = "<div class='vco-icon-" + this.options.media_type + "'></div><p>" + message + "</p>";
-		
+		try {
+			this._el.content.removeChild(this._el.content_item);
+		} catch(e) {
+			// if this._el.content_item isn't a child of this._el then just keep truckin
+		}
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-loaderror", this._el.content);
+		this._el.content_item.innerHTML = "<div class='tl-icon-" + this.options.media_type + "'></div><p>" + message + "</p>";
+
 		// After Loaded
 		this.onLoaded(true);
 	},
@@ -6654,7 +6889,7 @@ VCO.Media = VCO.Class.extend({
 		}
 		this.updateDisplay();
 	},
-	
+
 	onMediaLoaded: function(e) {
 		this._state.media_loaded = true;
 		this.fire("media_loaded", this.data);
@@ -6665,49 +6900,49 @@ VCO.Media = VCO.Class.extend({
 			this._el.caption.style.width		= this._el.content_item.offsetWidth + "px";
 		}
 	},
-	
+
 	showMeta: function(credit, caption) {
 		this._state.show_meta = true;
 		// Credit
 		if (this.data.credit && this.data.credit != "") {
-			this._el.credit					= VCO.Dom.create("div", "vco-credit", this._el.content_container);
-			this._el.credit.innerHTML		= this.data.credit;
+			this._el.credit					= TL.Dom.create("div", "tl-credit", this._el.content_container);
+			this._el.credit.innerHTML		= TL.Util.linkify(this.data.credit);
 			this.options.credit_height 		= this._el.credit.offsetHeight;
-		} 
-		
+		}
+
 		// Caption
 		if (this.data.caption && this.data.caption != "") {
-			this._el.caption				= VCO.Dom.create("div", "vco-caption", this._el.content_container);
-			this._el.caption.innerHTML		= this.data.caption;
+			this._el.caption				= TL.Dom.create("div", "tl-caption", this._el.content_container);
+			this._el.caption.innerHTML		= TL.Util.linkify(this.data.caption);
 			this.options.caption_height 	= this._el.caption.offsetHeight;
-		} 
-		
+		}
+
 		if (!this.data.caption || !this.data.credit) {
 			this.getMeta();
 		}
-		
+
 	},
-	
+
 	getMeta: function() {
 		this._getMeta();
 	},
-	
+
 	updateMeta: function() {
 		if (!this.data.credit && this.data.credit_alternate) {
-			this._el.credit					= VCO.Dom.create("div", "vco-credit", this._el.content_container);
+			this._el.credit					= TL.Dom.create("div", "tl-credit", this._el.content_container);
 			this._el.credit.innerHTML		= this.data.credit_alternate;
 			this.options.credit_height 		= this._el.credit.offsetHeight;
 		}
-		
+
 		if (!this.data.caption && this.data.caption_alternate) {
-			this._el.caption				= VCO.Dom.create("div", "vco-caption", this._el.content_container);
+			this._el.caption				= TL.Dom.create("div", "tl-caption", this._el.content_container);
 			this._el.caption.innerHTML		= this.data.caption_alternate;
 			this.options.caption_height 	= this._el.caption.offsetHeight;
 		}
-		
+
 		this.updateDisplay();
 	},
-	
+
 	onAdd: function() {
 		this.fire("added", this.data);
 	},
@@ -6715,76 +6950,77 @@ VCO.Media = VCO.Class.extend({
 	onRemove: function() {
 		this.fire("removed", this.data);
 	},
-	
+
 	/*	Private Methods
 	================================================== */
 	_initLayout: function () {
-		
+
 		// Message
-		this.message = new VCO.Message({}, this.options);
+		this.message = new TL.Message({}, this.options);
 		this.message.addTo(this._el.container);
-		
+
 		// Create Layout
-		this._el.content_container = VCO.Dom.create("div", "vco-media-content-container", this._el.container);
-		
+		this._el.content_container = TL.Dom.create("div", "tl-media-content-container", this._el.container);
+
 		// Link
 		if (this.data.link && this.data.link != "") {
-			
-			this._el.link = VCO.Dom.create("a", "vco-media-link", this._el.content_container);
+
+			this._el.link = TL.Dom.create("a", "tl-media-link", this._el.content_container);
 			this._el.link.href = this.data.link;
 			if (this.data.link_target && this.data.link_target != "") {
 				this._el.link.target = this.data.link_target;
 			} else {
 				this._el.link.target = "_blank";
 			}
-			
-			this._el.content = VCO.Dom.create("div", "vco-media-content", this._el.link);
-			
+
+			this._el.content = TL.Dom.create("div", "tl-media-content", this._el.link);
+
 		} else {
-			this._el.content = VCO.Dom.create("div", "vco-media-content", this._el.content_container);
+			this._el.content = TL.Dom.create("div", "tl-media-content", this._el.content_container);
 		}
-		
-		
+
+
 	},
-	
+
 	// Update Display
 	_updateDisplay: function(w, h, l) {
 		if (w) {
 			this.options.width = w;
-			
-		} 
+
+		}
 		//this._el.container.style.width = this.options.width + "px";
 		if (h) {
 			this.options.height = h;
 		}
-		
+
 		if (l) {
 			this.options.layout = l;
-		} 
-		
+		}
+
 		if (this._el.credit) {
 			this.options.credit_height 		= this._el.credit.offsetHeight;
 		}
 		if (this._el.caption) {
 			this.options.caption_height 	= this._el.caption.offsetHeight + 5;
 		}
-		
+
 		this.updateMediaDisplay(this.options.layout);
-		
+
 	},
-	
+
 	_stopMedia: function() {
-		
+
 	}
-	
+
 });
 
-/*	VCO.Media.Blockquote
+
+/*	TL.Media.Blockquote
 ================================================== */
 
-VCO.Media.Blockquote = VCO.Media.extend({
+TL.Media.Blockquote = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -6794,8 +7030,8 @@ VCO.Media.Blockquote = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-blockquote", this._el.content);
-		this._el.content_container.className = "vco-media-content-container vco-media-content-container-text";
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-blockquote", this._el.content);
+		this._el.content_container.className = "tl-media-content-container tl-media-content-container-text";
 		
 		// Get Media ID
 		this.media_id = this.data.url;
@@ -6819,12 +7055,12 @@ VCO.Media.Blockquote = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.DailyMotion
+/*	TL.Media.DailyMotion
 ================================================== */
 
-VCO.Media.DailyMotion = VCO.Media.extend({
+TL.Media.DailyMotion = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -6836,7 +7072,7 @@ VCO.Media.DailyMotion = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-iframe vco-media-dailymotion", this._el.content);
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-dailymotion", this._el.content);
 		
 		// Get Media ID
 		if (this.data.url.match("video")) {
@@ -6857,18 +7093,18 @@ VCO.Media.DailyMotion = VCO.Media.extend({
 	
 	// Update Media Display
 	_updateMediaDisplay: function() {
-		this._el.content_item.style.height = VCO.Util.ratio.r16_9({w:this._el.content_item.offsetWidth}) + "px";
+		this._el.content_item.style.height = TL.Util.ratio.r16_9({w:this._el.content_item.offsetWidth}) + "px";
 	}
 	
 });
 
 
-/*	VCO.Media.DocumentCloud
+/*	TL.Media.DocumentCloud
 ================================================== */
 
-VCO.Media.DocumentCloud = VCO.Media.extend({
+TL.Media.DocumentCloud = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -6879,8 +7115,8 @@ VCO.Media.DocumentCloud = VCO.Media.extend({
 		this.loadingMessage();
 				
 		// Create Dom elements
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-documentcloud vco-media-shadow", this._el.content);
-		this._el.content_item.id = VCO.Util.unique_ID(7)
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-documentcloud tl-media-shadow", this._el.content);
+		this._el.content_item.id = TL.Util.unique_ID(7)
 		
 		// Check url
 		if(this.data.url.match(/\.html$/)) {
@@ -6890,7 +7126,7 @@ VCO.Media.DocumentCloud = VCO.Media.extend({
 		}
 		
 		// Load viewer API
-        VCO.Load.js([
+        TL.Load.js([
                 '//s3.documentcloud.org/viewer/loader.js', 
                 '//s3.amazonaws.com/s3.documentcloud.org/viewer/viewer.js'],
             function() {	
@@ -6929,13 +7165,13 @@ VCO.Media.DocumentCloud = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.Flickr
+/*	TL.Media.Flickr
 
 ================================================== */
 
-VCO.Media.Flickr = VCO.Media.extend({
+TL.Media.Flickr = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -6947,12 +7183,12 @@ VCO.Media.Flickr = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Link
-		this._el.content_link 				= VCO.Dom.create("a", "", this._el.content);
+		this._el.content_link 				= TL.Dom.create("a", "", this._el.content);
 		this._el.content_link.href 			= this.data.url;
 		this._el.content_link.target 		= "_blank";
 		
 		// Photo
-		this._el.content_item	= VCO.Dom.create("img", "vco-media-item vco-media-image vco-media-flickr vco-media-shadow", this._el.content_link);
+		this._el.content_item	= TL.Dom.create("img", "tl-media-item tl-media-image tl-media-flickr tl-media-shadow", this._el.content_link);
 		
 		// Media Loaded Event
 		this._el.content_item.addEventListener('load', function(e) {
@@ -6966,7 +7202,7 @@ VCO.Media.Flickr = VCO.Media.extend({
 		api_url = "https://api.flickr.com/services/rest/?method=flickr.photos.getSizes&api_key=" + this.options.api_key_flickr + "&photo_id=" + this.media_id + "&format=json&jsoncallback=?";
 		
 		// API Call
-		VCO.getJSON(api_url, function(d) {
+		TL.getJSON(api_url, function(d) {
 			if (d.stat == "ok") {
 				self.createMedia(d);
 			} else {
@@ -7011,7 +7247,7 @@ VCO.Media.Flickr = VCO.Media.extend({
 		api_url = "https://api.flickr.com/services/rest/?method=flickr.photos.getInfo&api_key=" + this.options.api_key_flickr + "&photo_id=" + this.media_id + "&format=json&jsoncallback=?";
 		
 		// API Call
-		VCO.getJSON(api_url, function(d) {
+		TL.getJSON(api_url, function(d) {
 			self.data.credit_alternate = "<a href='" + self.data.url + "' target='_blank'>" + d.photo.owner.realname + "</a>";
 			self.data.caption_alternate = d.photo.title._content + " " + d.photo.description._content;
 			self.updateMeta();
@@ -7049,50 +7285,43 @@ VCO.Media.Flickr = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.GoogleDoc
+/*	TL.Media.GoogleDoc
 
 ================================================== */
 
-VCO.Media.GoogleDoc = VCO.Media.extend({
+TL.Media.GoogleDoc = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
-		var api_url,
+		var url,
 			self = this;
 		
 		// Loading Message
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-iframe", this._el.content);
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe", this._el.content);
 		
 		// Get Media ID
 		if (this.data.url.match("open\?id\=")) {
 			this.media_id = this.data.url.split("open\?id\=")[1];
 			if (this.data.url.match("\&authuser\=0")) {
-				this.media_id = this.media_id("\&authuser\=0")[0];
+				url = this.media_id.match("\&authuser\=0")[0];
 			};
-		} else if (this.data.url.match("\/d\/")) {
-			this.media_id = this.data.url.split("\/d\/")[1];
-			if (this.data.url.match("[^\/]*\/")) {
-				this.media_id = this.media_id("[^\/]*\/")[0];
-			};
+		} else if (this.data.url.match(/file\/d\/([^/]*)\/?/)) {
+			var doc_id = this.data.url.match(/file\/d\/([^/]*)\/?/)[1];
+			url = 'https://drive.google.com/file/d/' + doc_id + '/preview'
 		} else {
-			this.media_id = "";
+			url = this.data.url;
 		}
 		
-		// API URL
-		api_url = "http://www.googledrive.com/host/" + this.media_id + "/";
+		// this URL makes something suitable for an img src but what if it's not an image?
+		// api_url = "http://www.googledrive.com/host/" + this.media_id + "/";
 		
-		// API Call
-		if (this.media_id.match(/docs.google.com/i)) {
-			this._el.content_item.innerHTML	=	"<iframe class='doc' frameborder='0' width='100%' height='100%' src='" + this.media_id + "&amp;embedded=true'></iframe>";
-		} else {
-			this._el.content_item.innerHTML	=	"<iframe class='doc' frameborder='0' width='100%' height='100%' src='" + "http://docs.google.com/viewer?url=" + this.media_id + "&amp;embedded=true'></iframe>";
-		}
+		this._el.content_item.innerHTML	=	"<iframe class='doc' frameborder='0' width='100%' height='100%' src='" + url + "'></iframe>";
 		
 		// After Loaded
 		this.onLoaded();
@@ -7107,12 +7336,12 @@ VCO.Media.GoogleDoc = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.GooglePlus
+/*	TL.Media.GooglePlus
 ================================================== */
 
-VCO.Media.GooglePlus = VCO.Media.extend({
+TL.Media.GooglePlus = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -7124,7 +7353,7 @@ VCO.Media.GooglePlus = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-googleplus", this._el.content);
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-googleplus", this._el.content);
 		
 		// Get Media ID
 		this.media_id = this.data.url;
@@ -7148,12 +7377,12 @@ VCO.Media.GooglePlus = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.IFrame
+/*	TL.Media.IFrame
 ================================================== */
 
-VCO.Media.IFrame = VCO.Media.extend({
+TL.Media.IFrame = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -7165,7 +7394,7 @@ VCO.Media.IFrame = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-iframe", this._el.content);
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe", this._el.content);
 		
 		// Get Media ID
 		this.media_id = this.data.url;
@@ -7188,70 +7417,67 @@ VCO.Media.IFrame = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.Image
+/*	TL.Media.Image
 	Produces image assets.
 	Takes a data object and populates a dom object
 ================================================== */
 
-VCO.Media.Image = VCO.Media.extend({
-	
-	includes: [VCO.Events],
-	
+TL.Media.Image = TL.Media.extend({
+
+	includes: [TL.Events],
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var self = this,
-			image_class = "vco-media-item vco-media-image vco-media-shadow";
+			image_class = "tl-media-item tl-media-image tl-media-shadow";
 		// Loading Message
 		this.loadingMessage();
-		
+
 		if (this.data.url.match(/.png(\?.*)?$/)) {
-			image_class = "vco-media-item vco-media-image"
+			image_class = "tl-media-item tl-media-image"
 		}
-		
+
 		// Link
 		if (this.data.link) {
-			this._el.content_link 				= VCO.Dom.create("a", "", this._el.content);
+			this._el.content_link 				= TL.Dom.create("a", "", this._el.content);
 			this._el.content_link.href 			= this.data.link;
 			this._el.content_link.target 		= "_blank";
-			this._el.content_item				= VCO.Dom.create("img", image_class, this._el.content_link);
+			this._el.content_item				= TL.Dom.create("img", image_class, this._el.content_link);
 		} else {
-			this._el.content_item				= VCO.Dom.create("img", image_class, this._el.content);
+			this._el.content_item				= TL.Dom.create("img", image_class, this._el.content);
 		}
-		
+
 		// Media Loaded Event
 		this._el.content_item.addEventListener('load', function(e) {
 			self.onMediaLoaded();
 		});
-		
-		this._el.content_item.src			= this._transformURL(this.data.url);
-		
+
+		this._el.content_item.src			= TL.Util.transformImageURL(this.data.url);
+
 		this.onLoaded();
 	},
-	
-	_transformURL: function(url) {
-        return url.replace(/(.*)www.dropbox.com\/(.*)/, '$1dl.dropboxusercontent.com/$2')
-	},
-	
+
 	_updateMediaDisplay: function(layout) {
-		
-		
-		if(VCO.Browser.firefox) {
+
+
+		if(TL.Browser.firefox) {
 			//this._el.content_item.style.maxWidth = (this.options.width/2) - 40 + "px";
 			this._el.content_item.style.width = "auto";
 		}
-		
+
 	}
-	
+
 });
 
-/*	VCO.Media.Instagram
+
+/*	TL.Media.Instagram
 
 ================================================== */
 
-VCO.Media.Instagram = VCO.Media.extend({
+TL.Media.Instagram = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -7266,12 +7492,12 @@ VCO.Media.Instagram = VCO.Media.extend({
 		this.media_id = this.data.url.split("\/p\/")[1].split("/")[0];
 		
 		// Link
-		this._el.content_link 				= VCO.Dom.create("a", "", this._el.content);
+		this._el.content_link 				= TL.Dom.create("a", "", this._el.content);
 		this._el.content_link.href 			= this.data.url;
 		this._el.content_link.target 		= "_blank";
 		
 		// Photo
-		this._el.content_item				= VCO.Dom.create("img", "vco-media-item vco-media-image vco-media-instagram vco-media-shadow", this._el.content_link);
+		this._el.content_item				= TL.Dom.create("img", "tl-media-item tl-media-image tl-media-instagram tl-media-shadow", this._el.content_link);
 		
 		// Media Loaded Event
 		this._el.content_item.addEventListener('load', function(e) {
@@ -7296,7 +7522,7 @@ VCO.Media.Instagram = VCO.Media.extend({
 		api_url = "http://api.instagram.com/oembed?url=http://instagr.am/p/" + this.media_id + "&callback=?";
 		
 		// API Call
-		VCO.getJSON(api_url, function(d) {
+		TL.getJSON(api_url, function(d) {
 			self.data.credit_alternate = "<a href='" + d.author_url + "' target='_blank'>" + d.author_name + "</a>";
 			self.data.caption_alternate = d.title;
 			self.updateMeta();
@@ -7321,11 +7547,11 @@ VCO.Media.Instagram = VCO.Media.extend({
 });
 
 
-/*  VCO.Media.Map
+/*  TL.Media.Map
 ================================================== */
 
-VCO.Media.GoogleMap = VCO.Media.extend({
-	includes: [VCO.Events],
+TL.Media.GoogleMap = TL.Media.extend({
+	includes: [TL.Events],
 
 	_API_KEY: "AIzaSyB9dW8e_iRrATFa8g24qB6BDBGdkrLDZYI",
 	/*  Load the media
@@ -7336,13 +7562,13 @@ VCO.Media.GoogleMap = VCO.Media.extend({
 		this.loadingMessage();
 
 		// Create Dom element
-		this._el.content_item   = VCO.Dom.create("div", "vco-media-item vco-media-map vco-media-shadow", this._el.content);
+		this._el.content_item   = TL.Dom.create("div", "tl-media-item tl-media-map tl-media-shadow", this._el.content);
 
 		// Get Media ID
 		this.media_id = this.data.url;
 
 		// API Call
-		this.mapframe = VCO.Dom.create("iframe", "", this._el.content_item);
+		this.mapframe = TL.Dom.create("iframe", "", this._el.content_item);
 		window.stash = this;
 		this.mapframe.width       = "100%";
 		this.mapframe.height      = "100%";
@@ -7356,7 +7582,7 @@ VCO.Media.GoogleMap = VCO.Media.extend({
 
 	_updateMediaDisplay: function() {
 		if (this._state.loaded) {
-			var dimensions = VCO.Util.ratio.square({w:this._el.content_item.offsetWidth});
+			var dimensions = TL.Util.ratio.square({w:this._el.content_item.offsetWidth});
 			this._el.content_item.style.height = dimensions.h + "px";
 		}
 	},
@@ -7424,7 +7650,7 @@ VCO.Media.GoogleMap = VCO.Media.extend({
 					mapmode = "streetview";
 				} else {
 				}
-				return (url_root + "/embed/v1/" + mapmode + VCO.Util.getParamString(param_string));
+				return (url_root + "/embed/v1/" + mapmode + TL.Util.getParamString(param_string));
 			}
 
 
@@ -7477,13 +7703,13 @@ VCO.Media.GoogleMap = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.Profile
+/*	TL.Media.Profile
 
 ================================================== */
 
-VCO.Media.Profile = VCO.Media.extend({
+TL.Media.Profile = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -7491,7 +7717,7 @@ VCO.Media.Profile = VCO.Media.extend({
 		// Loading Message
 		this.loadingMessage();
 		
-		this._el.content_item				= VCO.Dom.create("img", "vco-media-item vco-media-image vco-media-profile vco-media-shadow", this._el.content);
+		this._el.content_item				= TL.Dom.create("img", "tl-media-item tl-media-image tl-media-profile tl-media-shadow", this._el.content);
 		this._el.content_item.src			= this.data.url;
 		
 		this.onLoaded();
@@ -7500,29 +7726,29 @@ VCO.Media.Profile = VCO.Media.extend({
 	_updateMediaDisplay: function(layout) {
 		
 		
-		if(VCO.Browser.firefox) {
+		if(TL.Browser.firefox) {
 			this._el.content_item.style.maxWidth = (this.options.width/2) - 40 + "px";
 		}
 	}
 	
 });
 
-/*	VCO.Media.SLider
+/*	TL.Media.SLider
 	Produces a Slider
 	Takes a data object and populates a dom object
 	TODO
 	Placeholder
 ================================================== */
 
-VCO.Media.Slider = VCO.Media.extend({
+TL.Media.Slider = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		
-		this._el.content_item				= VCO.Dom.create("img", "vco-media-item vco-media-image", this._el.content);
+		this._el.content_item				= TL.Dom.create("img", "tl-media-item tl-media-image", this._el.content);
 		this._el.content_item.src			= this.data.url;
 		
 		this.onLoaded();
@@ -7530,12 +7756,12 @@ VCO.Media.Slider = VCO.Media.extend({
 	
 });
 
-/*	VCO.Media.SoundCloud
+/*	TL.Media.SoundCloud
 ================================================== */
 
-VCO.Media.SoundCloud = VCO.Media.extend({
+TL.Media.SoundCloud = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -7547,7 +7773,7 @@ VCO.Media.SoundCloud = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-iframe vco-media-soundcloud vco-media-shadow", this._el.content);
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-soundcloud tl-media-shadow", this._el.content);
 		
 		// Get Media ID
 		this.media_id = this.data.url;
@@ -7556,7 +7782,7 @@ VCO.Media.SoundCloud = VCO.Media.extend({
 		api_url = "http://soundcloud.com/oembed?url=" + this.media_id + "&format=js&callback=?"
 		
 		// API Call
-		VCO.getJSON(api_url, function(d) {
+		TL.getJSON(api_url, function(d) {
 			self.createMedia(d);
 		});
 		
@@ -7572,12 +7798,12 @@ VCO.Media.SoundCloud = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.Spotify
+/*	TL.Media.Spotify
 ================================================== */
 
-VCO.Media.Spotify = VCO.Media.extend({
+TL.Media.Spotify = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -7589,7 +7815,7 @@ VCO.Media.Spotify = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-iframe vco-media-spotify", this._el.content);
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-spotify", this._el.content);
 		
 		// Get Media ID
 		if (this.data.url.match("open.spotify.com/track/")) {
@@ -7606,7 +7832,7 @@ VCO.Media.Spotify = VCO.Media.extend({
 		// API URL
 		api_url = "http://embed.spotify.com/?uri=" + this.media_id + "&theme=white&view=coverart";
 				
-		this.player = VCO.Dom.create("iframe", "vco-media-shadow", this._el.content_item);
+		this.player = TL.Dom.create("iframe", "tl-media-shadow", this._el.content_item);
 		this.player.width 		= "100%";
 		this.player.height 		= "100%";
 		this.player.frameBorder = "0";
@@ -7623,7 +7849,7 @@ VCO.Media.Spotify = VCO.Media.extend({
 			_player_height = 0,
 			_player_width = 0;
 			
-		if (VCO.Browser.mobile) {
+		if (TL.Browser.mobile) {
 			_height = (this.options.height/2);
 		} else {
 			_height = this.options.height - this.options.credit_height - this.options.caption_height - 30;
@@ -7664,12 +7890,12 @@ VCO.Media.Spotify = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.Storify
+/*	TL.Media.Storify
 ================================================== */
 
-VCO.Media.Storify = VCO.Media.extend({
+TL.Media.Storify = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -7680,7 +7906,7 @@ VCO.Media.Storify = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-iframe vco-media-storify", this._el.content);
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-storify", this._el.content);
 		
 		// Get Media ID
 		this.media_id = this.data.url;
@@ -7705,9 +7931,9 @@ VCO.Media.Storify = VCO.Media.extend({
 });
 
 
-VCO.Media.Text = VCO.Class.extend({
+TL.Media.Text = TL.Class.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	// DOM ELEMENTS
 	_el: {
@@ -7720,7 +7946,7 @@ VCO.Media.Text = VCO.Class.extend({
 	
 	// Data
 	data: {
-		uniqueid: 			"",
+		unique_id: 			"",
 		headline: 			"headline",
 		text: 				"text"
 	},
@@ -7734,13 +7960,13 @@ VCO.Media.Text = VCO.Class.extend({
 	================================================== */
 	initialize: function(data, options, add_to_container) {
 		
-		VCO.Util.setData(this, data);
+		TL.Util.setData(this, data);
 		
 		// Merge Options
-		VCO.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.options, options);
 		
-		this._el.container = VCO.Dom.create("div", "vco-text");
-		this._el.container.id = this.data.uniqueid;
+		this._el.container = TL.Dom.create("div", "tl-text");
+		this._el.container.id = this.data.unique_id;
 		
 		this._initLayout();
 		
@@ -7796,18 +8022,18 @@ VCO.Media.Text = VCO.Class.extend({
 	_initLayout: function () {
 		
 		// Create Layout
-		this._el.content_container			= VCO.Dom.create("div", "vco-text-content-container", this._el.container);
+		this._el.content_container			= TL.Dom.create("div", "tl-text-content-container", this._el.container);
 		
 		// Date
-		this._el.date 				= VCO.Dom.create("h3", "vco-headline-date", this._el.content_container);
+		this._el.date 				= TL.Dom.create("h3", "tl-headline-date", this._el.content_container);
 		
 		// Headline
 		if (this.data.headline != "") {
-			var headline_class = "vco-headline";
+			var headline_class = "tl-headline";
 			if (this.options.title) {
-				headline_class = "vco-headline vco-headline-title";
+				headline_class = "tl-headline tl-headline-title";
 			}
-			this._el.headline				= VCO.Dom.create("h2", headline_class, this._el.content_container);
+			this._el.headline				= TL.Dom.create("h2", headline_class, this._el.content_container);
 			this._el.headline.innerHTML		= this.data.headline;
 		}
 		
@@ -7815,9 +8041,9 @@ VCO.Media.Text = VCO.Class.extend({
 		if (this.data.text != "") {
 			var text_content = "";
 			
-			text_content 					+= VCO.Util.htmlify(VCO.Util.linkify(this.data.text));
+			text_content 					+= TL.Util.htmlify(TL.Util.linkify(this.data.text));
 						
-			this._el.content				= VCO.Dom.create("div", "vco-text-content", this._el.content_container);
+			this._el.content				= TL.Dom.create("div", "tl-text-content", this._el.content_container);
 			this._el.content.innerHTML		= text_content;
 		}
 		
@@ -7831,13 +8057,13 @@ VCO.Media.Text = VCO.Class.extend({
 	
 });
 
-/*	VCO.Media.Twitter
+/*	TL.Media.Twitter
 	Produces Twitter Display
 ================================================== */
 
-VCO.Media.Twitter = VCO.Media.extend({
+TL.Media.Twitter = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -7849,8 +8075,8 @@ VCO.Media.Twitter = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item = VCO.Dom.create("div", "vco-media-twitter", this._el.content);
-		this._el.content_container.className = "vco-media-content-container vco-media-content-container-text";
+		this._el.content_item = TL.Dom.create("div", "tl-media-twitter", this._el.content);
+		this._el.content_container.className = "tl-media-content-container tl-media-content-container-text";
 		
 		// Get Media ID
 		if (this.data.url.match("status\/")) {
@@ -7865,7 +8091,7 @@ VCO.Media.Twitter = VCO.Media.extend({
 		api_url = "https://api.twitter.com/1/statuses/oembed.json?id=" + this.media_id + "&omit_script=true&include_entities=true&callback=?";
 		
 		// API Call
-		VCO.ajax({
+		TL.ajax({
 			type: 'GET',
 			url: api_url,
 			dataType: 'json', //json data type
@@ -7897,7 +8123,7 @@ VCO.Media.Twitter = VCO.Media.extend({
 		tweet_status_date 	= tweet_status_temp.split("\"\>")[1].split("<\/a>")[0];
 		
 		// Open links in new window
-		tweet_text = tweet_text.replace(/<a href/ig, '<a class="vco-makelink" target="_blank" href');
+		tweet_text = tweet_text.replace(/<a href/ig, '<a class="tl-makelink" target="_blank" href');
 
 		// 	TWEET CONTENT
 		tweet += tweet_text;
@@ -7908,7 +8134,7 @@ VCO.Media.Twitter = VCO.Media.extend({
 		tweet += "<div class='author'>";
 		tweet += "<a class='screen-name url' href='" + d.author_url + "' target='_blank'>";
 		tweet += "<span class='avatar'></span>";
-		tweet += "<span class='fn'>" + d.author_name + " <span class='vco-icon-twitter'></span></span>";
+		tweet += "<span class='fn'>" + d.author_name + " <span class='tl-icon-twitter'></span></span>";
 		tweet += "<span class='nickname'>@" + tweetuser + "<span class='thumbnail-inline'></span></span>";
 		tweet += "</a>";
 		tweet += "</div>";
@@ -7936,12 +8162,12 @@ VCO.Media.Twitter = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.Vimeo
+/*	TL.Media.Vimeo
 ================================================== */
 
-VCO.Media.Vimeo = VCO.Media.extend({
+TL.Media.Vimeo = TL.Media.extend({
 
-	includes: [VCO.Events],
+	includes: [TL.Events],
 
 	/*	Load the media
 	================================================== */
@@ -7953,15 +8179,15 @@ VCO.Media.Vimeo = VCO.Media.extend({
 		this.loadingMessage();
 
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-iframe vco-media-vimeo vco-media-shadow", this._el.content);
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-vimeo tl-media-shadow", this._el.content);
 
 		// Get Media ID
 		this.media_id = this.data.url.split(/video\/|\/\/vimeo\.com\//)[1].split(/[?&]/)[0];
 
 		// API URL
-		api_url = "http://player.vimeo.com/video/" + this.media_id + "?api=1&title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff";
+		api_url = "https://player.vimeo.com/video/" + this.media_id + "?api=1&title=0&amp;byline=0&amp;portrait=0&amp;color=ffffff";
 
-		this.player = VCO.Dom.create("iframe", "", this._el.content_item);
+		this.player = TL.Dom.create("iframe", "", this._el.content_item);
 
 		// Media Loaded Event
 		this.player.addEventListener('load', function(e) {
@@ -7979,14 +8205,14 @@ VCO.Media.Vimeo = VCO.Media.extend({
 
 	// Update Media Display
 	_updateMediaDisplay: function() {
-		this._el.content_item.style.height = VCO.Util.ratio.r16_9({w:this._el.content_item.offsetWidth}) + "px";
+		this._el.content_item.style.height = TL.Util.ratio.r16_9({w:this._el.content_item.offsetWidth}) + "px";
 
 	},
 
 	_stopMedia: function() {
 
 		try {
-			this.player.contentWindow.postMessage(JSON.stringify({method: "pause"}), "http://player.vimeo.com");
+			this.player.contentWindow.postMessage(JSON.stringify({method: "pause"}), "https://player.vimeo.com");
 		}
 		catch(err) {
 			trace(err);
@@ -7996,13 +8222,13 @@ VCO.Media.Vimeo = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.Vine
+/*	TL.Media.Vine
 
 ================================================== */
 
-VCO.Media.Vine = VCO.Media.extend({
+TL.Media.Vine = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -8014,7 +8240,7 @@ VCO.Media.Vine = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-iframe vco-media-vine vco-media-shadow", this._el.content);
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-iframe tl-media-vine tl-media-shadow", this._el.content);
 		
 		// Get Media ID
 		this.media_id = this.data.url.split("vine.co/v/")[1];
@@ -8031,21 +8257,21 @@ VCO.Media.Vine = VCO.Media.extend({
 	
 	// Update Media Display
 	_updateMediaDisplay: function() {
-		var size = VCO.Util.ratio.square({w:this._el.content_item.offsetWidth , h:this.options.height});
+		var size = TL.Util.ratio.square({w:this._el.content_item.offsetWidth , h:this.options.height});
 		this._el.content_item.style.height = size.h + "px";
 	}
 	
 });
 
 
-/*	VCO.Media.Website
+/*	TL.Media.Website
 	Uses Embedly
 	http://embed.ly/docs/api/extract/endpoints/1/extract
 ================================================== */
 
-VCO.Media.Website = VCO.Media.extend({
+TL.Media.Website = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -8056,18 +8282,37 @@ VCO.Media.Website = VCO.Media.extend({
 		
 		// Get Media ID
 		this.media_id = this.data.url.replace(/.*?:\/\//g, "");
-		// API URL
-		api_url = "http://api.embed.ly/1/extract?key=" + this.options.api_key_embedly + "&url=" + this.media_id + "&callback=?";
-		
-		// API Call
-		VCO.getJSON(api_url, function(d) {
-			self.createMedia(d);
-		});
-		
-		
+
+		if (this.options.api_key_embedly) {
+			// API URL
+			api_url = "http://api.embed.ly/1/extract?key=" + this.options.api_key_embedly + "&url=" + this.media_id + "&callback=?";
+			
+			// API Call
+			TL.getJSON(api_url, function(d) {
+				self.createMedia(d);
+			});
+		} else {
+			this.createCardContent();
+		}
 	},
 	
-	createMedia: function(d) {
+	createCardContent: function() {
+		(function(w, d){
+			var id='embedly-platform', n = 'script';
+			if (!d.getElementById(id)){
+			 w.embedly = w.embedly || function() {(w.embedly.q = w.embedly.q || []).push(arguments);};
+			 var e = d.createElement(n); e.id = id; e.async=1;
+			 e.src = ('https:' === document.location.protocol ? 'https' : 'http') + '://cdn.embedly.com/widgets/platform.js';
+			 var s = d.getElementsByTagName(n)[0];
+			 s.parentNode.insertBefore(e, s);
+			}
+		})(window, document);
+
+		var content = "<a href=\"" + this.data.url + "\" class=\"embedly-card\">" + this.data.url + "</a>";
+		this._setContent(content);
+
+	},
+	createMedia: function(d) { // this costs API credits...
 		var content = "";
 		
 		
@@ -8078,17 +8323,24 @@ VCO.Media.Website = VCO.Media.extend({
 				content		+=	"<img src='" + d.images[0].url + "' />";
 			}
 		}
-		content		+=	"<img class='vco-media-website-icon' src='" + d.favicon_url + "' />";
-		content		+=	"<span class='vco-media-website-description'>" + d.provider_name + "</span><br/>";
+		if (d.favicon_url) {
+			content		+=	"<img class='tl-media-website-icon' src='" + d.favicon_url + "' />";
+		}
+		content		+=	"<span class='tl-media-website-description'>" + d.provider_name + "</span><br/>";
 		content		+=	"<p>" + d.description + "</p>";
 		
+		this._setContent(content);
+	},
+
+	_setContent: function(content) {
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-website", this._el.content);
-		this._el.content_container.className = "vco-media-content-container vco-media-content-container-text";
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-website", this._el.content);
+		this._el.content_container.className = "tl-media-content-container tl-media-content-container-text";
 		this._el.content_item.innerHTML = content;
 		
 		// After Loaded
 		this.onLoaded();
+
 	},
 	
 	updateMediaDisplay: function() {
@@ -8103,12 +8355,12 @@ VCO.Media.Website = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.Wikipedia
+/*	TL.Media.Wikipedia
 ================================================== */
 
-VCO.Media.Wikipedia = VCO.Media.extend({
+TL.Media.Wikipedia = TL.Media.extend({
 	
-	includes: [VCO.Events],
+	includes: [TL.Events],
 	
 	/*	Load the media
 	================================================== */
@@ -8121,8 +8373,8 @@ VCO.Media.Wikipedia = VCO.Media.extend({
 		this.loadingMessage();
 		
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-wikipedia", this._el.content);
-		this._el.content_container.className = "vco-media-content-container vco-media-content-container-text";
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-wikipedia", this._el.content);
+		this._el.content_container.className = "tl-media-content-container tl-media-content-container-text";
 		
 		// Get Media ID
 		this.media_id	 = this.data.url.split("wiki\/")[1].split("#")[0].replace("_", " ");
@@ -8130,11 +8382,10 @@ VCO.Media.Wikipedia = VCO.Media.extend({
 		api_language	 = this.data.url.split("//")[1].split(".wikipedia")[0];
 		
 		// API URL
-		api_url = "http://" + api_language + ".wikipedia.org/w/api.php?action=query&prop=extracts&redirects=&titles=" + this.media_id + "&exintro=1&format=json&callback=?";
-		
+		api_url = "http://" + api_language + ".wikipedia.org/w/api.php?action=query&prop=extracts|pageimages&redirects=&titles=" + this.media_id + "&exintro=1&format=json&callback=?";
+
 		// API Call
-		
-		VCO.ajax({
+		TL.ajax({
 			type: 'GET',
 			url: api_url,
 			dataType: 'json', //json data type
@@ -8155,19 +8406,21 @@ VCO.Media.Wikipedia = VCO.Media.extend({
 		var wiki = "";
 		
 		if (d.query) {
-			var content,
+			var content = "",
 				wiki = {
 					entry: {},
 					title: "",
 					text: "",
 					extract: "",
 					paragraphs: 1,
+					page_image: "",
 					text_array: []
 				};
 			
-			wiki.entry		 = VCO.Util.getObjectAttributeByIndex(d.query.pages, 0);
+			wiki.entry		 = TL.Util.getObjectAttributeByIndex(d.query.pages, 0);
 			wiki.extract	 = wiki.entry.extract;
 			wiki.title		 = wiki.entry.title;
+			wiki.page_image	 = wiki.entry.thumbnail;
 			
 			if (wiki.extract.match("<p>")) {
 				wiki.text_array = wiki.extract.split("<p>");
@@ -8180,9 +8433,16 @@ VCO.Media.Wikipedia = VCO.Media.extend({
 					wiki.text	+= "<p>" + wiki.text_array[i+1];
 				}
 			}
-			content		=	"<span class='vco-icon-wikipedia'></span>";
-			content		+=	"<div class='vco-wikipedia-title'><h4><a href='" + this.data.url + "' target='_blank'>" + wiki.title + "</a></h4>";
-			content		+=	"<span class='vco-wikipedia-source'>" + this._('wikipedia') + "</span></div>";
+
+			
+			content		+=	"<span class='tl-icon-wikipedia'></span>";
+			content		+=	"<div class='tl-wikipedia-title'><h4><a href='" + this.data.url + "' target='_blank'>" + wiki.title + "</a></h4>";
+			content		+=	"<span class='tl-wikipedia-source'>" + this._('wikipedia') + "</span></div>";
+			
+			if (wiki.page_image) {
+				//content 	+= 	"<img class='tl-wikipedia-pageimage' src='" + wiki.page_image.source +"'>";
+			}
+
 			content		+=	wiki.text;
 			
 			if (wiki.extract.match("REDIRECT")) {
@@ -8210,34 +8470,34 @@ VCO.Media.Wikipedia = VCO.Media.extend({
 });
 
 
-/*	VCO.Media.YouTube
+/*	TL.Media.YouTube
 ================================================== */
 
-VCO.Media.YouTube = VCO.Media.extend({
-	
-	includes: [VCO.Events],
-	
+TL.Media.YouTube = TL.Media.extend({
+
+	includes: [TL.Events],
+
 	/*	Load the media
 	================================================== */
 	_loadMedia: function() {
 		var self = this,
 			url_vars;
-		
-		// Loading Message 
+
+		// Loading Message
 		this.loadingMessage();
-		
+
 		this.youtube_loaded = false;
-		
+
 		// Create Dom element
-		this._el.content_item	= VCO.Dom.create("div", "vco-media-item vco-media-youtube vco-media-shadow", this._el.content);
-		this._el.content_item.id = VCO.Util.unique_ID(7)
-		
+		this._el.content_item	= TL.Dom.create("div", "tl-media-item tl-media-youtube tl-media-shadow", this._el.content);
+		this._el.content_item.id = TL.Util.unique_ID(7)
+
 		// URL Vars
-		url_vars = VCO.Util.getUrlVars(this.data.url);
-		
+		url_vars = TL.Util.getUrlVars(this.data.url);
+
 		// Get Media ID
 		this.media_id = {};
-		
+
 		if (this.data.url.match('v=')) {
 			this.media_id.id	= url_vars["v"];
 		} else if (this.data.url.match('\/embed\/')) {
@@ -8247,75 +8507,43 @@ VCO.Media.YouTube = VCO.Media.extend({
 		} else {
 			trace("YOUTUBE IN URL BUT NOT A VALID VIDEO");
 		}
-		
-		this.media_id.start		= url_vars["t"];
-		this.media_id.hd		= url_vars["hd"];
-		
-		
+
+		this.media_id.start		= TL.Util.parseYouTubeTime(url_vars["t"]);
+		this.media_id.hd		= Boolean(typeof(url_vars["hd"]) != 'undefined');
+
+
 		// API Call
-		VCO.Load.js('https://www.youtube.com/player_api', function() {
+		TL.Load.js('https://www.youtube.com/iframe_api', function() {
 			self.createMedia();
 		});
-		
+
 	},
-	
+
 	// Update Media Display
 	_updateMediaDisplay: function() {
 		//this.el.content_item = document.getElementById(this._el.content_item.id);
-		this._el.content_item.style.height = VCO.Util.ratio.r16_9({w:this.options.width}) + "px";
+		this._el.content_item.style.height = TL.Util.ratio.r16_9({w:this.options.width}) + "px";
 		this._el.content_item.style.width = this.options.width + "px";
 	},
-	
+
 	_stopMedia: function() {
 		if (this.youtube_loaded) {
 			try {
-				this.player.pauseVideo();
+			    if(this.player.getPlayerState() == YT.PlayerState.PLAYING) {
+			        this.player.pauseVideo();
+			    }
 			}
 			catch(err) {
 				trace(err);
 			}
-			
+
 		}
 	},
-	
 	createMedia: function() {
 		var self = this;
-		
-		// Determine Start of Media
-		if (typeof(this.media_id.start) != 'undefined') {
-			
-			var vidstart			= this.media_id.start.toString(),
-				vid_start_minutes	= 0,
-				vid_start_seconds	= 0;
-				
-			if (vidstart.match('m')) {
-				vid_start_minutes = parseInt(vidstart.split("m")[0], 10);
-				vid_start_seconds = parseInt(vidstart.split("m")[1].split("s")[0], 10);
-				this.media_id.start = (vid_start_minutes * 60) + vid_start_seconds;
-			} else {
-				this.media_id.start = 0;
-			}
-		} else {
-			this.media_id.start = 0;
-		}
-		
-		// Determine HD
-		if (typeof(this.media_id.hd) != 'undefined') {
-			this.media_id.hd = true;
-		} else {
-			this.media_id.hd = false;
-		}
-		
-		this.createPlayer();
-		
-			
-	},
-	
-	createPlayer: function() {
-		var self = this;
-		
+
 		clearTimeout(this.timer);
-		
+
 		if(typeof YT != 'undefined' && typeof YT.Player != 'undefined') {
 			// Create Player
 			this.player = new YT.Player(this._el.content_item.id, {
@@ -8341,37 +8569,39 @@ VCO.Media.YouTube = VCO.Media.extend({
 			});
 		} else {
 			this.timer = setTimeout(function() {
-				self.createPlayer();
+				self.createMedia();
 			}, 1000);
 		}
-		
 	},
-	
+
 	/*	Events
 	================================================== */
 	onPlayerReady: function(e) {
 		this.youtube_loaded = true;
 		this._el.content_item = document.getElementById(this._el.content_item.id);
 		this.onMediaLoaded();
-		
+
 	},
-	
+
 	onStateChange: function(e) {
-		
+        if(e.data == YT.PlayerState.ENDED) {
+            e.target.seekTo(0);
+            e.target.pauseVideo();
+        }				
 	}
 
-	
+
 });
 
 
-/*	VCO.Slide
+/*	TL.Slide
 	Creates a slide. Takes a data object and
 	populates the slide with content.
 ================================================== */
 
-VCO.Slide = VCO.Class.extend({
+TL.Slide = TL.Class.extend({
 	
-	includes: [VCO.Events, VCO.DomMixins, VCO.I18NMixins],
+	includes: [TL.Events, TL.DomMixins, TL.I18NMixins],
 	
 	_el: {},
 	
@@ -8413,7 +8643,7 @@ VCO.Slide = VCO.Class.extend({
 		
 		// Data
 		this.data = {
-			uniqueid: 				null,
+			unique_id: 				null,
 			background: 			null,
 			start_date: 			null,
 			end_date: 				null,
@@ -8427,7 +8657,7 @@ VCO.Slide = VCO.Class.extend({
 			// animation
 			duration: 			1000,
 			slide_padding_lr: 	40,
-			ease: 				VCO.Ease.easeInSpline,
+			ease: 				TL.Ease.easeInSpline,
 			width: 				600,
 			height: 			600,
 			skinny_size: 		650,
@@ -8441,8 +8671,8 @@ VCO.Slide = VCO.Class.extend({
 		this.animator = {};
 		
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
-		VCO.Util.mergeData(this.data, data);
+		TL.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.data, data);
 		
 		this._initLayout();
 		this._initEvents();
@@ -8453,7 +8683,7 @@ VCO.Slide = VCO.Class.extend({
 	/*	Adding, Hiding, Showing etc
 	================================================== */
 	show: function() {
-		this.animator = VCO.Animate(this._el.slider_container, {
+		this.animator = TL.Animate(this._el.slider_container, {
 			left: 		-(this._el.container.offsetWidth * n) + "px",
 			duration: 	this.options.duration,
 			easing: 	this.options.ease
@@ -8513,6 +8743,10 @@ VCO.Slide = VCO.Class.extend({
 	},
 
 	getFormattedDate: function() {
+
+		if (TL.Util.trim(this.data.display_date).length > 0) {
+			return this.data.display_date;
+		}
 		var date_text = "";
 		
 		if(!this.has.title) {
@@ -8534,24 +8768,24 @@ VCO.Slide = VCO.Class.extend({
 	================================================== */
 	_initLayout: function () {
 		// Create Layout
-		this._el.container 				= VCO.Dom.create("div", "vco-slide");
+		this._el.container 				= TL.Dom.create("div", "tl-slide");
 		
 		if (this.has.title) {
-			this._el.container.className = "vco-slide vco-slide-titleslide";
+			this._el.container.className = "tl-slide tl-slide-titleslide";
 		}
 		
-		if (this.data.uniqueid) {
-			this._el.container.id 		= this.data.uniqueid;
+		if (this.data.unique_id) {
+			this._el.container.id 		= this.data.unique_id;
 		}
-		this._el.scroll_container 		= VCO.Dom.create("div", "vco-slide-scrollable-container", this._el.container);
-		this._el.content_container		= VCO.Dom.create("div", "vco-slide-content-container", this._el.scroll_container);
-		this._el.content				= VCO.Dom.create("div", "vco-slide-content", this._el.content_container);
-		this._el.background				= VCO.Dom.create("div", "vco-slide-background", this._el.container);
+		this._el.scroll_container 		= TL.Dom.create("div", "tl-slide-scrollable-container", this._el.container);
+		this._el.content_container		= TL.Dom.create("div", "tl-slide-content-container", this._el.scroll_container);
+		this._el.content				= TL.Dom.create("div", "tl-slide-content", this._el.content_container);
+		this._el.background				= TL.Dom.create("div", "tl-slide-background", this._el.container);
 		// Style Slide Background
 		if (this.data.background) {
 			if (this.data.background.url) {
 				this.has.background.image 					= true;
-				this._el.container.className 				+= ' vco-full-image-background';
+				this._el.container.className 				+= ' tl-full-image-background';
 				//this._el.container.style.backgroundImage="url('" + this.data.background.url + "')";
 				this.has.background.color_value 			= "#000";
 				this._el.background.style.backgroundImage 	= "url('" + this.data.background.url + "')";
@@ -8559,14 +8793,14 @@ VCO.Slide = VCO.Class.extend({
 			}
 			if (this.data.background.color) {
 				this.has.background.color 					= true;
-				this._el.container.className 				+= ' vco-full-color-background';
+				this._el.container.className 				+= ' tl-full-color-background';
 				this.has.background.color_value 			= this.data.background.color;
 				//this._el.container.style.backgroundColor = this.data.background.color;
 				//this._el.background.style.backgroundColor 	= this.data.background.color;
 				//this._el.background.style.display 			= "block";
 			}
 			if (this.data.background.text_background) {
-				this._el.container.className 				+= ' vco-text-background';
+				this._el.container.className 				+= ' tl-text-background';
 			}
 			
 		} 
@@ -8588,7 +8822,7 @@ VCO.Slide = VCO.Class.extend({
 		if (this.has.media) {
 			
 			// Determine the media type
-			this.data.media.mediatype 	= VCO.MediaType(this.data.media);
+			this.data.media.mediatype 	= TL.MediaType(this.data.media);
 			this.options.media_name 	= this.data.media.mediatype.name;
 			this.options.media_type 	= this.data.media.mediatype.type;
 			
@@ -8599,7 +8833,7 @@ VCO.Slide = VCO.Class.extend({
 		
 		// Create Text
 		if (this.has.text || this.has.headline) {
-			this._text = new VCO.Media.Text(this.data.text, {title:this.has.title,language: this.options.language});
+			this._text = new TL.Media.Text(this.data.text, {title:this.has.title,language: this.options.language});
 			this._text.addDateText(this.getFormattedDate());
 		}
 		
@@ -8607,17 +8841,17 @@ VCO.Slide = VCO.Class.extend({
 		
 		// Add to DOM
 		if (!this.has.text && !this.has.headline && this.has.media) {
-			this._el.container.className += ' vco-slide-media-only';
+			this._el.container.className += ' tl-slide-media-only';
 			this._media.addTo(this._el.content);
 		} else if (this.has.headline && this.has.media && !this.has.text) {
-			this._el.container.className += ' vco-slide-media-only';
+			this._el.container.className += ' tl-slide-media-only';
 			this._text.addTo(this._el.content);
 			this._media.addTo(this._el.content);
 		} else if (this.has.text && this.has.media) {
 			this._media.addTo(this._el.content);
 			this._text.addTo(this._el.content);
 		} else if (this.has.text || this.has.headline) {
-			this._el.container.className += ' vco-slide-text-only';
+			this._el.container.className += ' tl-slide-text-only';
 			this._text.addTo(this._el.content);
 		}
 		
@@ -8644,7 +8878,7 @@ VCO.Slide = VCO.Class.extend({
 		
 		content_width = this.options.width - (this.options.slide_padding_lr * 2);
 		
-		if(VCO.Browser.mobile && (this.options.width <= this.options.skinny_size)) {
+		if(TL.Browser.mobile && (this.options.width <= this.options.skinny_size)) {
 			content_padding_left = 0;
 			content_padding_right = 0;
 			content_width = this.options.width;
@@ -8688,15 +8922,15 @@ VCO.Slide = VCO.Class.extend({
 });
 
 
-/*	VCO.SlideNav
+/*	TL.SlideNav
 	encapsulate DOM display/events for the 
 	'next' and 'previous' buttons on a slide.
 ================================================== */
 // TODO null out data
 
-VCO.SlideNav = VCO.Class.extend({
+TL.SlideNav = TL.Class.extend({
 	
-	includes: [VCO.Events, VCO.DomMixins],
+	includes: [TL.Events, TL.DomMixins],
 	
 	_el: {},
 	
@@ -8730,13 +8964,13 @@ VCO.SlideNav = VCO.Class.extend({
 		this.animator = null;
 		
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
-		VCO.Util.mergeData(this.data, data);
+		TL.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.data, data);
 		
 		
-		this._el.container = VCO.Dom.create("div", "vco-slidenav-" + this.options.direction);
+		this._el.container = TL.Dom.create("div", "tl-slidenav-" + this.options.direction);
 		
-		if (VCO.Browser.mobile) {
+		if (TL.Browser.mobile) {
 			this._el.container.setAttribute("ontouchstart"," ");
 		}
 		
@@ -8771,9 +9005,9 @@ VCO.SlideNav = VCO.Class.extend({
 	================================================== */
 	setColor: function(inverted) {
 		if (inverted) {
-			this._el.content_container.className = 'vco-slidenav-content-container vco-slidenav-inverted';
+			this._el.content_container.className = 'tl-slidenav-content-container tl-slidenav-inverted';
 		} else {
-			this._el.content_container.className = 'vco-slidenav-content-container';
+			this._el.content_container.className = 'tl-slidenav-content-container';
 		}
 	},
 	
@@ -8787,22 +9021,22 @@ VCO.SlideNav = VCO.Class.extend({
 	================================================== */
 	_update: function(d) {
 		// update data
-		this.data = VCO.Util.mergeData(this.data, d);
+		this.data = TL.Util.mergeData(this.data, d);
 		
 		// Title
-		this._el.title.innerHTML = VCO.Util.unlinkify(this.data.title);
+		this._el.title.innerHTML = TL.Util.unlinkify(this.data.title);
 		
 		// Date
-		this._el.description.innerHTML	= VCO.Util.unlinkify(this.data.date);
+		this._el.description.innerHTML	= TL.Util.unlinkify(this.data.date);
 	},
 	
 	_initLayout: function () {
 		
 		// Create Layout
-		this._el.content_container			= VCO.Dom.create("div", "vco-slidenav-content-container", this._el.container);
-		this._el.icon						= VCO.Dom.create("div", "vco-slidenav-icon", this._el.content_container);
-		this._el.title						= VCO.Dom.create("div", "vco-slidenav-title", this._el.content_container);
-		this._el.description				= VCO.Dom.create("div", "vco-slidenav-description", this._el.content_container);
+		this._el.content_container			= TL.Dom.create("div", "tl-slidenav-content-container", this._el.container);
+		this._el.icon						= TL.Dom.create("div", "tl-slidenav-icon", this._el.content_container);
+		this._el.title						= TL.Dom.create("div", "tl-slidenav-title", this._el.content_container);
+		this._el.description				= TL.Dom.create("div", "tl-slidenav-description", this._el.content_container);
 		
 		this._el.icon.innerHTML				= "&nbsp;"
 		
@@ -8810,7 +9044,7 @@ VCO.SlideNav = VCO.Class.extend({
 	},
 	
 	_initEvents: function () {
-		VCO.DomEvent.addListener(this._el.container, 'click', this._onMouseClick, this);
+		TL.DomEvent.addListener(this._el.container, 'click', this._onMouseClick, this);
 	}
 	
 	
@@ -8831,9 +9065,9 @@ VCO.SlideNav = VCO.Class.extend({
 	
 ================================================== */
 
-VCO.StorySlider = VCO.Class.extend({
+TL.StorySlider = TL.Class.extend({
 	
-	includes: VCO.Events,
+	includes: TL.Events,
 	
 	/*	Private Methods
 	================================================== */
@@ -8878,13 +9112,13 @@ VCO.StorySlider = VCO.Class.extend({
 			layout: 				"portrait",
 			width: 					600,
 			height: 				600,
-			default_bg_color: 		{r:256, g:256, b:256},
+			default_bg_color: 		{r:255, g:255, b:255},
 			slide_padding_lr: 		40, 			// padding on slide of slide
 			start_at_slide: 		1,
 			slide_default_fade: 	"0%", 			// landscape fade
 			// animation
 			duration: 				1000,
-			ease: 					VCO.Ease.easeInOutQuint,
+			ease: 					TL.Ease.easeInOutQuint,
 			// interaction
 			dragging: 				true,
 			trackResize: 			true
@@ -8893,10 +9127,10 @@ VCO.StorySlider = VCO.Class.extend({
 		// Main element ID
 		if (typeof elem === 'object') {
 			this._el.container = elem;
-			this.options.id = VCO.Util.unique_ID(6, "vco");
+			this.options.id = TL.Util.unique_ID(6, "tl");
 		} else {
 			this.options.id = elem;
-			this._el.container = VCO.Dom.get(elem);
+			this._el.container = TL.Dom.get(elem);
 		}
 
 		if (!this._el.container.id) {
@@ -8907,8 +9141,8 @@ VCO.StorySlider = VCO.Class.extend({
 		this.animator = null;
 		
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
-		VCO.Util.mergeData(this.data, data);
+		TL.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.data, data);
 		
 		if (init) {
 			this.init();
@@ -8936,7 +9170,7 @@ VCO.StorySlider = VCO.Class.extend({
 	},
 
 	_createSlide: function(d, title_slide, n) {
-		var slide = new VCO.Slide(d, this.options, title_slide);
+		var slide = new TL.Slide(d, this.options, title_slide);
 		this._addSlide(slide);
 		if(n < 0) { 
 		    this._slides.push(slide);
@@ -8947,8 +9181,8 @@ VCO.StorySlider = VCO.Class.extend({
 
 	_createSlides: function(array) {
 		for (var i = 0; i < array.length; i++) {
-			if (array[i].uniqueid == "") {
-				array[i].uniqueid = VCO.Util.unique_ID(6, "vco-slide");
+			if (array[i].unique_id == "") {
+				array[i].unique_id = TL.Util.unique_ID(6, "tl-slide");
 			}
             this._createSlide(array[i], false, -1);
 		}
@@ -8968,7 +9202,7 @@ VCO.StorySlider = VCO.Class.extend({
     _findSlideIndex: function(n) {
         var _n = n;
 		if (typeof n == 'string' || n instanceof String) {
-			_n = VCO.Util.findArrayNumberByUniqueID(n, this._slides, "uniqueid");
+			_n = TL.Util.findArrayNumberByUniqueID(n, this._slides, "unique_id");
 		}
 		return _n;
     },
@@ -9017,7 +9251,7 @@ VCO.StorySlider = VCO.Class.extend({
 		}
 		
 		if (n < this._slides.length && n >= 0) {			
-			this.current_id = this._slides[n].data.uniqueid;
+			this.current_id = this._slides[n].data.unique_id;
 
 			// Stop animation
 			if (this.animator) {
@@ -9031,7 +9265,7 @@ VCO.StorySlider = VCO.Class.extend({
 				this._el.slider_container.style.left = -(this.slide_spacing * n) + "px";
 				this._onSlideChange(displayupdate);
 			} else {
-				this.animator = VCO.Animate(this._el.slider_container, {
+				this.animator = TL.Animate(this._el.slider_container, {
 					left: 		-(this.slide_spacing * n) + "px",
 					duration: 	this.options.duration,
 					easing: 	this.options.ease,
@@ -9106,7 +9340,7 @@ VCO.StorySlider = VCO.Class.extend({
 	
 	showNav: function(nav_obj, show) {
 		
-		if (this.options.width <= 500 && VCO.Browser.mobile) {
+		if (this.options.width <= 500 && TL.Browser.mobile) {
 			
 		} else {
 			if (show) {
@@ -9118,35 +9352,34 @@ VCO.StorySlider = VCO.Class.extend({
 		}
 	},
 	
+ 
+
 	changeBackground: function(bg) {
-		
 		var bg_color = {r:256, g:256, b:256},
-			bg_color_rgb,
-			bg_percent_start 	= this.options.slide_default_fade,
-			bg_percent_end 		= "15%",
-			bg_alpha_end 		= "0.87",
-			bg_css 				= "";
+			bg_color_rgb;
 			
-		if (bg.color_value) {
-			bg_color		= VCO.Util.hexToRgb(bg.color_value);
+		if (bg.color_value && bg.color_value != "") {
+			bg_color = TL.Util.hexToRgb(bg.color_value);
 			if (!bg_color) {
 				trace("Invalid color value " + bg.color_value);
 				bg_color = this.options.default_bg_color;	
 			}
 		} else {
 			bg_color = this.options.default_bg_color;
+			bg.color_value = "rgb(" + bg_color.r + " , " + bg_color.g + ", " + bg_color.b + ")";
 		}
 		
 		bg_color_rgb 	= bg_color.r + "," + bg_color.g + "," + bg_color.b;
 		this._el.background.style.backgroundImage = "none";
 		
+
 		if (bg.color_value) {
 			this._el.background.style.backgroundColor = bg.color_value;
 		} else {
 			this._el.background.style.backgroundColor = "transparent";
 		}
 		
-		if (bg_color.r < 255 && bg_color.g < 255 && bg_color.b < 255 || bg.image) {
+		if (bg_color.r < 255 || bg_color.g < 255 || bg_color.b < 255 || bg.image) {
 			this._nav.next.setColor(true);
 			this._nav.previous.setColor(true);
 		} else {
@@ -9154,7 +9387,6 @@ VCO.StorySlider = VCO.Class.extend({
 			this._nav.previous.setColor(false);
 		}
 	},
-	
 	/*	Private Methods
 	================================================== */
 	
@@ -9220,13 +9452,13 @@ VCO.StorySlider = VCO.Class.extend({
 	================================================== */
 	_initLayout: function () {
 		
-		this._el.container.className += ' vco-storyslider';
+		this._el.container.className += ' tl-storyslider';
 		
 		// Create Layout
-		this._el.slider_container_mask		= VCO.Dom.create('div', 'vco-slider-container-mask', this._el.container);
-		this._el.background 				= VCO.Dom.create('div', 'vco-slider-background vco-animate', this._el.container); 
-		this._el.slider_container			= VCO.Dom.create('div', 'vco-slider-container vcoanimate', this._el.slider_container_mask);
-		this._el.slider_item_container		= VCO.Dom.create('div', 'vco-slider-item-container', this._el.slider_container);
+		this._el.slider_container_mask		= TL.Dom.create('div', 'tl-slider-container-mask', this._el.container);
+		this._el.background 				= TL.Dom.create('div', 'tl-slider-background tl-animate', this._el.container); 
+		this._el.slider_container			= TL.Dom.create('div', 'tl-slider-container tlanimate', this._el.slider_container_mask);
+		this._el.slider_item_container		= TL.Dom.create('div', 'tl-slider-item-container', this._el.slider_container);
 		
 		
 		// Update Size
@@ -9234,8 +9466,8 @@ VCO.StorySlider = VCO.Class.extend({
 		this.options.height = this._el.container.offsetHeight;
 		
 		// Create Navigation
-		this._nav.previous = new VCO.SlideNav({title: "Previous", description: "description"}, {direction:"previous"});
-		this._nav.next = new VCO.SlideNav({title: "Next",description: "description"}, {direction:"next"});
+		this._nav.previous = new TL.SlideNav({title: "Previous", description: "description"}, {direction:"previous"});
+		this._nav.next = new TL.SlideNav({title: "Next",description: "description"}, {direction:"next"});
 		
 		// add the navigation to the dom
 		this._nav.next.addTo(this._el.container);
@@ -9245,20 +9477,20 @@ VCO.StorySlider = VCO.Class.extend({
 				
 		this._el.slider_container.style.left="0px";
 		
-		if (VCO.Browser.touch) {
-			//this._el.slider_touch_mask = VCO.Dom.create('div', 'vco-slider-touch-mask', this._el.slider_container_mask);
-			this._swipable = new VCO.Swipable(this._el.slider_container_mask, this._el.slider_container, {
+		if (TL.Browser.touch) {
+			//this._el.slider_touch_mask = TL.Dom.create('div', 'tl-slider-touch-mask', this._el.slider_container_mask);
+			this._swipable = new TL.Swipable(this._el.slider_container_mask, this._el.slider_container, {
 				enable: {x:true, y:false},
 				snap: 	true
 			});
 			this._swipable.enable();
 			
 			// Message
-			this._message = new VCO.Message({}, {
-				message_class: 		"vco-message-full",
-				message_icon_class: "vco-icon-swipe-left"
+			this._message = new TL.Message({}, {
+				message_class: 		"tl-message-full",
+				message_icon_class: "tl-icon-swipe-left"
 			});
-			this._message.updateMessage("Swipe to Navigate<br><span class='vco-button'>OK</span>");
+			this._message.updateMessage("Swipe to Navigate<br><span class='tl-button'>OK</span>");
 			this._message.addTo(this._el.container);
 		}
 		
@@ -9326,7 +9558,7 @@ VCO.StorySlider = VCO.Class.extend({
 	
 	_onSlideChange: function(displayupdate) {		
 		if (!displayupdate) {
-			this.fire("change", {uniqueid: this.current_id});
+			this.fire("change", {unique_id: this.current_id});
 		}
 	},
 	
@@ -9347,7 +9579,7 @@ VCO.StorySlider = VCO.Class.extend({
 		}
 
 		if (type === 'contextmenu') {
-			VCO.DomEvent.preventDefault(e);
+			TL.DomEvent.preventDefault(e);
 		}
 		
 		this.fire(type, {
@@ -9363,13 +9595,13 @@ VCO.StorySlider = VCO.Class.extend({
 	
 });
 
-/*	VCO.TimeNav
+/*	TL.TimeNav
 	
 ================================================== */
   
-VCO.TimeNav = VCO.Class.extend({
+TL.TimeNav = TL.Class.extend({
 	
-	includes: [VCO.Events, VCO.DomMixins],
+	includes: [TL.Events, TL.DomMixins],
 	
 	_el: {},
 	
@@ -9396,7 +9628,7 @@ VCO.TimeNav = VCO.Class.extend({
 		if (typeof elem === 'object') {
 			this._el.container = elem;
 		} else {
-			this._el.container = VCO.Dom.get(elem);
+			this._el.container = TL.Dom.get(elem);
 		}
 		
 		// Data Object
@@ -9407,7 +9639,7 @@ VCO.TimeNav = VCO.Class.extend({
 			width: 					600,
 			height: 				600,
 			duration: 				1000,
-			ease: 					VCO.Ease.easeInOutQuint,
+			ease: 					TL.Ease.easeInOutQuint,
 			has_groups: 			false,
 			optimal_tick_width: 	50,
 			scale_factor: 			2, 				// How many screen widths wide should the timeline be
@@ -9450,8 +9682,8 @@ VCO.TimeNav = VCO.Class.extend({
 		this._swipable;
 		
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
-		VCO.Util.mergeData(this.data, data);
+		TL.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.data, data);
 			   
 		if (init) {
 			this.init();
@@ -9501,7 +9733,7 @@ VCO.TimeNav = VCO.Class.extend({
 		if (this.max_rows < 1) {
 			this.max_rows = 1;
 		}
-		return new VCO.TimeScale(this.data, {
+		return new TL.TimeScale(this.data, {
             display_width: this._el.container.offsetWidth,
             screen_multiplier: this.options.scale_factor,
             max_rows: this.max_rows
@@ -9515,25 +9747,36 @@ VCO.TimeNav = VCO.Class.extend({
 	},
 	
 	zoomIn: function() { // move the the next "higher" scale factor
-		var new_scale = VCO.Util.findNextGreater(this.options.zoom_sequence, this.options.scale_factor);
+		var new_scale = TL.Util.findNextGreater(this.options.zoom_sequence, this.options.scale_factor);
 		if (new_scale == this.options.zoom_sequence[this.options.zoom_sequence.length-1]) {
 			this.fire("zoomtoggle", {zoom:"in", show:false});
 		} else {
 			this.fire("zoomtoggle", {zoom:"in", show:true});
 		}
-		this.options.scale_factor = new_scale;
-		//this._updateDrawTimeline(true);
-		this.goToId(this.current_id, !this._updateDrawTimeline(true), true);
+		this.setZoomFactor(new_scale);
 	},
 	
 	zoomOut: function() { // move the the next "lower" scale factor
-		var new_scale = VCO.Util.findNextLesser(this.options.zoom_sequence, this.options.scale_factor);
+		var new_scale = TL.Util.findNextLesser(this.options.zoom_sequence, this.options.scale_factor);
 		if (new_scale == this.options.zoom_sequence[0]) {
 			this.fire("zoomtoggle", {zoom:"out", show:false});
 		} else {
 			this.fire("zoomtoggle", {zoom:"out", show:true});
 		}
-		this.options.scale_factor = new_scale;
+		this.setZoomFactor(new_scale);
+	},
+
+	setZoom: function(level) {
+		var zoom_factor = this.options.zoom_sequence[level];
+		if (typeof(zoom_factor) == 'number') {
+			this.setZoomFactor(zoom_factor);
+		} else {
+			console.log("Invalid zoom level. Please use a number between 0 and " + (this.options.zoom_sequence.length - 1));
+		}
+	},
+
+	setZoomFactor: function(factor) {
+		this.options.scale_factor = factor;
 		//this._updateDrawTimeline(true);
 		this.goToId(this.current_id, !this._updateDrawTimeline(true), true);
 	},
@@ -9553,7 +9796,7 @@ VCO.TimeNav = VCO.Class.extend({
 	},
 	
 	_createGroup: function(group_label) {
-		var group = new VCO.TimeGroup(group_label);
+		var group = new TL.TimeGroup(group_label);
 		this._addGroup(group);
 		this._groups.push(group);
 	},
@@ -9573,7 +9816,7 @@ VCO.TimeNav = VCO.Class.extend({
 				var group_y = Math.floor(group_rows * (group_height + this.options.marker_padding));
 				
 				this._groups[i].setRowPosition(group_y, this._calculated_row_height + this.options.marker_padding/2); 
-				this._groups[i].setAlternateRowColor(VCO.Util.isEven(i));
+				this._groups[i].setAlternateRowColor(TL.Util.isEven(i));
 				
 				group_rows += this._groups[i].data.rows;    // account for groups spanning multiple rows
 			}
@@ -9589,7 +9832,7 @@ VCO.TimeNav = VCO.Class.extend({
 	},
 
 	_createMarker: function(data, n) {
-		var marker = new VCO.TimeMarker(data, this.options);
+		var marker = new TL.TimeMarker(data, this.options);
 		this._addMarker(marker);
 		if(n < 0) {
 		    this._markers.push(marker);
@@ -9619,9 +9862,9 @@ VCO.TimeNav = VCO.Class.extend({
 		for (var i = 0; i < this._markers.length; i++) {
 			var pos = this.timescale.getPositionInfo(i);
 			if (fast) {
-				this._markers[i].setClass("vco-timemarker vco-timemarker-fast");
+				this._markers[i].setClass("tl-timemarker tl-timemarker-fast");
 			} else {
-				this._markers[i].setClass("vco-timemarker");
+				this._markers[i].setClass("tl-timemarker");
 			}
 			this._markers[i].setPosition({left:pos.start});
 			this._markers[i].setWidth(pos.width);
@@ -9660,7 +9903,7 @@ VCO.TimeNav = VCO.Class.extend({
 	_findMarkerIndex: function(n) {	
 	    var _n = -1;
 		if (typeof n == 'string' || n instanceof String) {
-			_n = VCO.Util.findArrayNumberByUniqueID(n, this._markers, "uniqueid", _n);
+			_n = TL.Util.findArrayNumberByUniqueID(n, this._markers, "unique_id", _n);
 		} 
 		return _n;
 	},
@@ -9707,16 +9950,16 @@ VCO.TimeNav = VCO.Class.extend({
 		}
 		
 		if (fast) {
-			this._el.slider.className = "vco-timenav-slider";
+			this._el.slider.className = "tl-timenav-slider";
 			this._el.slider.style.left = -this._markers[_n].getLeft() + (this.options.width/2) + "px";
 		} else {
 			if (css_animation) {
-				this._el.slider.className = "vco-timenav-slider vco-timenav-slider-animate";
+				this._el.slider.className = "tl-timenav-slider tl-timenav-slider-animate";
 				this.animate_css = true;
 				this._el.slider.style.left = -this._markers[_n].getLeft() + (this.options.width/2) + "px";
 			} else {
-				this._el.slider.className = "vco-timenav-slider";
-				this.animator = VCO.Animate(this._el.slider, {
+				this._el.slider.className = "tl-timenav-slider";
+				this.animator = TL.Animate(this._el.slider, {
 					left: 		-this._markers[_n].getLeft() + (this.options.width/2) + "px",
 					duration: 	_duration,
 					easing: 	_ease
@@ -9725,7 +9968,7 @@ VCO.TimeNav = VCO.Class.extend({
 		}
 		
 		if(n >= 0 && n < this._markers.length) {
-		    this.current_id = this._markers[n].data.uniqueid;
+		    this.current_id = this._markers[n].data.unique_id;
 		} else {
 		    this.current_id = '';
 		}
@@ -9751,8 +9994,8 @@ VCO.TimeNav = VCO.Class.extend({
 	
 	_onMarkerClick: function(e) {
 		// Go to the clicked marker
-		this.goToId(e.uniqueid);
-		this.fire("change", {uniqueid: e.uniqueid});
+		this.goToId(e.unique_id);
+		this.fire("change", {unique_id: e.unique_id});
 	},
 	
 	_onMouseScroll: function(e) {
@@ -9797,7 +10040,7 @@ VCO.TimeNav = VCO.Class.extend({
 		}
 		
 		if (this.animate_css) {
-			this._el.slider.className = "vco-timenav-slider";
+			this._el.slider.className = "tl-timenav-slider";
 			this.animate_css = false;
 		}
 		
@@ -9807,7 +10050,7 @@ VCO.TimeNav = VCO.Class.extend({
 	
 	_onDragMove: function(e) {
 		if (this.animate_css) {
-			this._el.slider.className = "vco-timenav-slider";
+			this._el.slider.className = "tl-timenav-slider";
 			this.animate_css = false;
 		}
 		
@@ -9856,7 +10099,7 @@ VCO.TimeNav = VCO.Class.extend({
 		// Check to see if redraw is needed
 		if (check_update) {
 			/* keep this aligned with _getTimeScale or reduce code duplication */
-			var temp_timescale = new VCO.TimeScale(this.data, {
+			var temp_timescale = new TL.TimeScale(this.data, {
 	            display_width: this._el.container.offsetWidth,
 	            screen_multiplier: this.options.scale_factor,
 	            max_rows: this.max_rows
@@ -9892,25 +10135,25 @@ VCO.TimeNav = VCO.Class.extend({
 	================================================== */
 	_initLayout: function () {
 		// Create Layout
-		this._el.attribution 				= VCO.Dom.create('div', 'vco-attribution', this._el.container);
-		this._el.line						= VCO.Dom.create('div', 'vco-timenav-line', this._el.container);
-		this._el.slider						= VCO.Dom.create('div', 'vco-timenav-slider', this._el.container);
-		this._el.slider_background			= VCO.Dom.create('div', 'vco-timenav-slider-background', this._el.slider);
-		this._el.marker_container_mask		= VCO.Dom.create('div', 'vco-timenav-container-mask', this._el.slider);
-		this._el.marker_container			= VCO.Dom.create('div', 'vco-timenav-container', this._el.marker_container_mask);
-		this._el.marker_item_container		= VCO.Dom.create('div', 'vco-timenav-item-container', this._el.marker_container);
-		this._el.timeaxis 					= VCO.Dom.create('div', 'vco-timeaxis', this._el.slider);
-		this._el.timeaxis_background 		= VCO.Dom.create('div', 'vco-timeaxis-background', this._el.container);
+		this._el.attribution 				= TL.Dom.create('div', 'tl-attribution', this._el.container);
+		this._el.line						= TL.Dom.create('div', 'tl-timenav-line', this._el.container);
+		this._el.slider						= TL.Dom.create('div', 'tl-timenav-slider', this._el.container);
+		this._el.slider_background			= TL.Dom.create('div', 'tl-timenav-slider-background', this._el.slider);
+		this._el.marker_container_mask		= TL.Dom.create('div', 'tl-timenav-container-mask', this._el.slider);
+		this._el.marker_container			= TL.Dom.create('div', 'tl-timenav-container', this._el.marker_container_mask);
+		this._el.marker_item_container		= TL.Dom.create('div', 'tl-timenav-item-container', this._el.marker_container);
+		this._el.timeaxis 					= TL.Dom.create('div', 'tl-timeaxis', this._el.slider);
+		this._el.timeaxis_background 		= TL.Dom.create('div', 'tl-timeaxis-background', this._el.container);
 		
 		
 		// Knight Lab Logo
-		this._el.attribution.innerHTML = "<a href='http://timeline.knightlab.com' target='_blank'><span class='vco-knightlab-logo'></span>Timeline JS</a>"
+		this._el.attribution.innerHTML = "<a href='http://timeline.knightlab.com' target='_blank'><span class='tl-knightlab-logo'></span>Timeline JS</a>"
 		
 		// Time Axis
-		this.timeaxis = new VCO.TimeAxis(this._el.timeaxis, this.options);
+		this.timeaxis = new TL.TimeAxis(this._el.timeaxis, this.options);
 		
 		// Swipable
-		this._swipable = new VCO.Swipable(this._el.slider_background, this._el.slider, {
+		this._swipable = new TL.Swipable(this._el.slider_background, this._el.slider, {
 			enable: {x:true, y:false},
 			constraint: {top: false,bottom: false,left: (this.options.width/2),right: false},
 			snap: 	false
@@ -9924,8 +10167,8 @@ VCO.TimeNav = VCO.Class.extend({
 		this._swipable.on('dragmove', this._onDragMove, this);
 		
 		// Scroll Events
-		VCO.DomEvent.addListener(this._el.container, 'mousewheel', this._onMouseScroll, this);
-		VCO.DomEvent.addListener(this._el.container, 'DOMMouseScroll', this._onMouseScroll, this);
+		TL.DomEvent.addListener(this._el.container, 'mousewheel', this._onMouseScroll, this);
+		TL.DomEvent.addListener(this._el.container, 'DOMMouseScroll', this._onMouseScroll, this);
 	},
 	
 	_initData: function() {
@@ -9938,20 +10181,20 @@ VCO.TimeNav = VCO.Class.extend({
 	
 });
 
-/*	VCO.TimeMarker
-	
+/*	TL.TimeMarker
+
 ================================================== */
 
-VCO.TimeMarker = VCO.Class.extend({
-	
-	includes: [VCO.Events, VCO.DomMixins],
-	
+TL.TimeMarker = TL.Class.extend({
+
+	includes: [TL.Events, TL.DomMixins],
+
 	_el: {},
-	
+
 	/*	Constructor
 	================================================== */
 	initialize: function(data, options) {
-		
+
 		// DOM Elements
 		this._el = {
 			container: {},
@@ -9964,19 +10207,19 @@ VCO.TimeMarker = VCO.Class.extend({
 			text: {},
 			media: {},
 		};
-	
+
 		// Components
 		this._text			= {};
-	
+
 		// State
 		this._state = {
 			loaded: 		false
 		};
-		
-		
+
+
 		// Data
 		this.data = {
-			uniqueid: 			"",
+			unique_id: 			"",
 			background: 		null,
 			date: {
 				year:			0,
@@ -9995,262 +10238,262 @@ VCO.TimeMarker = VCO.Class.extend({
 			},
 			media: 				null
 		};
-	
+
 		// Options
 		this.options = {
 			duration: 			1000,
-			ease: 				VCO.Ease.easeInSpline,
+			ease: 				TL.Ease.easeInSpline,
 			width: 				600,
 			height: 			600,
 			marker_width_min: 	100 			// Minimum Marker Width
 		};
-		
+
 		// Actively Displaying
 		this.active = false;
-		
+
 		// Animation Object
 		this.animator = {};
-		
+
 		// End date
 		this.has_end_date = false;
-		
+
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
-		VCO.Util.mergeData(this.data, data);
-		
+		TL.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.data, data);
+
 		this._initLayout();
 		this._initEvents();
-		
-		
+
+
 	},
-	
+
 	/*	Adding, Hiding, Showing etc
 	================================================== */
 	show: function() {
 
 	},
-	
+
 	hide: function() {
-		
+
 	},
-	
+
 	setActive: function(is_active) {
 		this.active = is_active;
-		
+
 		if (this.active && this.has_end_date) {
-			this._el.container.className = 'vco-timemarker vco-timemarker-with-end vco-timemarker-active';
+			this._el.container.className = 'tl-timemarker tl-timemarker-with-end tl-timemarker-active';
 		} else if (this.active){
-			this._el.container.className = 'vco-timemarker vco-timemarker-active';
+			this._el.container.className = 'tl-timemarker tl-timemarker-active';
 		} else if (this.has_end_date){
-			this._el.container.className = 'vco-timemarker vco-timemarker-with-end';
+			this._el.container.className = 'tl-timemarker tl-timemarker-with-end';
 		} else {
-			this._el.container.className = 'vco-timemarker';
+			this._el.container.className = 'tl-timemarker';
 		}
 	},
-	
+
 	addTo: function(container) {
 		container.appendChild(this._el.container);
 	},
-	
+
 	removeFrom: function(container) {
 		container.removeChild(this._el.container);
 	},
-	
+
 	updateDisplay: function(w, h) {
 		this._updateDisplay(w, h);
 	},
-	
+
 	loadMedia: function() {
-		
+
 		if (this._media && !this._state.loaded) {
 			this._media.loadMedia();
 			this._state.loaded = true;
 		}
 	},
-	
+
 	stopMedia: function() {
 		if (this._media && this._state.loaded) {
 			this._media.stopMedia();
 		}
 	},
-	
+
 	getLeft: function() {
 		return this._el.container.style.left.slice(0, -2);
 	},
-	
+
 	getTime: function() { // TODO does this need to know about the end date?
 		return this.data.start_date.getTime();
 	},
-	
+
 	getEndTime: function() {
-		
+
 		if (this.data.end_date) {
 			return this.data.end_date.getTime();
 		} else {
 			return false;
 		}
 	},
-	
+
 	setHeight: function(h) {
 		var text_line_height = 12,
 			text_lines = 1;
-			
+
 		this._el.content_container.style.height = h  + "px";
 		this._el.timespan_content.style.height = h + "px";
 		// Handle Line height for better display of text
 		if (h <= 30) {
-			this._el.content.className = "vco-timemarker-content vco-timemarker-content-small";
+			this._el.content.className = "tl-timemarker-content tl-timemarker-content-small";
 		} else {
-			this._el.content.className = "vco-timemarker-content";
+			this._el.content.className = "tl-timemarker-content";
 		}
-		
+
 		if (h <= 56) {
-			VCO.DomUtil.addClass(this._el.content_container, "vco-timemarker-content-container-small");
+			TL.DomUtil.addClass(this._el.content_container, "tl-timemarker-content-container-small");
 		} else {
-			VCO.DomUtil.removeClass(this._el.content_container, "vco-timemarker-content-container-small");
+			TL.DomUtil.removeClass(this._el.content_container, "tl-timemarker-content-container-small");
 		}
-		
+
 		// Handle number of lines visible vertically
-		
-		if (VCO.Browser.webkit) {
+
+		if (TL.Browser.webkit) {
 			text_lines = Math.floor(h / (text_line_height + 2));
 			if (text_lines < 1) {
 				text_lines = 1;
 			}
-			this._text.className = "vco-headline";
+			this._text.className = "tl-headline";
 			this._text.style.webkitLineClamp = text_lines;
 		} else {
 			text_lines = h / text_line_height;
 			if (text_lines > 1) {
-				this._text.className = "vco-headline vco-headline-fadeout";
+				this._text.className = "tl-headline tl-headline-fadeout";
 			} else {
-				this._text.className = "vco-headline";
+				this._text.className = "tl-headline";
 			}
 			this._text.style.height = (text_lines * text_line_height)  + "px";
 		}
-		
+
 	},
-	
+
 	setWidth: function(w) {
 		if (this.data.end_date) {
 			this._el.container.style.width = w + "px";
-			
+
 			if (w > this.options.marker_width_min) {
 				this._el.content_container.style.width = w + "px";
-				this._el.content_container.className = "vco-timemarker-content-container vco-timemarker-content-container-long";
+				this._el.content_container.className = "tl-timemarker-content-container tl-timemarker-content-container-long";
 			} else {
 				this._el.content_container.style.width = this.options.marker_width_min + "px";
-				this._el.content_container.className = "vco-timemarker-content-container";
+				this._el.content_container.className = "tl-timemarker-content-container";
 			}
 		}
-		
+
 	},
-	
+
 	setClass: function(n) {
 		this._el.container.className = n;
 	},
-	
+
 	setRowPosition: function(n, remainder) {
 		this.setPosition({top:n});
 		this._el.timespan.style.height = remainder + "px";
-		
+
 		if (remainder < 56) {
-			//VCO.DomUtil.removeClass(this._el.content_container, "vco-timemarker-content-container-small");
+			//TL.DomUtil.removeClass(this._el.content_container, "tl-timemarker-content-container-small");
 		}
 	},
-	
+
 	/*	Events
 	================================================== */
 	_onMarkerClick: function(e) {
-		this.fire("markerclick", {uniqueid:this.data.uniqueid});
+		this.fire("markerclick", {unique_id:this.data.unique_id});
 	},
-	
+
 	/*	Private Methods
 	================================================== */
 	_initLayout: function () {
 		//trace(this.data)
 		// Create Layout
-		this._el.container 				= VCO.Dom.create("div", "vco-timemarker");
-		if (this.data.uniqueid) {
-			this._el.container.id 		= this.data.uniqueid + "-marker";
-		}
-		
-		if (this.data.end_date) {
-			this.has_end_date = true;
-			this._el.container.className = 'vco-timemarker vco-timemarker-with-end';
-		}
-		
-		this._el.timespan				= VCO.Dom.create("div", "vco-timemarker-timespan", this._el.container);
-		this._el.timespan_content		= VCO.Dom.create("div", "vco-timemarker-timespan-content", this._el.timespan);
-		this._el.content_container		= VCO.Dom.create("div", "vco-timemarker-content-container", this._el.container);
-		
-		this._el.content				= VCO.Dom.create("div", "vco-timemarker-content", this._el.content_container);
-		
-		this._el.line_left				= VCO.Dom.create("div", "vco-timemarker-line-left", this._el.timespan);
-		this._el.line_right				= VCO.Dom.create("div", "vco-timemarker-line-right", this._el.timespan);
-		
-		// Thumbnail or Icon
-		if (this.data.media) {
-			this._el.media_container	= VCO.Dom.create("div", "vco-timemarker-media-container", this._el.content);
-			
-			if (this.data.media.thumb && this.data.media.thumb != "") {
-				this._el.media				= VCO.Dom.create("img", "vco-timemarker-media", this._el.media_container);
-				this._el.media.src			= this.data.media.thumb;
-				
-			} else {
-				var media_type = VCO.MediaType(this.data.media).type;
-				this._el.media				= VCO.Dom.create("span", "vco-icon-" + media_type, this._el.media_container);
-				
-			}
-			
-		}
-		
-		
-		// Text
-		this._el.text					= VCO.Dom.create("div", "vco-timemarker-text", this._el.content);
-		this._text						= VCO.Dom.create("h2", "vco-headline", this._el.text);
-		if (this.data.text.headline && this.data.text.headline != "") {
-			this._text.innerHTML		= VCO.Util.unlinkify(this.data.text.headline);
-		} else if (this.data.text.text && this.data.text.text != "") {
-			this._text.innerHTML		= VCO.Util.unlinkify(this.data.text.text);
-		} else if (this.data.media.caption && this.data.media.caption != "") {
-			this._text.innerHTML		= VCO.Util.unlinkify(this.data.media.caption);
+		this._el.container 				= TL.Dom.create("div", "tl-timemarker");
+		if (this.data.unique_id) {
+			this._el.container.id 		= this.data.unique_id + "-marker";
 		}
 
-		
-		
+		if (this.data.end_date) {
+			this.has_end_date = true;
+			this._el.container.className = 'tl-timemarker tl-timemarker-with-end';
+		}
+
+		this._el.timespan				= TL.Dom.create("div", "tl-timemarker-timespan", this._el.container);
+		this._el.timespan_content		= TL.Dom.create("div", "tl-timemarker-timespan-content", this._el.timespan);
+		this._el.content_container		= TL.Dom.create("div", "tl-timemarker-content-container", this._el.container);
+
+		this._el.content				= TL.Dom.create("div", "tl-timemarker-content", this._el.content_container);
+
+		this._el.line_left				= TL.Dom.create("div", "tl-timemarker-line-left", this._el.timespan);
+		this._el.line_right				= TL.Dom.create("div", "tl-timemarker-line-right", this._el.timespan);
+
+		// Thumbnail or Icon
+		if (this.data.media) {
+			this._el.media_container	= TL.Dom.create("div", "tl-timemarker-media-container", this._el.content);
+
+			if (this.data.media.thumbnail && this.data.media.thumbnail != "") {
+				this._el.media				= TL.Dom.create("img", "tl-timemarker-media", this._el.media_container);
+				this._el.media.src			= TL.Util.transformImageURL(this.data.media.thumbnail);
+
+			} else {
+				var media_type = TL.MediaType(this.data.media).type;
+				this._el.media				= TL.Dom.create("span", "tl-icon-" + media_type, this._el.media_container);
+
+			}
+
+		}
+
+
+		// Text
+		this._el.text					= TL.Dom.create("div", "tl-timemarker-text", this._el.content);
+		this._text						= TL.Dom.create("h2", "tl-headline", this._el.text);
+		if (this.data.text.headline && this.data.text.headline != "") {
+			this._text.innerHTML		= TL.Util.unlinkify(this.data.text.headline);
+		} else if (this.data.text.text && this.data.text.text != "") {
+			this._text.innerHTML		= TL.Util.unlinkify(this.data.text.text);
+		} else if (this.data.media.caption && this.data.media.caption != "") {
+			this._text.innerHTML		= TL.Util.unlinkify(this.data.media.caption);
+		}
+
+
+
 		// Fire event that the slide is loaded
 		this.onLoaded();
-		
+
 	},
-	
+
 	_initEvents: function() {
-		VCO.DomEvent.addListener(this._el.container, 'click', this._onMarkerClick, this);
+		TL.DomEvent.addListener(this._el.container, 'click', this._onMarkerClick, this);
 	},
-	
+
 	// Update Display
 	_updateDisplay: function(width, height, layout) {
-		
+
 		if (width) {
 			this.options.width 					= width;
-		} 
+		}
 
 		if (height) {
 			this.options.height = height;
 		}
-		
+
 	}
-	
+
 });
 
 
-/*	VCO.TimeGroup
+/*	TL.TimeGroup
 	
 ================================================== */
  
-VCO.TimeGroup = VCO.Class.extend({
+TL.TimeGroup = TL.Class.extend({
 	
-	includes: [VCO.Events, VCO.DomMixins],
+	includes: [TL.Events, TL.DomMixins],
 	
 	_el: {},
 	
@@ -10278,10 +10521,10 @@ VCO.TimeGroup = VCO.Class.extend({
 		};
 		
 		
-		this._el.container = VCO.Dom.create("div", "vco-timegroup"); 
+		this._el.container = TL.Dom.create("div", "tl-timegroup"); 
 		
 		// Merge Data
-		VCO.Util.mergeData(this.data, data);
+		TL.Util.mergeData(this.data, data);
 		
 		// Animation
 		this.animator = {};
@@ -10311,9 +10554,9 @@ VCO.TimeGroup = VCO.Class.extend({
 	
 	setAlternateRowColor: function(alternate) {
 		if (alternate) {
-			this._el.container.className = "vco-timegroup vco-timegroup-alternate";
+			this._el.container.className = "tl-timegroup tl-timegroup-alternate";
 		} else {
-			this._el.container.className = "vco-timegroup";
+			this._el.container.className = "tl-timegroup";
 		}
 	},
 	
@@ -10331,14 +10574,14 @@ VCO.TimeGroup = VCO.Class.extend({
 	_initLayout: function () {
 		
 		// Create Layout
-		this._el.message = VCO.Dom.create("div", "vco-timegroup-message", this._el.container);
+		this._el.message = TL.Dom.create("div", "tl-timegroup-message", this._el.container);
 		this._el.message.innerHTML = this.data.label;
 		
 		
 	},
 	
 	_initEvents: function () {
-		VCO.DomEvent.addListener(this._el.container, 'click', this._onMouseClick, this);
+		TL.DomEvent.addListener(this._el.container, 'click', this._onMouseClick, this);
 	},
 	
 	// Update Display
@@ -10348,23 +10591,23 @@ VCO.TimeGroup = VCO.Class.extend({
 	
 });
 
-/*  VCO.TimeScale
+/*  TL.TimeScale
     Strategies for laying out the timenav
     make a new one if the slides change
 
-    TODOS: deal with clustering 
+    TODOS: deal with clustering
 ================================================== */
-VCO.TimeScale = VCO.Class.extend({
-    
+TL.TimeScale = TL.Class.extend({
+
     initialize: function (timeline_config, options) {
-        timeline_config = VCO.Util.extend({ // establish defaults
-            scale: 'javascript'
+        timeline_config = TL.Util.mergeData({ // establish defaults
+            scale: 'human'
         }, timeline_config);
 
         var slides = timeline_config.events;
         this._scale = timeline_config.scale;
 
-        options = VCO.Util.extend({ // establish defaults
+        options = TL.Util.mergeData({ // establish defaults
             display_width: 500,
             screen_multiplier: 3,
             max_rows: null
@@ -10377,34 +10620,62 @@ VCO.TimeScale = VCO.Class.extend({
         this._group_labels = undefined;
         this._positions = [];
         this._pixels_per_milli = 0;
-        
+
         this._earliest = slides[0].start_date.getTime();
         // TODO: should _latest be the end date if there is one?
         this._latest = slides[slides.length - 1].start_date.getTime();
         this._span_in_millis = this._latest - this._earliest;
-        if (this._span_in_millis <= 0) throw new Error("earliest event time is before or same as latest.")
+        if (this._span_in_millis < 0) {
+            throw new Error("earliest event time is before latest. Events should be sorted.")
+        } else if (this._span_in_millis == 0) {
+            this._span_in_millis = this._computeDefaultSpan(timeline_config);
+        }
         this._average = (this._span_in_millis)/slides.length;
 
         this._pixels_per_milli = this.getPixelWidth() / this._span_in_millis;
 
-        this._axis_helper = VCO.AxisHelper.getBestHelper(this);
+        this._axis_helper = TL.AxisHelper.getBestHelper(this);
 
         this._scaled_padding = (1/this.getPixelsPerTick()) * (this._display_width/2)
         this._computePositionInfo(slides, options.max_rows);
     },
-    
-    getGroupLabels: function() { /* 
+
+    _computeDefaultSpan: function(timeline_config) {
+        // this gets called when all events are at the same instant,
+        // or maybe when the span_in_millis is > 0 but still below a desired threshold
+        if (timeline_config.scale == 'human') {
+            var formats = {}
+            for (var i = 0; i < timeline_config.events.length; i++) {
+                var fmt = timeline_config.events[i].start_date.findBestFormat();
+                formats[fmt] = (formats[fmt]) ? formats[fmt] + 1 : 1;
+            };
+
+            for (var i = TL.Date.SCALES.length - 1; i >= 0; i--) {
+                if (formats.hasOwnProperty(TL.Date.SCALES[i][0])) {
+                    var scale = TL.Date.SCALES[TL.Date.SCALES.length - 1]; // default
+                    if (TL.Date.SCALES[i+1]) {
+                        scale = TL.Date.SCALES[i+1]; // one larger than the largest in our data
+                    }
+                    return scale[1]
+                }
+            };
+            return 365 * 24 * 60 * 60 * 1000; // default to a year?
+        }
+
+        return 200000; // what is the right handling for cosmo dates?
+    },
+    getGroupLabels: function() { /*
         return an array of objects, one per group, in the order (top to bottom) that the groups are expected to appear. Each object will have two properties:
             * label (the string as specified in one or more 'group' properties of events in the configuration)
-            * rows (the number of rows occupied by events associated with the label. ) 
+            * rows (the number of rows occupied by events associated with the label. )
         */
         return (this._group_labels || []);
     },
-    
+
     getScale: function() {
         return this._scale;
     },
-    
+
     getNumberOfRows: function() {
         return this._number_of_rows
     },
@@ -10415,8 +10686,8 @@ VCO.TimeScale = VCO.Class.extend({
 
     getPosition: function(time_in_millis) {
         // be careful using millis, as they won't scale to cosmological time.
-        // however, we're moving to make the arg to this whatever value 
-        // comes from VCO.Date.getTime() which could be made smart about that -- 
+        // however, we're moving to make the arg to this whatever value
+        // comes from TL.Date.getTime() which could be made smart about that --
         // so it may just be about the naming.
         return ( time_in_millis - this._earliest ) * this._pixels_per_milli
     },
@@ -10430,25 +10701,25 @@ VCO.TimeScale = VCO.Class.extend({
     },
 
     getTicks: function() {
-        return { 
-            major: this._axis_helper.getMajorTicks(this), 
+        return {
+            major: this._axis_helper.getMajorTicks(this),
             minor: this._axis_helper.getMinorTicks(this) }
     },
 
     getDateFromTime: function(t) {
-        if(this._scale == 'javascript') {
-            return new VCO.Date(t);
+        if(this._scale == 'human') {
+            return new TL.Date(t);
         } else if(this._scale == 'cosmological') {
-            return new VCO.BigDate(new VCO.BigYear(t));
-        }  
-        
+            return new TL.BigDate(new TL.BigYear(t));
+        }
+
         throw("Don't know how to get date from time for "+this._scale);
     },
-    
+
     getMajorScale: function() {
         return this._axis_helper.major.name;
     },
-    
+
     getMinorScale: function() {
         return this._axis_helper.minor.name;
     },
@@ -10462,8 +10733,8 @@ VCO.TimeScale = VCO.Class.extend({
                     groups.push(slides[i].group);
                 } else {
                     empty_group = true;
-                }            
-            } 
+                }
+            }
         };
         if (groups.length && empty_group) {
             groups.push('');
@@ -10473,141 +10744,141 @@ VCO.TimeScale = VCO.Class.extend({
 
     /*  Compute the marker row positions, minimizing the number of
         overlaps.
-        
+
         @positions = list of objects from this._positions
         @rows_left = number of rows available (assume > 0)
     */
     _computeRowInfo: function(positions, rows_left) {
         var lasts_in_row = [];
         var n_overlaps = 0;
-        
+
         for (var i = 0; i < positions.length; i++) {
-            var pos_info = positions[i];      
+            var pos_info = positions[i];
             var overlaps = [];
-                       
-            // See if we can add item to an existing row without 
-            // overlapping the previous item in that row      
+
+            // See if we can add item to an existing row without
+            // overlapping the previous item in that row
             delete pos_info.row;
-             
+
             for (var j = 0; j < lasts_in_row.length; j++) {
                 overlaps.push(lasts_in_row[j].end - pos_info.start);
                 if(overlaps[j] <= 0) {
                     pos_info.row = j;
                     lasts_in_row[j] = pos_info;
                     break;
-                }                        
+                }
             }
-            
+
             // If we couldn't add to an existing row without overlap...
-            if (typeof(pos_info.row) == 'undefined') {    
+            if (typeof(pos_info.row) == 'undefined') {
                 if (rows_left === null) {
                     // Make a new row
                     pos_info.row = lasts_in_row.length;
-                    lasts_in_row.push(pos_info);                  
+                    lasts_in_row.push(pos_info);
                 } else if (rows_left > 0) {
                     // Make a new row
                     pos_info.row = lasts_in_row.length;
-                    lasts_in_row.push(pos_info);  
+                    lasts_in_row.push(pos_info);
                     rows_left--;
                 } else {
                     // Add to existing row with minimum overlap.
                     var min_overlap = Math.min.apply(null, overlaps);
-                    var idx = overlaps.indexOf(min_overlap);                   
+                    var idx = overlaps.indexOf(min_overlap);
                     pos_info.row = idx;
                     if (pos_info.end > lasts_in_row[idx].end) {
-                        lasts_in_row[idx] = pos_info;                                          
+                        lasts_in_row[idx] = pos_info;
                     }
                     n_overlaps++;
-                }                        
-            }   
-        }   
-        
+                }
+            }
+        }
+
         return {n_rows: lasts_in_row.length, n_overlaps: n_overlaps};
-    },   
+    },
 
     /*  Compute marker positions.  If using groups, this._number_of_rows
         will never be less than the number of groups.
-        
+
         @max_rows = total number of available rows
         @default_marker_width should be in pixels
     */
     _computePositionInfo: function(slides, max_rows, default_marker_width) {
         default_marker_width = default_marker_width || 100;
-        
+
         var groups = [];
         var empty_group = false;
 
         // Set start/end/width; enumerate groups
         for (var i = 0; i < slides.length; i++) {
             var pos_info = {
-                start: this.getPosition(slides[i].start_date.getTime()) 
+                start: this.getPosition(slides[i].start_date.getTime())
             };
             this._positions.push(pos_info);
-            
+
             if (typeof(slides[i].end_date) != 'undefined') {
                 var end_pos = this.getPosition(slides[i].end_date.getTime());
                 pos_info.width = end_pos - pos_info.start;
                 if (pos_info.width > default_marker_width) {
-                    pos_info.end = pos_info.start + pos_info.width; 
+                    pos_info.end = pos_info.start + pos_info.width;
                 } else {
-                    pos_info.end = pos_info.start + default_marker_width; 
+                    pos_info.end = pos_info.start + default_marker_width;
                 }
             } else {
                 pos_info.width = default_marker_width;
                 pos_info.end = pos_info.start + default_marker_width;
             }
-            
+
             if(slides[i].group) {
                 if(groups.indexOf(slides[i].group) < 0) {
                     groups.push(slides[i].group);
-                }            
+                }
             } else {
                 empty_group = true;
             }
         }
 
-        if(!(groups.length)) {                       
-            var result = this._computeRowInfo(this._positions, max_rows);  
-            this._number_of_rows = result.n_rows;    
+        if(!(groups.length)) {
+            var result = this._computeRowInfo(this._positions, max_rows);
+            this._number_of_rows = result.n_rows;
         } else {
             if(empty_group) {
                 groups.push("");
             }
 
             // Init group info
-            var group_info = [];            
-            
+            var group_info = [];
+
             for(var i = 0; i < groups.length; i++) {
                 group_info[i] = {
                     label: groups[i],
                     idx: i,
-                    positions: [], 
+                    positions: [],
                     n_rows: 1,      // default
                     n_overlaps: 0
                 };
-            }       
-                             
+            }
+
             for(var i = 0; i < this._positions.length; i++) {
                 var pos_info = this._positions[i];
-                                
+
                 pos_info.group = groups.indexOf(slides[i].group || "");
                 pos_info.row = 0;
-                
+
                 var gi = group_info[pos_info.group];
                 for(var j = gi.positions.length - 1; j >= 0; j--) {
                     if(gi.positions[j].end > pos_info.start) {
                         gi.n_overlaps++;
-                    }                   
-                }   
-                
-                gi.positions.push(pos_info);                
+                    }
+                }
+
+                gi.positions.push(pos_info);
             }
-            
+
             var n_rows = groups.length; // start with 1 row per group
-          
+
             while(true) {
-                // Count free rows available              
-                var rows_left = Math.max(0, max_rows - n_rows);                
+                // Count free rows available
+                var rows_left = Math.max(0, max_rows - n_rows);
                 if(!rows_left) {
                     break;  // no free rows, nothing to do
                 }
@@ -10618,63 +10889,63 @@ VCO.TimeScale = VCO.Class.extend({
                         return -1;
                     } else if(a.n_overlaps < b.n_overlaps) {
                         return 1;
-                    } 
+                    }
                     return a.idx - b.idx;
-                });               
+                });
                 if(!group_info[0].n_overlaps) {
                     break; // no overlaps, nothing to do
                 }
-                                                
+
                 // Distribute free rows among groups with overlaps
                 var n_rows = 0;
                 for(var i = 0; i < group_info.length; i++) {
                     var gi = group_info[i];
-                    
+
                     if(gi.n_overlaps && rows_left) {
                         var res = this._computeRowInfo(gi.positions,  gi.n_rows + 1);
                         gi.n_rows = res.n_rows;     // update group info
-                        gi.n_overlaps = res.n_overlaps; 
+                        gi.n_overlaps = res.n_overlaps;
                         rows_left--;                // update rows left
-                    } 
-                    
-                    n_rows += gi.n_rows;            // update rows used          
+                    }
+
+                    n_rows += gi.n_rows;            // update rows used
                 }
-            } 
-                        
+            }
+
             // Set number of rows
             this._number_of_rows = n_rows;
-                                
+
             // Set group labels; offset row positions
             this._group_labels = [];
-            
-            group_info.sort(function(a, b) {return a.idx - b.idx; });               
-            
+
+            group_info.sort(function(a, b) {return a.idx - b.idx; });
+
             for(var i = 0, row_offset = 0; i < group_info.length; i++) {
                 this._group_labels.push({
                     label: group_info[i].label,
                     rows: group_info[i].n_rows
-                });   
-                 
+                });
+
                 for(var j = 0; j < group_info[i].positions.length; j++) {
                     var pos_info = group_info[i].positions[j];
                     pos_info.row += row_offset;
                 }
-                
-                row_offset += group_info[i].n_rows;       
+
+                row_offset += group_info[i].n_rows;
             }
-        }  
-        
+        }
+
     }
 });
 
 
-/*	VCO.TimeAxis
+/*	TL.TimeAxis
 	Display element for showing timescale ticks
 ================================================== */
 
-VCO.TimeAxis = VCO.Class.extend({
+TL.TimeAxis = TL.Class.extend({
 	
-	includes: [VCO.Events, VCO.DomMixins, VCO.I18NMixins],
+	includes: [TL.Events, TL.DomMixins, TL.I18NMixins],
 	
 	_el: {},
 	
@@ -10704,7 +10975,7 @@ VCO.TimeAxis = VCO.Class.extend({
 		// Options
 		this.options = {
 			duration: 				1000,
-			ease: 					VCO.Ease.easeInSpline,
+			ease: 					TL.Ease.easeInSpline,
 			width: 					600,
 			height: 				600
 		};
@@ -10724,9 +10995,9 @@ VCO.TimeAxis = VCO.Class.extend({
 		// Minor tick dom element array
 		this.major_ticks = [];
 		
-		// Date Format Lookup, map VCO.Date.SCALES names to...
+		// Date Format Lookup, map TL.Date.SCALES names to...
 		this.dateformat_lookup = {
-	        millisecond: 'time_milliseconds',     // ...VCO.Language.<code>.dateformats
+	        millisecond: 'time_milliseconds',     // ...TL.Language.<code>.dateformats
 	        second: 'time_short',
 	        minute: 'time_no_seconds_short',
 	        hour: 'time_no_minutes_short',
@@ -10736,7 +11007,7 @@ VCO.TimeAxis = VCO.Class.extend({
 	        decade: 'year',
 	        century: 'year',
 	        millennium: 'year', 
-	        age: 'compact',  // ...VCO.Language.<code>.bigdateformats
+	        age: 'compact',  // ...TL.Language.<code>.bigdateformats
 	        epoch: 'compact',
 	        era: 'compact',
 	        eon: 'compact',
@@ -10747,11 +11018,11 @@ VCO.TimeAxis = VCO.Class.extend({
 		if (typeof elem === 'object') {
 			this._el.container = elem;
 		} else {
-			this._el.container = VCO.Dom.get(elem);
+			this._el.container = TL.Dom.get(elem);
 		}
 		
 		// Merge Data and Options
-		VCO.Util.mergeData(this.options, options);
+		TL.Util.mergeData(this.options, options);
 		
 		this._initLayout();
 		this._initEvents();
@@ -10803,8 +11074,8 @@ VCO.TimeAxis = VCO.Class.extend({
 			}
 		}
 		// FADE OUT
-		this._el.major.className = "vco-timeaxis-major";
-		this._el.minor.className = "vco-timeaxis-minor";
+		this._el.major.className = "tl-timeaxis-major";
+		this._el.minor.className = "tl-timeaxis-minor";
 		this._el.major.style.opacity = 0;
 		this._el.minor.style.opacity = 0;
 		
@@ -10826,8 +11097,8 @@ VCO.TimeAxis = VCO.Class.extend({
 		this.positionTicks(timescale, optimal_tick_width, true);
 		
 		// FADE IN
-		this._el.major.className = "vco-timeaxis-major vco-animate-opacity vco-timeaxis-animate-opacity";
-		this._el.minor.className = "vco-timeaxis-minor vco-animate-opacity vco-timeaxis-animate-opacity";
+		this._el.major.className = "tl-timeaxis-major tl-animate-opacity tl-timeaxis-animate-opacity";
+		this._el.minor.className = "tl-timeaxis-minor tl-animate-opacity tl-timeaxis-animate-opacity";
 		this._el.major.style.opacity = 1;
 		this._el.minor.style.opacity = 1;
 	},
@@ -10845,15 +11116,15 @@ VCO.TimeAxis = VCO.Class.extend({
 		for (var i = 0; i < ts_ticks.length; i++) {
 			var ts_tick = ts_ticks[i];
 			if (!(ts_tick.getTime() in skip_times)) {
-				var tick = VCO.Dom.create("div", "vco-timeaxis-tick", tick_element),
-					tick_text 	= VCO.Dom.create("span", "vco-timeaxis-tick-text vco-animate-opacity", tick);
+				var tick = TL.Dom.create("div", "tl-timeaxis-tick", tick_element),
+					tick_text 	= TL.Dom.create("span", "tl-timeaxis-tick-text tl-animate-opacity", tick);
 				
 				tick_text.innerHTML = ts_tick.getDisplayDate(this.getLanguage(), dateformat);
 				
 				tick_elements.push({
 					tick:tick,
 					tick_text:tick_text,
-					display_text:ts_tick.getDisplayDate(this.getLanguage(), dateformat),
+					display_date:ts_tick.getDisplayDate(this.getLanguage(), dateformat),
 					date:ts_tick
 				});
 			}
@@ -10865,11 +11136,11 @@ VCO.TimeAxis = VCO.Class.extend({
 		
 		// Handle Animation
 		if (no_animate) {
-			this._el.major.className = "vco-timeaxis-major";
-			this._el.minor.className = "vco-timeaxis-minor";
+			this._el.major.className = "tl-timeaxis-major";
+			this._el.minor.className = "tl-timeaxis-minor";
 		} else {
-			this._el.major.className = "vco-timeaxis-major vco-timeaxis-animate";
-			this._el.minor.className = "vco-timeaxis-minor vco-timeaxis-animate";
+			this._el.major.className = "tl-timeaxis-major tl-timeaxis-animate";
+			this._el.minor.className = "tl-timeaxis-minor tl-timeaxis-animate";
 		}
 		
 		this._positionTickArray(this.major_ticks, timescale, optimal_tick_width);
@@ -10896,22 +11167,22 @@ VCO.TimeAxis = VCO.Class.extend({
 				
 				// Poition Ticks
 				tick.tick.style.left = timescale.getPosition(tick.date.getMillisecond()) + "px";
-				tick.tick_text.innerHTML = tick.display_text;
+				tick.tick_text.innerHTML = tick.display_date;
 				
 				// Handle density of ticks
 				if (fraction_of_array > 1) {
 					if (show >= fraction_of_array) {
 						show = 1;
 						tick.tick_text.style.opacity = 1;
-						tick.tick.className = "vco-timeaxis-tick";
+						tick.tick.className = "tl-timeaxis-tick";
 					} else {
 						show++;
 						tick.tick_text.style.opacity = 0;
-						tick.tick.className = "vco-timeaxis-tick vco-timeaxis-tick-hidden";
+						tick.tick.className = "tl-timeaxis-tick tl-timeaxis-tick-hidden";
 					}
 				} else {
 					tick.tick_text.style.opacity = 1;
-					tick.tick.className = "vco-timeaxis-tick";
+					tick.tick.className = "tl-timeaxis-tick";
 				}
 				
 			};
@@ -10925,9 +11196,9 @@ VCO.TimeAxis = VCO.Class.extend({
 	/*	Private Methods
 	================================================== */
 	_initLayout: function () {
-		this._el.content_container		= VCO.Dom.create("div", "vco-timeaxis-content-container", this._el.container);
-		this._el.major					= VCO.Dom.create("div", "vco-timeaxis-major", this._el.content_container);
-		this._el.minor					= VCO.Dom.create("div", "vco-timeaxis-minor", this._el.content_container);
+		this._el.content_container		= TL.Dom.create("div", "tl-timeaxis-content-container", this._el.container);
+		this._el.major					= TL.Dom.create("div", "tl-timeaxis-major", this._el.content_container);
+		this._el.minor					= TL.Dom.create("div", "tl-timeaxis-minor", this._el.content_container);
 		
 		// Fire event that the slide is loaded
 		this.onLoaded();
@@ -10953,12 +11224,12 @@ VCO.TimeAxis = VCO.Class.extend({
 });
 
 
-/*  VCO.AxisHelper
+/*  TL.AxisHelper
     Strategies for laying out the timenav
     markers and time axis
     Intended as a private class -- probably only known to TimeScale
 ================================================== */
-VCO.AxisHelper = VCO.Class.extend({
+TL.AxisHelper = TL.Class.extend({
     initialize: function (options) {
 		if (options) {
             this.scale = options.scale;
@@ -11019,8 +11290,8 @@ VCO.AxisHelper = VCO.Class.extend({
         }
     };
     
-    setHelpers('javascript', VCO.Date.SCALES);
-    setHelpers('cosmological', VCO.BigDate.SCALES);
+    setHelpers('human', TL.Date.SCALES);
+    setHelpers('cosmological', TL.BigDate.SCALES);
     
     cls.HELPERS = HELPERS;
     
@@ -11053,116 +11324,117 @@ VCO.AxisHelper = VCO.Class.extend({
         }
         return helpers[helpers.length - 1]; // last resort           
     }
-})(VCO.AxisHelper);
+})(TL.AxisHelper);
 
 
 /*  TimelineJS
 Designed and built by Zach Wise at KnightLab
-  
+
 This Source Code Form is subject to the terms of the Mozilla Public
 License, v. 2.0. If a copy of the MPL was not distributed with this
-file, You can obtain one at http://mozilla.org/MPL/2.0/.
-  
+file, You can obtain one at https://mozilla.org/MPL/2.0/.
+
 ================================================== */
-/* 
+/*
 TODO
-  
-*/ 
+
+*/
 
 /*  Required Files
 CodeKit Import
-http://incident57.com/codekit/
+https://incident57.com/codekit/
 ================================================== */
 
 // CORE
-	// @codekit-prepend "core/VCO.js";
-	// @codekit-prepend "core/VCO.Util.js";
-	// @codekit-prepend "data/VCO.Data.js";
-	// @codekit-prepend "core/VCO.Class.js";
-	// @codekit-prepend "core/VCO.Events.js";
-	// @codekit-prepend "core/VCO.Browser.js";
-	// @codekit-prepend "core/VCO.Load.js";
-	// @codekit-prepend "core/VCO.TimelineConfig.js";
-	// @codekit-prepend "core/VCO.ConfigFactory.js";
+	// @codekit-prepend "core/TL.js";
+	// @codekit-prepend "core/TL.Util.js";
+	// @codekit-prepend "data/TL.Data.js";
+	// @codekit-prepend "core/TL.Class.js";
+	// @codekit-prepend "core/TL.Events.js";
+	// @codekit-prepend "core/TL.Browser.js";
+	// @codekit-prepend "core/TL.Load.js";
+	// @codekit-prepend "core/TL.TimelineConfig.js";
+	// @codekit-prepend "core/TL.ConfigFactory.js";
 
 
 // LANGUAGE
-	// @codekit-prepend "language/VCO.Language.js";
-	// @codekit-prepend "language/VCO.I18NMixins.js";
+	// @codekit-prepend "language/TL.Language.js";
+	// @codekit-prepend "language/TL.I18NMixins.js";
 
 // ANIMATION
-	// @codekit-prepend "animation/VCO.Ease.js";
-	// @codekit-prepend "animation/VCO.Animate.js";
+	// @codekit-prepend "animation/TL.Ease.js";
+	// @codekit-prepend "animation/TL.Animate.js";
 
 // DOM
-	// @codekit-prepend "dom/VCO.Point.js";
-	// @codekit-prepend "dom/VCO.DomMixins.js";
-	// @codekit-prepend "dom/VCO.Dom.js";
-	// @codekit-prepend "dom/VCO.DomUtil.js";
-	// @codekit-prepend "dom/VCO.DomEvent.js";
-	// @codekit-prepend "dom/VCO.StyleSheet.js";
-  
+	// @codekit-prepend "dom/TL.Point.js";
+	// @codekit-prepend "dom/TL.DomMixins.js";
+	// @codekit-prepend "dom/TL.Dom.js";
+	// @codekit-prepend "dom/TL.DomUtil.js";
+	// @codekit-prepend "dom/TL.DomEvent.js";
+	// @codekit-prepend "dom/TL.StyleSheet.js";
+
 // Date
-	// @codekit-prepend "date/VCO.Date.js";
-	// @codekit-prepend "date/VCO.DateUtil.js";
+	// @codekit-prepend "date/TL.Date.js";
+	// @codekit-prepend "date/TL.DateUtil.js";
 
 // UI
-	// @codekit-prepend "ui/VCO.Draggable.js";
-	// @codekit-prepend "ui/VCO.Swipable.js";
-	// @codekit-prepend "ui/VCO.MenuBar.js";
-	// @codekit-prepend "ui/VCO.Message.js";
+	// @codekit-prepend "ui/TL.Draggable.js";
+	// @codekit-prepend "ui/TL.Swipable.js";
+	// @codekit-prepend "ui/TL.MenuBar.js";
+	// @codekit-prepend "ui/TL.Message.js";
 
 // MEDIA
-	// @codekit-prepend "media/VCO.MediaType.js";
-	// @codekit-prepend "media/VCO.Media.js";
+	// @codekit-prepend "media/TL.MediaType.js";
+	// @codekit-prepend "media/TL.Media.js";
 
 // MEDIA TYPES
-	// @codekit-prepend "media/types/VCO.Media.Blockquote.js";
-	// @codekit-prepend "media/types/VCO.Media.DailyMotion.js";
-	// @codekit-prepend "media/types/VCO.Media.DocumentCloud.js";
-	// @codekit-prepend "media/types/VCO.Media.Flickr.js";
-	// @codekit-prepend "media/types/VCO.Media.GoogleDoc.js";
-	// @codekit-prepend "media/types/VCO.Media.GooglePlus.js";
-	// @codekit-prepend "media/types/VCO.Media.IFrame.js";
-	// @codekit-prepend "media/types/VCO.Media.Image.js";
-	// @codekit-prepend "media/types/VCO.Media.Instagram.js";
-	// @codekit-prepend "media/types/VCO.Media.GoogleMap.js";
-	// @codekit-prepend "media/types/VCO.Media.Profile.js";
-	// @codekit-prepend "media/types/VCO.Media.Slider.js";
-	// @codekit-prepend "media/types/VCO.Media.SoundCloud.js";
-	// @codekit-prepend "media/types/VCO.Media.Spotify.js";
-	// @codekit-prepend "media/types/VCO.Media.Storify.js";
-	// @codekit-prepend "media/types/VCO.Media.Text.js";
-	// @codekit-prepend "media/types/VCO.Media.Twitter.js";
-	// @codekit-prepend "media/types/VCO.Media.Vimeo.js";
-	// @codekit-prepend "media/types/VCO.Media.Vine.js";
-	// @codekit-prepend "media/types/VCO.Media.Website.js";
-	// @codekit-prepend "media/types/VCO.Media.Wikipedia.js";
-	// @codekit-prepend "media/types/VCO.Media.YouTube.js";
+	// @codekit-prepend "media/types/TL.Media.Blockquote.js";
+	// @codekit-prepend "media/types/TL.Media.DailyMotion.js";
+	// @codekit-prepend "media/types/TL.Media.DocumentCloud.js";
+	// @codekit-prepend "media/types/TL.Media.Flickr.js";
+	// @codekit-prepend "media/types/TL.Media.GoogleDoc.js";
+	// @codekit-prepend "media/types/TL.Media.GooglePlus.js";
+	// @codekit-prepend "media/types/TL.Media.IFrame.js";
+	// @codekit-prepend "media/types/TL.Media.Image.js";
+	// @codekit-prepend "media/types/TL.Media.Instagram.js";
+	// @codekit-prepend "media/types/TL.Media.GoogleMap.js";
+	// @codekit-prepend "media/types/TL.Media.Profile.js";
+	// @codekit-prepend "media/types/TL.Media.Slider.js";
+	// @codekit-prepend "media/types/TL.Media.SoundCloud.js";
+	// @codekit-prepend "media/types/TL.Media.Spotify.js";
+	// @codekit-prepend "media/types/TL.Media.Storify.js";
+	// @codekit-prepend "media/types/TL.Media.Text.js";
+	// @codekit-prepend "media/types/TL.Media.Twitter.js";
+	// @codekit-prepend "media/types/TL.Media.Vimeo.js";
+	// @codekit-prepend "media/types/TL.Media.Vine.js";
+	// @codekit-prepend "media/types/TL.Media.Website.js";
+	// @codekit-prepend "media/types/TL.Media.Wikipedia.js";
+	// @codekit-prepend "media/types/TL.Media.YouTube.js";
 
 // STORYSLIDER
-	// @codekit-prepend "slider/VCO.Slide.js";
-	// @codekit-prepend "slider/VCO.SlideNav.js";
-	// @codekit-prepend "slider/VCO.StorySlider.js";
+	// @codekit-prepend "slider/TL.Slide.js";
+	// @codekit-prepend "slider/TL.SlideNav.js";
+	// @codekit-prepend "slider/TL.StorySlider.js";
 
 // TIMENAV
-	// @codekit-prepend "timenav/VCO.TimeNav.js"; 
-	// @codekit-prepend "timenav/VCO.TimeMarker.js";
-	// @codekit-prepend "timenav/VCO.TimeGroup.js";
-	// @codekit-prepend "timenav/VCO.TimeScale.js";
-	// @codekit-prepend "timenav/VCO.TimeAxis.js";
-	// @codekit-prepend "timenav/VCO.AxisHelper.js";
+	// @codekit-prepend "timenav/TL.TimeNav.js";
+	// @codekit-prepend "timenav/TL.TimeMarker.js";
+	// @codekit-prepend "timenav/TL.TimeGroup.js";
+	// @codekit-prepend "timenav/TL.TimeScale.js";
+	// @codekit-prepend "timenav/TL.TimeAxis.js";
+	// @codekit-prepend "timenav/TL.AxisHelper.js";
 
 
-VCO.Timeline = VCO.Class.extend({
-	includes: VCO.Events,
+TL.Timeline = TL.Class.extend({
+	includes: [TL.Events, TL.I18NMixins],
 
 	/*  Private Methods
 	================================================== */
 	initialize: function (elem, data, options) {
 		var self = this;
+		if (!options) { options = {}};
 		// Version
-		this.version = "0.0.20";
+		this.version = "3.2.6";
 
 		// Ready
 		this.ready = false;
@@ -11179,21 +11451,21 @@ VCO.Timeline = VCO.Class.extend({
 		if (typeof elem === 'object') {
 			this._el.container = elem;
 		} else {
-			this._el.container = VCO.Dom.get(elem);
+			this._el.container = TL.Dom.get(elem);
 		}
 
 		// Slider
 		this._storyslider = {};
 
 		// Style Sheet
-		this._style_sheet = new VCO.StyleSheet();
+		this._style_sheet = new TL.StyleSheet();
 
 		// TimeNav
 		this._timenav = {};
-		
+
 		// Message
-		this.message = new VCO.Message({}, {
-			message_class: "vco-message-full"
+		this.message = new TL.Message({}, {
+			message_class: "tl-message-full"
 		});
 
 		// Menu Bar
@@ -11203,7 +11475,6 @@ VCO.Timeline = VCO.Class.extend({
 		this._loaded = {storyslider:false, timenav:false};
 
 		// Data Object
-		// Test Data compiled from http://www.pbs.org/marktwain/learnmore/chronology.html
 		this.config = null;
 
 		this.options = {
@@ -11212,13 +11483,13 @@ VCO.Timeline = VCO.Class.extend({
 			width: 						this._el.container.offsetWidth,
 			is_embed: 					false,
 			is_full_embed: 				false,
-			hash_bookmark: 				false,
+			hash_bookmark: 				true,
 			default_bg_color: 			{r:255, g:255, b:255},
 			scale_factor: 				2,						// How many screen widths wide should the timeline be
 			layout: 					"landscape",			// portrait or landscape
-			timenav_position: 			"bottom",				// timeline on top or bottom 
+			timenav_position: 			"bottom",				// timeline on top or bottom
 			optimal_tick_width: 		60,						// optimal distance (in pixels) between ticks on axis
-			base_class: 				"",
+			base_class: 				"tl-timeline", 		// removing tl-timeline will break all default stylesheets...
 			timenav_height: 			175,
 			timenav_height_percentage: 	25,						// Overrides timenav height as a percentage of the screen
 			timenav_mobile_height_percentage: 40, 				// timenav height as a percentage on mobile devices
@@ -11230,14 +11501,15 @@ VCO.Timeline = VCO.Class.extend({
 			start_at_end: 				false,
 			menubar_height: 			0,
 			skinny_size: 				650,
+			medium_size: 				800,
 			relative_date: 				false,					// Use momentjs to show a relative date from the slide.text.date.created_time field
 			use_bc: 					false,					// Use declared suffix on dates earlier than 0
 			// animation
 			duration: 					1000,
-			ease: 						VCO.Ease.easeInOutQuint,
+			ease: 						TL.Ease.easeInOutQuint,
 			// interaction
 			dragging: 					true,
-			trackResize: 				true, 
+			trackResize: 				true,
 			map_type: 					"stamen:toner-lite",
 			slide_padding_lr: 			100,					// padding on slide of slide
 			slide_default_fade: 		"0%",					// landscape fade
@@ -11257,14 +11529,44 @@ VCO.Timeline = VCO.Class.extend({
 		this.animator_menubar = null;
 
 		// Merge Options
-		VCO.Util.mergeData(this.options, options);
+
+		if (typeof(options.default_bg_color) == "string") {
+			var parsed = TL.Util.hexToRgb(options.default_bg_color); // will clear it out if its invalid
+			if (parsed) {
+				options.default_bg_color = parsed;
+			} else {
+				delete options.default_bg_color
+				trace("Invalid default background color. Ignoring.");
+			}
+		}
+		TL.Util.mergeData(this.options, options);
+
+		window.addEventListener("resize", function(e){
+			self.updateDisplay();
+		})
+
+		// Apply base class to container
+		this._el.container.className += ' tl-timeline';
+
+		if (this.options.is_embed) {
+			this._el.container.className += ' tl-timeline-embed';
+		}
+
+		if (this.options.is_full_embed) {
+			this._el.container.className += ' tl-timeline-full-embed';
+		}
+
+		// Add Message to DOM
+		this.message.addTo(this._el.container);
+
+
 
 		// Use Relative Date Calculations
 		if(this.options.relative_date) {
 			if (typeof(moment) !== 'undefined') {
 				self._loadLanguage(data);
 			} else {
-				VCO.Load.js(this.options.script_path + "/library/moment.js", function() {
+				TL.Load.js(this.options.script_path + "/library/moment.js", function() {
 					self._loadLanguage(data);
 					trace("LOAD MOMENTJS")
 				});
@@ -11273,20 +11575,6 @@ VCO.Timeline = VCO.Class.extend({
 		} else {
 			self._loadLanguage(data);
 		}
-		
-		// Apply base class to container
-		this._el.container.className += ' vco-timeline';
-		
-		if (this.options.is_embed) {
-			this._el.container.className += ' vco-timeline-embed';
-		}
-		
-		if (this.options.is_full_embed) {
-			this._el.container.className += ' vco-timeline-full-embed';
-		}
-		
-		// Add Message to DOM
-		this.message.addTo(this._el.container);
 
 	},
 
@@ -11294,105 +11582,105 @@ VCO.Timeline = VCO.Class.extend({
 	================================================== */
 	_loadLanguage: function(data) {
 		var self = this;
-		this.options.language = new VCO.Language(this.options);
+		this.options.language = new TL.Language(this.options);
 		this._initData(data);
 	},
 
-  
+
 	/*  Navigation
 	================================================== */
-  
+
 	// Goto slide with id
 	goToId: function(id) {
 		if (this.current_id != id) {
 			this.current_id = id;
 			this._timenav.goToId(this.current_id);
 			this._storyslider.goToId(this.current_id, false, true);
-			this.fire("change", {uniqueid: this.current_id}, this);
+			this.fire("change", {unique_id: this.current_id}, this);
 		}
 	},
-  
+
 	// Goto slide n
 	goTo: function(n) {
 		if(this.config.title) {
 			if(n == 0) {
-				this.goToId(this.config.title.uniqueid);
+				this.goToId(this.config.title.unique_id);
 			} else {
-				this.goToId(this.config.events[n - 1].uniqueid);
+				this.goToId(this.config.events[n - 1].unique_id);
 			}
 		} else {
-			this.goToId(this.config.events[n].uniqueid);      
+			this.goToId(this.config.events[n].unique_id);
 		}
 	},
-  
+
 	// Goto first slide
 	goToStart: function() {
 		this.goTo(0);
 	},
-  
+
 	// Goto last slide
 	goToEnd: function() {
 		var _n = this.config.events.length - 1;
 		this.goTo(this.config.title ? _n + 1 : _n);
 	},
-  
+
 	// Goto previous slide
 	goToPrev: function() {
 		this.goTo(this._getSlideIndex(this.current_id) - 1);
 	},
-  
+
 	// Goto next slide
 	goToNext: function() {
 		this.goTo(this._getSlideIndex(this.current_id) + 1);
 	},
-  
+
 	/* Event maniupluation
 	================================================== */
-  
+
 	// Add an event
 	add: function(data) {
-		var uniqueid = this.config.addEvent(data);
-      
-		var n = this._getEventIndex(uniqueid);
+		var unique_id = this.config.addEvent(data);
+
+		var n = this._getEventIndex(unique_id);
 		var d = this.config.events[n];
-        
+
 		this._storyslider.createSlide(d, this.config.title ? n+1 : n);
-		this._storyslider._updateDrawSlides();            
-        
+		this._storyslider._updateDrawSlides();
+
 		this._timenav.createMarker(d, n);
-		this._timenav._updateDrawTimeline(false); 
-        
-		this.fire("added", {uniqueid: uniqueid});
+		this._timenav._updateDrawTimeline(false);
+
+		this.fire("added", {unique_id: unique_id});
 	},
-  
+
 	// Remove an event
 	remove: function(n) {
 		if(n >= 0  && n < this.config.events.length) {
 			// If removing the current, nav to new one first
-			if(this.config.events[n].uniqueid == this.current_id) {
+			if(this.config.events[n].unique_id == this.current_id) {
 				if(n < this.config.events.length - 1) {
 					this.goTo(n + 1);
 				} else {
 					this.goTo(n - 1);
 				}
 			}
-        
+
 			var event = this.config.events.splice(n, 1);
-        
+
 			this._storyslider.destroySlide(this.config.title ? n+1 : n);
-			this._storyslider._updateDrawSlides();            
-        
+			this._storyslider._updateDrawSlides();
+
 			this._timenav.destroyMarker(n);
 			this._timenav._updateDrawTimeline(false);
-         
-			this.fire("removed", {uniqueid: event[0].uniqueid});
+
+			this.fire("removed", {unique_id: event[0].unique_id});
 		}
 	},
-  
+
 	removeId: function(id) {
 		this.remove(this._getEventIndex(id));
 	},
-    
+
 	/* Get slide data
 	================================================== */
 
@@ -11409,7 +11697,7 @@ VCO.Timeline = VCO.Class.extend({
 		return null;
 	},
 
-	getDataId: function(id) {
+	getDataById: function(id) {
 		return this.getData(this._getSlideIndex(id));
 	},
 
@@ -11419,7 +11707,7 @@ VCO.Timeline = VCO.Class.extend({
 	getSlide: function(n) {
 		if(n >= 0 && n < this._storyslider._slides.length) {
 			return this._storyslider._slides[n];
-		}        
+		}
 		return null;
 	},
 
@@ -11439,10 +11727,20 @@ VCO.Timeline = VCO.Class.extend({
 			this._updateDisplay();
 		}
 	},
-  
+
+  	/*
+  		Compute the height of the navigation section of the Timeline, taking into account
+  		the possibility of an explicit height or height percentage, but also honoring the
+  		`timenav_height_min` option value. If `timenav_height` is specified it takes precedence over `timenav_height_percentage` but in either case, if the resultant pixel height is less than `options.timenav_height_min` then the value of `options.timenav_height_min` will be returned. (A minor adjustment is made to the returned value to account for marker padding.)
+
+  		Arguments:
+  		@timenav_height (optional): an integer value for the desired height in pixels
+  		@timenav_height_percentage (optional): an integer between 1 and 100
+
+  	 */
 	_calculateTimeNavHeight: function(timenav_height, timenav_height_percentage) {
 		var height = 0;
-    
+
 		if (timenav_height) {
 			height = timenav_height;
 		} else {
@@ -11452,240 +11750,262 @@ VCO.Timeline = VCO.Class.extend({
 				} else {
 					height = Math.round((this.options.height/100)*this.options.timenav_height_percentage);
 				}
-        
+
 			}
 		}
 		if (height < this.options.timenav_height_min) {
 			height = this.options.timenav_height_min;
 		}
-    
+
 		height = height - (this.options.marker_padding * 2);
-    
+
 		return height;
 	},
-  
+
 	/*  Private Methods
 	================================================== */
-  
+
 	// Update View
 	_updateDisplay: function(timenav_height, animate, d) {
 		var duration    = this.options.duration,
 		display_class   = this.options.base_class,
 		menu_position   = 0,
 		self      = this;
-    
+
 		if (d) {
 			duration = d;
 		}
-    
+
 		// Update width and height
 		this.options.width = this._el.container.offsetWidth;
 		this.options.height = this._el.container.offsetHeight;
-    
+
 		// Check if skinny
 		if (this.options.width <= this.options.skinny_size) {
+			display_class += " tl-skinny";
 			this.options.layout = "portrait";
+		} else if (this.options.width <= this.options.medium_size) {
+			display_class += " tl-medium";
+			this.options.layout = "landscape";
 		} else {
 			this.options.layout = "landscape";
 		}
-    
+
 		// Detect Mobile and Update Orientation on Touch devices
-		if (VCO.Browser.touch) {
-			this.options.layout = VCO.Browser.orientation();
-		} 
-    
-		if (VCO.Browser.mobile) {
-			display_class += " vco-mobile";
+		if (TL.Browser.touch) {
+			this.options.layout = TL.Browser.orientation();
+		}
+
+		if (TL.Browser.mobile) {
+			display_class += " tl-mobile";
 			// Set TimeNav Height
 			this.options.timenav_height = this._calculateTimeNavHeight(timenav_height, this.options.timenav_mobile_height_percentage);
 		} else {
 			// Set TimeNav Height
 			this.options.timenav_height = this._calculateTimeNavHeight(timenav_height);
 		}
-    
+
 		// LAYOUT
 		if (this.options.layout == "portrait") {
-      
-			display_class += " vco-skinny";
 			// Portrait
-			display_class += " vco-layout-portrait";
+			display_class += " tl-layout-portrait";
 
 		} else {
 			// Landscape
-			display_class += " vco-layout-landscape";
-      
+			display_class += " tl-layout-landscape";
+
 		}
-    
+
 		// Set StorySlider Height
 		this.options.storyslider_height = (this.options.height - this.options.timenav_height);
-    
+
 		// Positon Menu
 		if (this.options.timenav_position == "top") {
 			menu_position = ( Math.ceil(this.options.timenav_height)/2 ) - (this._el.menubar.offsetHeight/2) - (39/2) ;
 		} else {
 			menu_position = Math.round(this.options.storyslider_height + 1 + ( Math.ceil(this.options.timenav_height)/2 ) - (this._el.menubar.offsetHeight/2) - (35/2));
 		}
-    
-    
+
+
 		if (animate) {
-    
+
 			// Animate TimeNav
-			
+
 			/*
 			if (this.animator_timenav) {
 			this.animator_timenav.stop();
 			}
-    
-			this.animator_timenav = VCO.Animate(this._el.timenav, {
+
+			this.animator_timenav = TL.Animate(this._el.timenav, {
 			height:   (this.options.timenav_height) + "px",
 			duration:   duration/4,
-			easing:   VCO.Ease.easeOutStrong,
+			easing:   TL.Ease.easeOutStrong,
 			complete: function () {
 			//self._map.updateDisplay(self.options.width, self.options.timenav_height, animate, d, self.options.menubar_height);
 			}
 			});
 			*/
-			
+
 			this._el.timenav.style.height = Math.ceil(this.options.timenav_height) + "px";
-			
+
 			// Animate StorySlider
 			if (this.animator_storyslider) {
 				this.animator_storyslider.stop();
 			}
-			this.animator_storyslider = VCO.Animate(this._el.storyslider, {
+			this.animator_storyslider = TL.Animate(this._el.storyslider, {
 				height:   this.options.storyslider_height + "px",
 				duration:   duration/2,
-				easing:   VCO.Ease.easeOutStrong
+				easing:   TL.Ease.easeOutStrong
 			});
-      
+
 			// Animate Menubar
 			if (this.animator_menubar) {
 				this.animator_menubar.stop();
 			}
-      
-			this.animator_menubar = VCO.Animate(this._el.menubar, {
+
+			this.animator_menubar = TL.Animate(this._el.menubar, {
 				top:  menu_position + "px",
 				duration:   duration/2,
-				easing:   VCO.Ease.easeOutStrong
+				easing:   TL.Ease.easeOutStrong
 			});
-    
+
 		} else {
 			// TimeNav
 			this._el.timenav.style.height = Math.ceil(this.options.timenav_height) + "px";
-    
+
 			// StorySlider
 			this._el.storyslider.style.height = this.options.storyslider_height + "px";
-      
+
 			// Menubar
 			this._el.menubar.style.top = menu_position + "px";
 		}
-		
+
 		if (this.message) {
 			this.message.updateDisplay(this.options.width, this.options.height);
 		}
 		// Update Component Displays
 		this._timenav.updateDisplay(this.options.width, this.options.timenav_height, animate);
 		this._storyslider.updateDisplay(this.options.width, this.options.storyslider_height, animate, this.options.layout);
-    
+
 		// Apply class
 		this._el.container.className = display_class;
-		
+
 	},
-  
+
 	// Update hashbookmark in the url bar
 	_updateHashBookmark: function(id) {
-		window.location.hash = "#" + "event-" + id.toString();
-		this.fire("hash_updated", {uniqueid:this.current_id, hashbookmark:"#" + "event-" + id.toString()}, this);
+		var hash = "#" + "event-" + id.toString();
+    window.history.replaceState(null, "Browsing TimelineJS", hash);
+		this.fire("hash_updated", {unique_id:this.current_id, hashbookmark:"#" + "event-" + id.toString()}, this);
 	},
-	
+
 	/*  Init
 	================================================== */
 	// Initialize the data
 	_initData: function(data) {
 		var self = this;
-		if (VCO.TimelineConfig == data.constructor) {
-			self.config = data;
-			self._onDataLoaded();
+
+		if (typeof data == 'string') {
+			var self = this;
+			TL.ConfigFactory.makeConfig(data, function(config) {
+				self.setConfig(config);
+			});
+		} else if (TL.TimelineConfig == data.constructor) {
+			this.setConfig(data);
 		} else {
-			self.config = new VCO.TimelineConfig(data,function() {self._onDataLoaded()});
+			this.setConfig(new TL.TimelineConfig(data));
 		}
-		self.config.on('load_error', this._onError, this);
-		
 	},
-  
+
+	setConfig: function(config) {
+		this.config = config;
+		this.config.validate();
+		if (this.config.isValid()) {
+			this._onDataLoaded();
+		} else {
+			this.showMessage("<strong>"+ this._('error') +":</strong> " + this.config.getErrors(';'));
+			// should we set 'self.ready'? if not, it won't resize,
+			// but most resizing would only work
+			// if more setup happens
+		}
+	},
+
 	// Initialize the layout
 	_initLayout: function () {
 		var self = this;
-    
-		//this._el.container.className += ' vco-timeline';
-		this.options.base_class = this._el.container.className;
+
 		this._el.container.innerHTML = "";
 		// Create Layout
 		if (this.options.timenav_position == "top") {
-			this._el.timenav		= VCO.Dom.create('div', 'vco-timenav', this._el.container);
-			this._el.storyslider	= VCO.Dom.create('div', 'vco-storyslider', this._el.container);
+			this._el.timenav		= TL.Dom.create('div', 'tl-timenav', this._el.container);
+			this._el.storyslider	= TL.Dom.create('div', 'tl-storyslider', this._el.container);
 		} else {
-			this._el.storyslider  	= VCO.Dom.create('div', 'vco-storyslider', this._el.container);
-			this._el.timenav		= VCO.Dom.create('div', 'vco-timenav', this._el.container);
+			this._el.storyslider  	= TL.Dom.create('div', 'tl-storyslider', this._el.container);
+			this._el.timenav		= TL.Dom.create('div', 'tl-timenav', this._el.container);
 		}
-    
-		this._el.menubar			= VCO.Dom.create('div', 'vco-menubar', this._el.container);
 
-    
+		this._el.menubar			= TL.Dom.create('div', 'tl-menubar', this._el.container);
+
+
 		// Initial Default Layout
 		this.options.width        = this._el.container.offsetWidth;
 		this.options.height       = this._el.container.offsetHeight;
 		this._el.storyslider.style.top  = "1px";
-    
+
 		// Set TimeNav Height
 		this.options.timenav_height = this._calculateTimeNavHeight();
-    
+
 		// Create TimeNav
-		this._timenav = new VCO.TimeNav(this._el.timenav, this.config, this.options);
+		this._timenav = new TL.TimeNav(this._el.timenav, this.config, this.options);
 		this._timenav.on('loaded', this._onTimeNavLoaded, this);
 		this._timenav.options.height = this.options.timenav_height;
 		this._timenav.init();
-    
+
+    // intial_zoom cannot be applied before the timenav has been created
+    if (this.options.initial_zoom) {
+      // at this point, this.options refers to the merged set of options
+      this.setZoom(this.options.initial_zoom);
+    }
+
 		// Create StorySlider
-		this._storyslider = new VCO.StorySlider(this._el.storyslider, this.config, this.options);
+		this._storyslider = new TL.StorySlider(this._el.storyslider, this.config, this.options);
 		this._storyslider.on('loaded', this._onStorySliderLoaded, this);
 		this._storyslider.init();
-    
+
 		// Create Menu Bar
-		this._menubar = new VCO.MenuBar(this._el.menubar, this._el.container, this.options);
-    
+		this._menubar = new TL.MenuBar(this._el.menubar, this._el.container, this.options);
+
 		// LAYOUT
 		if (this.options.layout == "portrait") {
 			this.options.storyslider_height = (this.options.height - this.options.timenav_height - 1);
 		} else {
 			this.options.storyslider_height = (this.options.height - 1);
 		}
-		
-		
-		
+
+
 		// Update Display
 		this._updateDisplay(false, true, 2000);
-    
+
 	},
-  
-	_initEvents: function () {    
+  /* Depends upon _initLayout because these events are on things the layout initializes */
+	_initEvents: function () {
 		// TimeNav Events
 		this._timenav.on('change', this._onTimeNavChange, this);
 		this._timenav.on('zoomtoggle', this._onZoomToggle, this);
-		
+
 		// StorySlider Events
 		this._storyslider.on('change', this._onSlideChange, this);
 		this._storyslider.on('colorchange', this._onColorChange, this);
 		this._storyslider.on('nav_next', this._onStorySliderNext, this);
 		this._storyslider.on('nav_previous', this._onStorySliderPrevious, this);
-    
+
 		// Menubar Events
 		this._menubar.on('zoom_in', this._onZoomIn, this);
 		this._menubar.on('zoom_out', this._onZoomOut, this);
 		this._menubar.on('back_to_start', this._onBackToStart, this);
-    
+
 	},
-  
+
 	/* Analytics
 	================================================== */
 	_initGoogleAnalytics: function() {
@@ -11706,44 +12026,44 @@ VCO.Timeline = VCO.Class.extend({
 			});
 		}
 	},
-	
+
 	_onZoomToggle: function(e) {
 		if (e.zoom == "in") {
 			this._menubar.toogleZoomIn(e.show);
 		} else if (e.zoom == "out") {
 			this._menubar.toogleZoomOut(e.show);
 		}
-		
+
 	},
-	
+
 	/* Get index of event by id
 	================================================== */
 	_getEventIndex: function(id) {
 		for(var i = 0; i < this.config.events.length; i++) {
-			if(id == this.config.events[i].uniqueid) {
+			if(id == this.config.events[i].unique_id) {
 				return i;
 			}
 		}
 		return -1;
-	},  
-  
+	},
+
 	/*  Get index of slide by id
 	================================================== */
 	_getSlideIndex: function(id) {
-		if(this.config.title && this.config.title.uniqueid == id) {
+		if(this.config.title && this.config.title.unique_id == id) {
 			return 0;
 		}
 		for(var i = 0; i < this.config.events.length; i++) {
-			if(id == this.config.events[i].uniqueid) {
+			if(id == this.config.events[i].unique_id) {
 				return this.config.title ? i+1 : i;
 			}
 		}
 		return -1;
 	},
-  
+
 	/*  Events
 	================================================== */
-  
+
 	_onDataLoaded: function(e) {
 		this.fire("dataloaded");
 		this._initLayout();
@@ -11752,113 +12072,123 @@ VCO.Timeline = VCO.Class.extend({
 		if (this.message) {
 			this.message.hide();
 		}
-        
+
 		this.ready = true;
-    
+
 	},
-	
-	_onError: function(e) {
+
+	showMessage: function(msg) {
 		if (this.message) {
-			this.message.updateMessage("<strong>Error: </strong>" + e.message);
-		}
-	},
-  
-	_onColorChange: function(e) {
-		this.fire("color_change", {uniqueid:this.current_id}, this);
-		if (e.color || e.image) {
-      
+			this.message.updateMessage(msg);
 		} else {
-      
+			trace("No message display available.")
+			trace(msg);
 		}
 	},
-  
+
+	_onColorChange: function(e) {
+		this.fire("color_change", {unique_id:this.current_id}, this);
+		if (e.color || e.image) {
+
+		} else {
+
+		}
+	},
+
 	_onSlideChange: function(e) {
-		if (this.current_id != e.uniqueid) {
-			this.current_id = e.uniqueid;
+		if (this.current_id != e.unique_id) {
+			this.current_id = e.unique_id;
 			this._timenav.goToId(this.current_id);
 			this._onChange(e);
 		}
 	},
-  
+
 	_onTimeNavChange: function(e) {
-		if (this.current_id != e.uniqueid) {
-			this.current_id = e.uniqueid;
+		if (this.current_id != e.unique_id) {
+			this.current_id = e.unique_id;
 			this._storyslider.goToId(this.current_id);
 			this._onChange(e);
 		}
 	},
-  
+
 	_onChange: function(e) {
-		this.fire("change", {uniqueid:this.current_id}, this);
-		if (this.options.hash_bookmark) {
+		this.fire("change", {unique_id:this.current_id}, this);
+		if (this.options.hash_bookmark && this.current_id) {
 			this._updateHashBookmark(this.current_id);
 		}
 	},
-  
+
 	_onBackToStart: function(e) {
 		this._storyslider.goTo(0);
-		this.fire("back_to_start", {uniqueid:this.current_id}, this);
+		this.fire("back_to_start", {unique_id:this.current_id}, this);
 	},
-  
+
+	/**
+	 * Zoom in and zoom out should be part of the public API.
+	 */
+	zoomIn: function() {
+	    this._timenav.zoomIn();
+	},
+	zoomOut: function() {
+	    this._timenav.zoomOut();
+	},
+
+	setZoom: function(level) {
+	    this._timenav.setZoom(level);
+	},
+
 	_onZoomIn: function(e) {
 		this._timenav.zoomIn();
 		this.fire("zoom_in", {zoom_level:this._timenav.options.scale_factor}, this);
 	},
-  
+
 	_onZoomOut: function(e) {
 		this._timenav.zoomOut();
 		this.fire("zoom_out", {zoom_level:this._timenav.options.scale_factor}, this);
 	},
-  
+
 	_onTimeNavLoaded: function() {
 		this._loaded.timenav = true;
 		this._onLoaded();
 	},
-  
+
 	_onStorySliderLoaded: function() {
 		this._loaded.storyslider = true;
 		this._onLoaded();
 	},
-  
+
 	_onStorySliderNext: function(e) {
 		this.fire("nav_next", e);
 	},
-  
+
 	_onStorySliderPrevious: function(e) {
 		this.fire("nav_previous", e);
 	},
-    
+
 	_onLoaded: function() {
 		if (this._loaded.storyslider && this._loaded.timenav) {
 			this.fire("loaded", this.config);
-			
 			// Go to proper slide
 			if (this.options.hash_bookmark && window.location.hash != "") {
 				this.goToId(window.location.hash.replace("#event-", ""));
 			} else {
-				if(this.options.start_at_end == "true") {
+				if(this.options.start_at_end == "true" || this.options.start_at_slide > this.config.events.length ) {
 					this.goToEnd();
 				} else {
 					this.goTo(this.options.start_at_slide);
 				}
-				this.current_id = this._timenav.current_id;
-				if (this.options.hash_bookmark) {
+				if (this.options.hash_bookmark ) {
 					this._updateHashBookmark(this.current_id);
 				}
 			}
-			
+
 		}
 	}
 
 });
 
-VCO.Timeline.source_path = (function() {
+TL.Timeline.source_path = (function() {
 	var script_tags = document.getElementsByTagName('script');
 	var src = script_tags[script_tags.length-1].src;
 	return src.substr(0,src.lastIndexOf('/'));
 })();
-
-
-
-
-
